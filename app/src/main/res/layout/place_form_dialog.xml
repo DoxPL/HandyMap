@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Adding current place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialogTitle"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_gravity="top"
+        android:background="#194470"
+        android:textSize="26sp"
+        android:textColor="@android:color/background_light"
+        android:fontFamily="sans-serif-condensed"
+        android:textAlignment="center" />
+
+    <TextView
+        android:text="Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/tName" />
+
+    <TextView
+        android:text="Description (optional)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView8" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/tDescription" />
+
+    <TextView
+        android:text="Marker color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView9" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spnColor"
+        android:layout_marginBottom="5dp" />
+
+    <Switch
+        android:text="Manual coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/swAutoManual" />
+
+    <TextView
+        android:text="Latitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvLat" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etLat" />
+
+    <TextView
+        android:text="Longitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvLng" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etLng" />
+
+    <Button
+        android:text="Save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAdd"
+        android:background="#194470"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif" />
+</LinearLayout>
