@@ -57,14 +57,6 @@ public class MapFragment extends Fragment {
                     }
                 });
 
-                mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(@NonNull Marker marker) {
-                        return false;
-                    }
-                });
-
-
             }
         });
 
