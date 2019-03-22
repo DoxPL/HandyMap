@@ -10,6 +10,8 @@
     <string name="longitude">Longitude</string>
     <string name="marker_color">Marker color</string>
     <string name="name">Place name</string>
+    <string name="mapView">Display map</string>
+    <string name="listView">Location list</string>
 
     <string name="mapbox_token">
         pk.eyJ1IjoiZG9taW5pa2dhbG9jaCIsImEiOiJjanRnOGdnOGQwbnNiM3ludXoydzNiZzI4In0.RbF8CacFXwIwI-4DzL78Qw

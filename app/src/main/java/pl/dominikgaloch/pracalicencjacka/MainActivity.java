@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.mapbox.mapboxsdk.Mapbox;
 
+import pl.dominikgaloch.pracalicencjacka.fragments.LocationListFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -88,8 +89,11 @@ public class MainActivity extends AppCompatActivity
         Fragment currentFragment = null;
         switch(id)
         {
-            case R.id.nav_camera:
+            case R.id.nav_map:
                 currentFragment = new MapFragment();
+                break;
+            case R.id.nav_list:
+                currentFragment = new LocationListFragment();
                 break;
         }
 

@@ -18,15 +18,29 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import pl.dominikgaloch.pracalicencjacka.DatabaseUtilities;
 import pl.dominikgaloch.pracalicencjacka.R;
 
 public class MapFragment extends Fragment {
+    private MapView mapView;
+    private LatLng coordinates;
+
+    public MapFragment()
+    {
+
+    }
+
+    public MapFragment(LatLng coords)
+    {
+        this.coordinates = coords;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         Mapbox.setAccessToken(getResources().getString(R.string.mapbox_token));
-        MapView mapView = view.findViewById(R.id.mapBoxView);
+        mapView = view.findViewById(R.id.mapBoxView);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull final MapboxMap mapboxMap) {
@@ -36,6 +50,12 @@ public class MapFragment extends Fragment {
 
                     }
                 });
+
+                //TODO remove after tests
+                if(coordinates != null)
+                {
+                    mapboxMap.addMarker(new MarkerOptions().position(coordinates).title("Uniejow"));
+                }
 
                 mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     @Override

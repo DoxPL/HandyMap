@@ -1,0 +1,99 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.3.20)  20 MAR 2019 18:52
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**Dokumentacja.tex
+(./Dokumentacja.tex
+LaTeX2e <2018-04-01> patch level 2
+Babel <3.18> and hyphenation patterns for 22 language(s) loaded.
+(/usr/local/texlive/2018basic/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2018basic/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/local/texlive/2018basic/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2018/02/14 3.18 The Babel package
+
+(/usr/local/texlive/2018basic/texmf-dist/tex/generic/babel/switch.def
+File: switch.def 2018/02/14 3.18 Babel switching mechanism
+)
+(/usr/local/texlive/2018basic/texmf-dist/tex/generic/babel-polish/polish.ldf
+Language: polish 2005/03/31 v1.2l Polish support from the babel system
+
+(/usr/local/texlive/2018basic/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2018/02/14 3.18 Babel common definitions
+\babel@savecnt=\count88
+\U@D=\dimen103
+
+(/usr/local/texlive/2018basic/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@dirlevel=\count89
+)
+Package babel Info: Making " an active character on input line 83.
+\pl@left=\dimen104
+\pl@down=\dimen105
+\pl@right=\dimen106
+\pl@temp=\dimen107
+))
+(./Dokumentacja.aux)
+\openout1 = `Dokumentacja.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+
+
+! LaTeX Error: Command \k unavailable in encoding OT1.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.16        urzą
+                 dzenia mobilne z systemem Android
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+[1
+
+{/usr/local/texlive/2018basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+(./Dokumentacja.aux) ) 
+Here is how much of TeX's memory you used:
+ 792 strings out of 494091
+ 9889 string characters out of 6163523
+ 73653 words of memory out of 5000000
+ 4535 multiletter control sequences out of 15000+600000
+ 3948 words of font info for 15 fonts, out of 8000000 for 9000
+ 319 hyphenation exceptions out of 8191
+ 23i,4n,23p,189b,128s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2018basic/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2018basic/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr10.pfb>
+Output written on Dokumentacja.pdf (1 page, 27626 bytes).
+PDF statistics:
+ 16 PDF objects out of 1000 (max. 8388607)
+ 10 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
