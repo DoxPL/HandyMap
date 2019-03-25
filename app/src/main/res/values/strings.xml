@@ -17,6 +17,6 @@
         pk.eyJ1IjoiZG9taW5pa2dhbG9jaCIsImEiOiJjanRnOGdnOGQwbnNiM3ludXoydzNiZzI4In0.RbF8CacFXwIwI-4DzL78Qw
     </string>
 
-    <string name="database_name">userdata.db</string>
+    <string name="database_name">user_database</string>
 
 </resources>

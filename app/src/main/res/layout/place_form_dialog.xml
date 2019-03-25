@@ -91,7 +91,7 @@
         android:text="Save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnAdd"
+        android:id="@+id/btnSave"
         android:background="#194470"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

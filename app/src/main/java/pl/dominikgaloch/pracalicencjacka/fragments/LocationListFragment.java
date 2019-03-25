@@ -15,7 +15,9 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
 
+import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.models.Location;
 import pl.dominikgaloch.pracalicencjacka.utilities.LocationAdapter;
 
@@ -28,15 +30,10 @@ public class LocationListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ArrayList<Location> list = new ArrayList<Location>();
 
-        //TODO delete sample object
-        Location sample = new Location();
-        sample.setName("Przykladowe");
-        sample.setDescription("Miejsce");
-        sample.setCoordinates(new LatLng(51.974130, 18.793245));
+        ApplicationDatabase database = Room.databaseBuilder(getContext(), ApplicationDatabase.class,
+                getString(R.string.database_name)).build();
 
-        Location s = new Location();
-        s.setName("Nazwa");
-        s.setDescription("Przykladowy opis");
+        list = database.locationDao().getAllLocations();
 
         recyclerView = view.findViewById(R.id.recyclerView);
         adapter = new LocationAdapter(getContext(), list);
@@ -45,8 +42,6 @@ public class LocationListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        list.add(sample);
-        list.add(s);
         adapter.notifyDataSetChanged();
 
         return view;
