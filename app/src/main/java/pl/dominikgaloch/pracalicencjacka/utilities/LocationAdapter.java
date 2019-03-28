@@ -1,10 +1,10 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +46,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> {
             public void onClick(View view, int position, boolean longClick) {
                 FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                 fragmentManager.beginTransaction().
-                        replace(R.id.content, new MapFragment(location.getCoordinates())).
+                        replace(R.id.content, new MapFragment(location.getLatitude(), location.getLongitude())).
                         addToBackStack(null)
                         .commit();
             }
