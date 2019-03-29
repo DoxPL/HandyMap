@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapBoxView"
+    <org.osmdroid.views.MapView
+        android:id="@+id/mvOsmDroid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"></org.osmdroid.views.MapView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
