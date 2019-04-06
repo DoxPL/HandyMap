@@ -2,12 +2,17 @@ package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -38,17 +43,21 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> {
     @Override
     public void onBindViewHolder(@NonNull LocationHolder locationHolder, int i) {
         final Location location = list.get(i);
-
         locationHolder.tvName.setText(location.getName());
         locationHolder.tvDescription.setText(location.getDescription());
         locationHolder.setOnClickListener(new ListItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean longClick) {
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                fragmentManager.beginTransaction().
-                        replace(R.id.content, new MapFragment(location.getLatitude(), location.getLongitude())).
-                        addToBackStack(null)
-                        .commit();
+                if(longClick) {
+                    createDialog(view, position);
+                }
+                else {
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    fragmentManager.beginTransaction().
+                            replace(R.id.content, new MapFragment(location.getGeoPoint())).
+                            addToBackStack(null)
+                            .commit();
+                }
             }
         });
     }
@@ -56,5 +65,28 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> {
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void createDialog(final View view, final int currentItemPosition) {
+        DialogInterface.OnClickListener dialogCallback = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        list.remove(currentItemPosition);
+                        notifyDataSetChanged();
+                        Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
+                                setAction("Action", null).show();
+                        //usun z bazy
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setMessage(context.getResources().getString(R.string.dialog_question))
+                .setPositiveButton(context.getResources().getString(R.string.dialog_pos_text), dialogCallback)
+                .setNegativeButton(context.getResources().getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 }

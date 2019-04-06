@@ -2,6 +2,8 @@ package pl.dominikgaloch.pracalicencjacka.models;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import org.osmdroid.util.GeoPoint;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -95,5 +97,10 @@ public class Location {
 
     public void setVisited(boolean visited) {
         this.visited = visited;
+    }
+
+    public GeoPoint getGeoPoint()
+    {
+        return new GeoPoint(this.latitude, this.longitude);
     }
 }

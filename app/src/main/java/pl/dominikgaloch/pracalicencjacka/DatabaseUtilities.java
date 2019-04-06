@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseUtilities extends SQLiteOpenHelper {
-
+    //Todo remove
     private static final String CREATE_TABLE_PLACES = "CREATE TABLE places (" +
             "ID integer primary key autoincrement," +
             "PLACE_NAME text," +

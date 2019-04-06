@@ -21,7 +21,7 @@ public class NearbyPlacesFinder {
         {
             if(point.distanceToAsDouble(new GeoPoint(location.getLatitude(), location.getLongitude())) < 100)
             {
-                
+
             }
         }
         return true;

@@ -16,7 +16,7 @@ public class LocationHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     public LocationHolder(@NonNull View itemView) {
         super(itemView);
-        tvName = itemView.findViewById(R.id.tvlocationName);
+        tvName = itemView.findViewById(R.id.tvLocationName);
         tvDescription = itemView.findViewById(R.id.tvLocationDescription);
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);

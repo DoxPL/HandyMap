@@ -47,14 +47,15 @@ public class MapFragment extends Fragment {
     private Marker userLocationPin;
     private static final long GPS_UPDATE_INTERVAL = 2000;
     private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
+    private GeoPoint passedPoint;
 
 
     public MapFragment() {
     }
 
-    public MapFragment(double latitude, double longitude)
+    public MapFragment(GeoPoint point)
     {
-        //this.coordinates = new LatLng(latitude, longitude);
+        this.passedPoint = point;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class MapFragment extends Fragment {
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         mvOsmView.setTileSource(TileSourceFactory.MAPNIK);
         mvOsmView.setMultiTouchControls(true);
-
+        //mvOsmView.setMinZoomLevel(10.0);
         database = Room.databaseBuilder(getContext(), ApplicationDatabase.class,
                 getString(R.string.database_name)).allowMainThreadQueries().build();
 
@@ -102,10 +103,17 @@ public class MapFragment extends Fragment {
                     }
                 });
 
+
                 dialog.show();
                 return false;
             }
         };
+
+        if(passedPoint != null)
+        {
+            putMarker(mvOsmView, passedPoint, false);
+            mvOsmView.invalidate();
+        }
 
         mapEventsOverlay = new MapEventsOverlay(eventsReceiver);
         mvOsmView.getOverlays().add(mapEventsOverlay);

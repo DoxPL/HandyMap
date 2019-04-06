@@ -12,11 +12,11 @@
     <string name="name">Place name</string>
     <string name="mapView">Display map</string>
     <string name="listView">Location list</string>
-
-    <string name="mapbox_token">
-        pk.eyJ1IjoiZG9taW5pa2dhbG9jaCIsImEiOiJjanRnOGdnOGQwbnNiM3ludXoydzNiZzI4In0.RbF8CacFXwIwI-4DzL78Qw
-    </string>
-
     <string name="database_name">user_database</string>
-
+    
+    <!--Dialog -->
+    <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>
+    <string name="dialog_pos_text">Potwierdź</string>
+    <string name="dialog_neg_text">Anuluj</string>
+    <string name="text_item_removed">Element został usunięty</string>
 </resources>
