@@ -4,24 +4,24 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Adding current place"
+        android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dialogTitle"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="top"
         android:background="#194470"
-        android:textSize="26sp"
-        android:textColor="@android:color/background_light"
         android:fontFamily="sans-serif-condensed"
-        android:textAlignment="center" />
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:text="@string/form_title"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="26sp" />
 
     <TextView
-        android:text="Name"
+        android:id="@+id/textView7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView7" />
+        android:text="@string/form_place_name" />
 
     <EditText
         android:layout_width="match_parent"
@@ -31,10 +31,10 @@
         android:id="@+id/tName" />
 
     <TextView
-        android:text="Description (optional)"
+        android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView8" />
+        android:text="@string/form_place_desc" />
 
     <EditText
         android:layout_width="match_parent"
@@ -44,10 +44,10 @@
         android:id="@+id/tDescription" />
 
     <TextView
-        android:text="Marker color"
+        android:id="@+id/textView9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView9" />
+        android:text="@string/form_marker_color" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -56,16 +56,16 @@
         android:layout_marginBottom="5dp" />
 
     <Switch
-        android:text="Manual coordinates"
+        android:id="@+id/swAutoManual"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/swAutoManual" />
+        android:text="@string/form_switch_text" />
 
     <TextView
-        android:text="Latitude"
+        android:id="@+id/tvLat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvLat" />
+        android:text="@string/form_lat" />
 
     <EditText
         android:layout_width="match_parent"
@@ -75,10 +75,10 @@
         android:id="@+id/etLat" />
 
     <TextView
-        android:text="Longitude"
+        android:id="@+id/tvLng"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvLng" />
+        android:text="@string/form_lng" />
 
     <EditText
         android:layout_width="match_parent"
@@ -88,12 +88,12 @@
         android:id="@+id/etLng" />
 
     <Button
-        android:text="Save"
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSave"
-        android:background="#194470"
+        android:background="@color/colorAccent"
+        android:fontFamily="sans-serif"
+        android:text="@string/form_save_text"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif" />
+        android:textSize="18sp" />
 </LinearLayout>

@@ -65,7 +65,7 @@ public class MapFragment extends Fragment {
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         mvOsmView.setTileSource(TileSourceFactory.MAPNIK);
         mvOsmView.setMultiTouchControls(true);
-        //mvOsmView.setMinZoomLevel(10.0);
+        mvOsmView.getController().setZoom(7.0);
         database = Room.databaseBuilder(getContext(), ApplicationDatabase.class,
                 getString(R.string.database_name)).allowMainThreadQueries().build();
 
@@ -79,32 +79,8 @@ public class MapFragment extends Fragment {
             }
 
             @Override
-            public boolean longPressHelper(final GeoPoint p) {
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                View dialogView = getActivity().getLayoutInflater().inflate(R.layout.place_form_dialog, null);
-                final EditText etName = dialogView.findViewById(R.id.tName);
-                final EditText etDescription = dialogView.findViewById(R.id.tDescription);
-                final EditText etLatitude = dialogView.findViewById(R.id.etLat);
-                final EditText etLongitude = dialogView.findViewById(R.id.etLng);
-                Button btnSave = dialogView.findViewById(R.id.btnSave);
-                dialogBuilder.setView(dialogView);
-                final AlertDialog dialog = dialogBuilder.create();
-
-                btnSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String name = etName.getText().toString();
-                        String description = etDescription.getText().toString();
-                        database.locationDao().insertAllLocations(new Location(name,
-                                description, p.getLatitude(), p.getLongitude()));
-                        putMarker(mvOsmView, p, false);
-                        dialog.dismiss();
-
-                    }
-                });
-
-
-                dialog.show();
+            public boolean longPressHelper(GeoPoint p) {
+                createForm(p);
                 return false;
             }
         };
@@ -113,6 +89,7 @@ public class MapFragment extends Fragment {
         {
             putMarker(mvOsmView, passedPoint, false);
             mvOsmView.invalidate();
+            mvOsmView.getController().setCenter(passedPoint);
         }
 
         mapEventsOverlay = new MapEventsOverlay(eventsReceiver);
@@ -159,6 +136,48 @@ public class MapFragment extends Fragment {
         pin.setPosition(position);
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(pin);
+    }
+
+    private void createForm(final GeoPoint point)
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.place_form_dialog, null);
+        final EditText etName = dialogView.findViewById(R.id.tName);
+        final EditText etDescription = dialogView.findViewById(R.id.tDescription);
+        final EditText etLatitude = dialogView.findViewById(R.id.etLat);
+        final EditText etLongitude = dialogView.findViewById(R.id.etLng);
+        Button btnSave = dialogView.findViewById(R.id.btnSave);
+        Switch swInputType = dialogView.findViewById(R.id.swAutoManual);
+        dialogBuilder.setView(dialogView);
+        final AlertDialog dialog = dialogBuilder.create();
+
+        swInputType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    etLatitude.setVisibility(View.VISIBLE);
+                    etLongitude.setVisibility(View.VISIBLE);
+                }
+                else {
+                    etLatitude.setVisibility(View.GONE);
+                    etLongitude.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = etName.getText().toString();
+                String description = etDescription.getText().toString();
+                database.locationDao().insertAllLocations(new Location(name,
+                        description, point.getLatitude(), point.getLongitude()));
+                putMarker(mvOsmView, point, false);
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
     }
 
 }

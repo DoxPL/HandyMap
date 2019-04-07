@@ -10,8 +10,8 @@
     <string name="longitude">Longitude</string>
     <string name="marker_color">Marker color</string>
     <string name="name">Place name</string>
-    <string name="mapView">Display map</string>
-    <string name="listView">Location list</string>
+    <string name="mapView">Wyświetl mapę</string>
+    <string name="listView">Lista lokacji</string>
     <string name="database_name">user_database</string>
     
     <!--Dialog -->
@@ -19,4 +19,15 @@
     <string name="dialog_pos_text">Potwierdź</string>
     <string name="dialog_neg_text">Anuluj</string>
     <string name="text_item_removed">Element został usunięty</string>
+
+    <string name="action_search_text">Filtruj</string>
+
+    <string name="form_title">Dodawanie miejsca</string>
+    <string name="form_place_name">Nazwa miejsca</string>
+    <string name="form_place_desc">Opis (opcjonalnie)</string>
+    <string name="form_marker_color">Kolor znacznika</string>
+    <string name="form_switch_text">Wprowadź współrzędne ręcznie</string>
+    <string name="form_lat">Szerokość geograficzna</string>
+    <string name="form_lng">Długość geograficzna</string>
+    <string name="form_save_text">Zapisz</string>
 </resources>

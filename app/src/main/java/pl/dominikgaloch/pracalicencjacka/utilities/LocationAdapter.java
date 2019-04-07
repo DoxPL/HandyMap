@@ -16,7 +16,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
+import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
 import pl.dominikgaloch.pracalicencjacka.models.Location;
@@ -73,11 +75,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        list.remove(currentItemPosition);
-                        notifyDataSetChanged();
                         Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
                                 setAction("Action", null).show();
-                        //usun z bazy
+                        //Todo delete after create repository
+                        ApplicationDatabase database = Room.databaseBuilder(context, ApplicationDatabase.class,
+                                context.getString(R.string.database_name)).allowMainThreadQueries().build();
+                        database.locationDao().delete(list.get(currentItemPosition));
+                        list.remove(currentItemPosition);
+                        notifyDataSetChanged();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;

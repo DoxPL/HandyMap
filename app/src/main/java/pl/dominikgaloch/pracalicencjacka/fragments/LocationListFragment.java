@@ -7,8 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 
@@ -21,6 +25,7 @@ import pl.dominikgaloch.pracalicencjacka.utilities.LocationAdapter;
 public class LocationListFragment extends Fragment {
     private RecyclerView recyclerView;
     private LocationAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,5 +47,13 @@ public class LocationListFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        SearchView searchWidget = (SearchView) menu.findItem(R.id.action_search_item);
+        searchWidget.setVisibility(View.VISIBLE);
+
     }
 }
