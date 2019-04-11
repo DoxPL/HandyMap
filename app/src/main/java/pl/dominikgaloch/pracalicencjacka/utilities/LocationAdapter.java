@@ -11,9 +11,12 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.room.Room;
@@ -23,15 +26,17 @@ import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
 import pl.dominikgaloch.pracalicencjacka.models.Location;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> {
+public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 
     private Context context;
     private List<Location> list;
+    private List<Location> temporaryList;
 
     public LocationAdapter(Context context, List<Location> list)
     {
         this.context = context;
         this.list = list;
+        temporaryList = new ArrayList<>();
     }
 
     @NonNull
@@ -94,4 +99,40 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> {
                 .setPositiveButton(context.getResources().getString(R.string.dialog_pos_text), dialogCallback)
                 .setNegativeButton(context.getResources().getString(R.string.dialog_neg_text), dialogCallback).show();
     }
+
+    public Filter getFilter()
+    {
+        final List<Location> filteredList = new ArrayList<>();
+        if(temporaryList.size() > 0) {
+            list = temporaryList;
+        }
+        Filter listFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                if(constraint != null) {
+                    for (Location location : list) {
+                        if (location.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                            filteredList.add(location);
+                        }
+                    }
+                    FilterResults results = new FilterResults();
+                    results.values = filteredList;
+                    results.count = filteredList.size();
+                    return results;
+                }
+                else {
+                    return new FilterResults();
+                }
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                temporaryList = list;
+                list = (List<Location>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+        return listFilter;
+    }
+
 }

@@ -1,11 +1,16 @@
 package pl.dominikgaloch.pracalicencjacka.fragments;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,6 +36,7 @@ public class LocationListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
+        setHasOptionsMenu(true);
         ArrayList<Location> list = new ArrayList<Location>();
 
         ApplicationDatabase database = Room.databaseBuilder(getContext(), ApplicationDatabase.class,
@@ -52,8 +59,23 @@ public class LocationListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        SearchView searchWidget = (SearchView) menu.findItem(R.id.action_search_item);
-        searchWidget.setVisibility(View.VISIBLE);
+        MenuItem searchItem = menu.findItem(R.id.action_search_item);
+        searchItem.setVisible(true);
+        //SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchWidget = (SearchView) searchItem.getActionView();
+        searchWidget.setVisibility(View.GONE);
+        searchWidget.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
+
 }

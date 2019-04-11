@@ -4,8 +4,10 @@ import android.content.Context;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -53,19 +56,18 @@ public class MapFragment extends Fragment {
     public MapFragment() {
     }
 
-    public MapFragment(GeoPoint point)
-    {
+    public MapFragment(GeoPoint point) {
         this.passedPoint = point;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         mvOsmView.setTileSource(TileSourceFactory.MAPNIK);
         mvOsmView.setMultiTouchControls(true);
         mvOsmView.getController().setZoom(7.0);
+        Configuration.getInstance().setUserAgentValue(getContext().getPackageName());
         database = Room.databaseBuilder(getContext(), ApplicationDatabase.class,
                 getString(R.string.database_name)).allowMainThreadQueries().build();
 
@@ -85,8 +87,7 @@ public class MapFragment extends Fragment {
             }
         };
 
-        if(passedPoint != null)
-        {
+        if (passedPoint != null) {
             putMarker(mvOsmView, passedPoint, false);
             mvOsmView.invalidate();
             mvOsmView.getController().setCenter(passedPoint);
@@ -128,9 +129,8 @@ public class MapFragment extends Fragment {
         return view;
     }
 
-    private void putMarker(MapView map, GeoPoint position, boolean removeLastUserLocation)
-    {
-        if(removeLastUserLocation && userLocationPin != null)
+    private void putMarker(MapView map, GeoPoint position, boolean removeLastUserLocation) {
+        if (removeLastUserLocation && userLocationPin != null)
             mvOsmView.getOverlays().remove(userLocationPin);
         Marker pin = new Marker(map);
         pin.setPosition(position);
@@ -138,8 +138,7 @@ public class MapFragment extends Fragment {
         map.getOverlays().add(pin);
     }
 
-    private void createForm(final GeoPoint point)
-    {
+    private void createForm(final GeoPoint point) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         View dialogView = getActivity().getLayoutInflater().inflate(R.layout.place_form_dialog, null);
         final EditText etName = dialogView.findViewById(R.id.tName);
@@ -154,11 +153,10 @@ public class MapFragment extends Fragment {
         swInputType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     etLatitude.setVisibility(View.VISIBLE);
                     etLongitude.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     etLatitude.setVisibility(View.GONE);
                     etLongitude.setVisibility(View.GONE);
                 }

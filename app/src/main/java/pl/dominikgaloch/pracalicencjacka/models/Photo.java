@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey;
 public class Photo {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    //@ForeignKey()
+    //@ForeignKey(Location.class::new;)
     private int placeId;
+    private String photoLocation;
 
     public int getId() {
         return id;
@@ -25,5 +26,13 @@ public class Photo {
 
     public void setPlaceId(int placeId) {
         this.placeId = placeId;
+    }
+
+    public String getPhotoLocation() {
+        return photoLocation;
+    }
+
+    public void setPhotoLocation(String photoLocation) {
+        this.photoLocation = photoLocation;
     }
 }
