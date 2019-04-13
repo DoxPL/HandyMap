@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -143,8 +144,7 @@ public class MapFragment extends Fragment {
         View dialogView = getActivity().getLayoutInflater().inflate(R.layout.place_form_dialog, null);
         final EditText etName = dialogView.findViewById(R.id.tName);
         final EditText etDescription = dialogView.findViewById(R.id.tDescription);
-        final EditText etLatitude = dialogView.findViewById(R.id.etLat);
-        final EditText etLongitude = dialogView.findViewById(R.id.etLng);
+        final LinearLayout manualCoordinatesForm = dialogView.findViewById(R.id.manualCoordsForm);
         Button btnSave = dialogView.findViewById(R.id.btnSave);
         Switch swInputType = dialogView.findViewById(R.id.swAutoManual);
         dialogBuilder.setView(dialogView);
@@ -154,11 +154,9 @@ public class MapFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    etLatitude.setVisibility(View.VISIBLE);
-                    etLongitude.setVisibility(View.VISIBLE);
+                    manualCoordinatesForm.setVisibility(View.VISIBLE);
                 } else {
-                    etLatitude.setVisibility(View.GONE);
-                    etLongitude.setVisibility(View.GONE);
+                    manualCoordinatesForm.setVisibility(View.GONE);
                 }
             }
         });

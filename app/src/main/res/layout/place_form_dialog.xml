@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:background="#194470"
+        android:background="@color/colorAccent"
         android:fontFamily="sans-serif-condensed"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
@@ -17,83 +17,107 @@
         android:textColor="@android:color/background_light"
         android:textSize="26sp" />
 
-    <TextView
-        android:id="@+id/textView7"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/form_place_name" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/tName" />
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_place_name" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/form_place_desc" />
+        <EditText
+            android:id="@+id/tName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/tDescription" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_place_desc" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/form_marker_color" />
+        <EditText
+            android:id="@+id/tDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spnColor"
-        android:layout_marginBottom="5dp" />
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_marker_color" />
 
-    <Switch
-        android:id="@+id/swAutoManual"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/form_switch_text" />
+        <Spinner
+            android:id="@+id/spnColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp" />
 
-    <TextView
-        android:id="@+id/tvLat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/form_lat" />
+        <Switch
+            android:id="@+id/swAutoManual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_switch_text" />
+    </LinearLayout>
 
-    <EditText
+    <LinearLayout
+        android:id="@+id/manualCoordsForm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/etLat" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone">
 
-    <TextView
-        android:id="@+id/tvLng"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/form_lng" />
+        <TextView
+            android:id="@+id/tvLat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_lat" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/etLng" />
+        <EditText
+            android:id="@+id/etLat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/tvLng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_lng" />
+
+        <EditText
+            android:id="@+id/etLng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        android:layout_margin="10dp"
+        android:background="@drawable/form_button_shape"
+        android:drawableStart="@android:drawable/ic_menu_save"
+        android:drawablePadding="10dp"
+        android:gravity="center"
         android:fontFamily="sans-serif"
         android:text="@string/form_save_text"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
+
 </LinearLayout>
