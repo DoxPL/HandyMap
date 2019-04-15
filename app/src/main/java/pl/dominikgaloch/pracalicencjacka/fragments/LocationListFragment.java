@@ -26,6 +26,7 @@ import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.models.Location;
+import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
 import pl.dominikgaloch.pracalicencjacka.utilities.LocationAdapter;
 
 public class LocationListFragment extends Fragment {
@@ -39,10 +40,7 @@ public class LocationListFragment extends Fragment {
         setHasOptionsMenu(true);
         ArrayList<Location> list = new ArrayList<Location>();
 
-        ApplicationDatabase database = Room.databaseBuilder(getContext(), ApplicationDatabase.class,
-                getString(R.string.database_name)).allowMainThreadQueries().build();
-
-        list = (ArrayList<Location>) database.locationDao().getAllLocations();
+        list = (ArrayList<Location>) new LocationRepository(getContext()).getAllLocations();
 
         recyclerView = view.findViewById(R.id.recyclerView);
         adapter = new LocationAdapter(getContext(), list);

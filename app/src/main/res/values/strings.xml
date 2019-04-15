@@ -30,4 +30,5 @@
     <string name="form_lat">Szerokość geograficzna</string>
     <string name="form_lng">Długość geograficzna</string>
     <string name="form_save_text">Zapisz</string>
+
 </resources>

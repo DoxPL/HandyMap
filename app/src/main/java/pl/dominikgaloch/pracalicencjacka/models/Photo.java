@@ -1,16 +1,21 @@
 package pl.dominikgaloch.pracalicencjacka.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(foreignKeys = @ForeignKey(entity = Location.class, parentColumns = "id",
+        childColumns = "placeID", onDelete = ForeignKey.CASCADE))
 public class Photo {
     @PrimaryKey(autoGenerate = true)
+    @NonNull
     private int id;
-    //@ForeignKey(Location.class::new;)
-    private int placeId;
+    @ColumnInfo(name = "photoLocation")
     private String photoLocation;
+    @ColumnInfo(name = "placeID")
+    private int placeID;
 
     public int getId() {
         return id;
@@ -20,19 +25,19 @@ public class Photo {
         this.id = id;
     }
 
-    public int getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(int placeId) {
-        this.placeId = placeId;
-    }
-
     public String getPhotoLocation() {
         return photoLocation;
     }
 
     public void setPhotoLocation(String photoLocation) {
         this.photoLocation = photoLocation;
+    }
+
+    public int getPlaceID() {
+        return placeID;
+    }
+
+    public void setPlaceID(int placeID) {
+        this.placeID = placeID;
     }
 }

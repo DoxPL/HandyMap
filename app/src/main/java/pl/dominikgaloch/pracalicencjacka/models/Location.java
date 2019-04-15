@@ -4,13 +4,16 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import org.osmdroid.util.GeoPoint;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(indices = {@Index(value = "id")})
 public class Location {
     @PrimaryKey(autoGenerate = true)
+    @NonNull
     private int id;
     @ColumnInfo(name = "location_name")
     private String name;
