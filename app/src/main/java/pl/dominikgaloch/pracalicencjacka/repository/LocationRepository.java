@@ -24,6 +24,11 @@ public class LocationRepository {
         return DATABASE_INSTANCE.locationDao().getAllLocations();
     }
 
+    public List<String> getAllLocationNames()
+    {
+        return DATABASE_INSTANCE.locationDao().getAllLocationNames();
+    }
+
     public void insertLocation(Location location)
     {
         DATABASE_INSTANCE.locationDao().insertLocation(location);

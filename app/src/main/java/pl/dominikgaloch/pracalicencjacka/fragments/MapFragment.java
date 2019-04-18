@@ -129,7 +129,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        storeLastLocation();
+        storeLastChanges();
     }
 
     @Override
@@ -199,21 +199,22 @@ public class MapFragment extends Fragment {
         Configuration.getInstance().setUserAgentValue(context.getPackageName());
         mvOsmView.setTileSource(TileSourceFactory.MAPNIK);
         mvOsmView.setMultiTouchControls(true);
-        mvOsmView.getController().setZoom(9.0);
+        mvOsmView.getController().setZoom(getLastZoomLevel());
         if (passedPoint != null) {
             putMarker(passedPoint, false);
             mvOsmView.invalidate();
-            mvOsmView.getController().animateTo(passedPoint);
+            mvOsmView.getController().setCenter(passedPoint);
         } else {
             mvOsmView.getController().setCenter(getLastLocation());
         }
     }
 
-    private void storeLastLocation()
+    private void storeLastChanges()
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putFloat("lastLocationLatitude", (float) mvOsmView.getMapCenter().getLatitude());
         editor.putFloat("lastLocationLongitude", (float) mvOsmView.getMapCenter().getLongitude());
+        editor.putFloat("lastZoomLevel", (float) mvOsmView.getZoomLevelDouble());
         editor.commit();
     }
 
@@ -221,5 +222,10 @@ public class MapFragment extends Fragment {
         double latitude = preferences.getFloat("lastLocationLatitude", 0);
         double longitude = preferences.getFloat("lastLocationLongitude", 0);
         return new GeoPoint(latitude, longitude);
+    }
+
+    private double getLastZoomLevel()
+    {
+        return preferences.getFloat("lastZoomLevel", (float) 10d);
     }
 }
