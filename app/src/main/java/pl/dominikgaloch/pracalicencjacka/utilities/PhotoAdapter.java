@@ -24,6 +24,8 @@ public class PhotoAdapter extends BaseAdapter {
         photos.add(R.drawable.bonuspack_bubble);
         photos.add(R.drawable.marker_default);
         photos.add(R.drawable.osm_ic_follow_me);
+        photos.add(R.drawable.ic_launcher_foreground);
+
     }
 
     @Override
