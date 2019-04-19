@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
@@ -20,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +30,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.models.Photo;
 import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.repository.PhotoRepository;
 import pl.dominikgaloch.pracalicencjacka.utilities.PhotoAdapter;
 
 public class GalleryFragment extends Fragment {
@@ -38,6 +42,7 @@ public class GalleryFragment extends Fragment {
     private GridView gvPhotos;
     private FloatingActionButton fabTakePhoto;
     private PhotoAdapter photoAdapter;
+    private List<Photo> photoList;
     private static final int PHOTO_TAKEN_CODE = 1002;
 
     @Nullable
@@ -48,9 +53,11 @@ public class GalleryFragment extends Fragment {
         fabTakePhoto = getActivity().findViewById(R.id.fab);
         spPlaces = view.findViewById(R.id.spPlaces);
         gvPhotos = view.findViewById(R.id.gvPhotos);
-        photoAdapter = new PhotoAdapter(context);
+        photoList = new PhotoRepository(context).getAllPhotos(10);
+        //getPhotoPathList();
+        photoAdapter = new PhotoAdapter(context, photoList);
         gvPhotos.setAdapter(photoAdapter);
-        spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, getPlaceNames());
+        spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, getPlaceNames());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spPlaces.setAdapter(spinnerAdapter);
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
@@ -60,20 +67,37 @@ public class GalleryFragment extends Fragment {
                 File file = makePhotoFile();
                 if(file != null) {
                     Uri photoUri = FileProvider.getUriForFile(context, "pl.dominikgaloch.pracalicencjacka.fileprovider", file);
+                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 }
 
                 startActivityForResult(intent, PHOTO_TAKEN_CODE);
             }
         });
+        gvPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+        gvPhotos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                photoAdapter.removePhoto(position);
+                photoAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+
         return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == PHOTO_TAKEN_CODE) {
-            Toast.makeText(context, "Zdrobiono fotke", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(context, "Zrobiono fotke", Toast.LENGTH_LONG).show();
+            photoAdapter.notifyDataSetChanged();
         }
     }
 
@@ -95,6 +119,13 @@ public class GalleryFragment extends Fragment {
     }
 
     public void savePhoto(String path) {
+        //
+        Photo photo = new Photo();
+        photo.setPhotoLocation(path);
+        photo.setPlaceID(10);
+        new PhotoRepository(context).insertPhoto(photo);
+        photoList.add(photo);
+        //
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File fileToSave = new File(path);
         Uri uri = Uri.fromFile(fileToSave);
@@ -102,4 +133,10 @@ public class GalleryFragment extends Fragment {
         getActivity().sendBroadcast(intent);
     }
 
+    public void getPhotoPathList() {
+        List<Photo> tmp = new PhotoRepository(context).getAllPhotos(10);
+        for(Photo p : tmp) {
+            //photoPathList.add(p.getPhotoLocation());
+        }
+    }
 }

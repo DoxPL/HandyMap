@@ -25,4 +25,8 @@ public class PhotoRepository {
     {
         DATABASE_INSTANCE.photoDao().deletePhoto(photo);
     }
+
+    public void insertPhoto(Photo photo) {
+        DATABASE_INSTANCE.photoDao().insertPhoto(photo);
+    }
 }

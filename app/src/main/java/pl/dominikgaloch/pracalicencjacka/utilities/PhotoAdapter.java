@@ -8,24 +8,26 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.repository.PhotoRepository;
 
 public class PhotoAdapter extends BaseAdapter {
 
     private Context context;
-    List<Integer> photos;
+    private List<Photo> photos;
+    public static final int PHOTO_WIDTH = 200;
+    public static final int PHOTO_HEIGHT = 180;
 
-    public PhotoAdapter(Context context) {
+    public PhotoAdapter(Context context, List<Photo> photos) {
         this.context = context;
-        photos = new ArrayList<>();
-        photos.add(R.drawable.bonuspack_bubble);
-        photos.add(R.drawable.marker_default);
-        photos.add(R.drawable.osm_ic_follow_me);
-        photos.add(R.drawable.ic_launcher_foreground);
-
+        this.photos = photos;
     }
 
     @Override
@@ -46,9 +48,26 @@ public class PhotoAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView ivPhotoItem = new ImageView(context);
-        ivPhotoItem.setImageResource(photos.get(position));
+        loadPhoto(getPhotoPath(position), ivPhotoItem);
         ivPhotoItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ivPhotoItem.setLayoutParams(new GridView.LayoutParams(200, 180));
+        ivPhotoItem.setLayoutParams(new GridView.LayoutParams(PHOTO_WIDTH, PHOTO_HEIGHT));
         return ivPhotoItem;
+    }
+
+    public void loadPhoto(String path, ImageView ivPhoto) {
+        Picasso.get().load(new File(path)).resize(PHOTO_WIDTH, PHOTO_HEIGHT).into(ivPhoto);
+    }
+
+    public String getPhotoPath(int position) {
+        return photos.get(position).getPhotoLocation();
+    }
+
+    public void removePhoto(int position) {
+        new PhotoRepository(context).deletePhoto(photos.get(position));
+        photos.remove(position);
+    }
+
+    public void createDialog() {
+
     }
 }
