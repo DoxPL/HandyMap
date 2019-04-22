@@ -25,6 +25,7 @@ import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
 import pl.dominikgaloch.pracalicencjacka.models.Location;
+import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 
@@ -82,10 +83,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                     case DialogInterface.BUTTON_POSITIVE:
                         Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
                                 setAction("Action", null).show();
-                        //Todo delete after create repository
-                        ApplicationDatabase database = Room.databaseBuilder(context, ApplicationDatabase.class,
-                                context.getString(R.string.database_name)).allowMainThreadQueries().build();
-                        database.locationDao().delete(list.get(currentItemPosition));
+                        new LocationRepository(context).deleteLocation(list.get(currentItemPosition));
                         list.remove(currentItemPosition);
                         notifyDataSetChanged();
                         break;

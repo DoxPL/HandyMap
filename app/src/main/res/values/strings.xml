@@ -18,7 +18,7 @@
     <string name="nfcModuleNotFound">Moduł NFC nie jest obsługiwany na tym urządzeniu</string>
     <string name="database_name">user_database</string>
     <string name="place_name">Nazwa miejsca</string>
-    
+
     <!--Dialog -->
     <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>
     <string name="dialog_pos_text">Potwierdź</string>

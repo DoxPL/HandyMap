@@ -30,7 +30,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
-    implementation ('com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0'){
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0') {
         exclude group: 'group_name', module: 'module_name'
     }
     implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'

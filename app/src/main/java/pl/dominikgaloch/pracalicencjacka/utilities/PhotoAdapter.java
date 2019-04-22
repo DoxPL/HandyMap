@@ -1,6 +1,7 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -8,6 +9,7 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -50,7 +52,7 @@ public class PhotoAdapter extends BaseAdapter {
         ImageView ivPhotoItem = new ImageView(context);
         loadPhoto(getPhotoPath(position), ivPhotoItem);
         ivPhotoItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ivPhotoItem.setLayoutParams(new GridView.LayoutParams(PHOTO_WIDTH, PHOTO_HEIGHT));
+        //ivPhotoItem.setLayoutParams(new GridView.LayoutParams(PHOTO_WIDTH, PHOTO_HEIGHT));
         return ivPhotoItem;
     }
 
@@ -65,9 +67,5 @@ public class PhotoAdapter extends BaseAdapter {
     public void removePhoto(int position) {
         new PhotoRepository(context).deletePhoto(photos.get(position));
         photos.remove(position);
-    }
-
-    public void createDialog() {
-
     }
 }

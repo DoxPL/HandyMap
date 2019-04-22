@@ -2,6 +2,7 @@ package pl.dominikgaloch.pracalicencjacka.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,18 +18,20 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import pl.dominikgaloch.pracalicencjacka.ImageViewActivity;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.models.Photo;
 import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
@@ -44,6 +47,7 @@ public class GalleryFragment extends Fragment {
     private PhotoAdapter photoAdapter;
     private List<Photo> photoList;
     private static final int PHOTO_TAKEN_CODE = 1002;
+    private static final String FILE_EXTENSION = ".jpg";
 
     @Nullable
     @Override
@@ -53,7 +57,7 @@ public class GalleryFragment extends Fragment {
         fabTakePhoto = getActivity().findViewById(R.id.fab);
         spPlaces = view.findViewById(R.id.spPlaces);
         gvPhotos = view.findViewById(R.id.gvPhotos);
-        photoList = new PhotoRepository(context).getAllPhotos(10);
+        photoList = new PhotoRepository(context).getAllPhotos(1);
         //getPhotoPathList();
         photoAdapter = new PhotoAdapter(context, photoList);
         gvPhotos.setAdapter(photoAdapter);
@@ -77,15 +81,16 @@ public class GalleryFragment extends Fragment {
         gvPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(getContext(), ImageViewActivity.class);
+                intent.putExtra("photo_path", getPhotoPath(position));
+                startActivity(intent);
             }
         });
 
         gvPhotos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                photoAdapter.removePhoto(position);
-                photoAdapter.notifyDataSetChanged();
+                createDialog(view, position);
                 return true;
             }
         });
@@ -105,12 +110,16 @@ public class GalleryFragment extends Fragment {
         return new LocationRepository(context).getAllLocationNames();
     }
 
+    public String getPhotoPath(int position) {
+        return photoList.get(position).getPhotoLocation();
+    }
+
     public File makePhotoFile() {
         String date = new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date());
         File destinationDirectory = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File temporaryFile = null;
         try {
-            temporaryFile = File.createTempFile(date, ".jpg", destinationDirectory);
+            temporaryFile = File.createTempFile(date, FILE_EXTENSION, destinationDirectory);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,7 +131,7 @@ public class GalleryFragment extends Fragment {
         //
         Photo photo = new Photo();
         photo.setPhotoLocation(path);
-        photo.setPlaceID(10);
+        photo.setPlaceID(1);
         new PhotoRepository(context).insertPhoto(photo);
         photoList.add(photo);
         //
@@ -133,10 +142,30 @@ public class GalleryFragment extends Fragment {
         getActivity().sendBroadcast(intent);
     }
 
-    public void getPhotoPathList() {
-        List<Photo> tmp = new PhotoRepository(context).getAllPhotos(10);
-        for(Photo p : tmp) {
-            //photoPathList.add(p.getPhotoLocation());
-        }
+    public boolean deletePhoto(String path) {
+        File fileToDelete = new File(path);
+        return fileToDelete.delete();
+    }
+
+
+    public void createDialog(final View view, final int currentItemPosition) {
+        DialogInterface.OnClickListener dialogCallback = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        String photoPath = photoList.get(currentItemPosition).getPhotoLocation();
+                        photoAdapter.removePhoto(currentItemPosition);
+                        photoAdapter.notifyDataSetChanged();
+                        deletePhoto(photoPath);
+                        Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
+                                setAction("Action", null).show();
+                }
+            }
+        };
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setMessage(context.getResources().getString(R.string.dialog_question))
+                .setPositiveButton(context.getResources().getString(R.string.dialog_pos_text), dialogCallback)
+                .setNegativeButton(context.getResources().getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 }
