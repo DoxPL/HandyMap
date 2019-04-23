@@ -19,23 +19,24 @@ public class LocationRepository {
                 allowMainThreadQueries().build();
     }
 
-    public List<Location> getAllLocations()
-    {
+    public List<Location> getAllLocations() {
         return DATABASE_INSTANCE.locationDao().getAllLocations();
     }
 
-    public List<String> getAllLocationNames()
-    {
+    public List<String> getAllLocationNames() {
         return DATABASE_INSTANCE.locationDao().getAllLocationNames();
     }
 
-    public void insertLocation(Location location)
-    {
+    public Location getLocationByPattern(String pattern) {
+        pattern += "%";
+        return DATABASE_INSTANCE.locationDao().getLocationByPattern(pattern);
+    }
+
+    public void insertLocation(Location location) {
         DATABASE_INSTANCE.locationDao().insertLocation(location);
     }
 
-    public void deleteLocation(Location location)
-    {
+    public void deleteLocation(Location location) {
         DATABASE_INSTANCE.locationDao().delete(location);
     }
 }

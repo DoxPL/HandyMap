@@ -62,7 +62,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                 else {
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     fragmentManager.beginTransaction().
-                            replace(R.id.content, new MapFragment(location.getGeoPoint())).
+                            replace(R.id.content, new MapFragment(location)).
                             addToBackStack(null)
                             .commit();
                 }

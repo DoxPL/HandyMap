@@ -11,13 +11,14 @@
     <string name="marker_color">Marker color</string>
     <string name="name">Place name</string>
     <string name="mapView">Wyświetl mapę</string>
-    <string name="listView">Lista lokacji</string>
+    <string name="listView">Lista miejsc</string>
     <string name="galleryView">Galeria zdjęć</string>
     <string name="commTitle">Komunikacja</string>
     <string name="nfcView">Komunikacja NFC</string>
     <string name="nfcModuleNotFound">Moduł NFC nie jest obsługiwany na tym urządzeniu</string>
     <string name="database_name">user_database</string>
     <string name="place_name">Nazwa miejsca</string>
+    <string name="current_user_position">Aktualna pozycja użytkownika</string>
 
     <!--Dialog -->
     <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>

@@ -6,16 +6,21 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -45,34 +50,33 @@ import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
 public class MapFragment extends Fragment {
 
     private MapView mvOsmView;
-    private ArrayList<OverlayItem> locationList;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private MapEventsOverlay mapEventsOverlay;
     private MapEventsReceiver eventsReceiver;
-    private ItemizedOverlayWithFocus<OverlayItem> mapOverlay;
     private Marker userLocationPin;
     private static final long GPS_UPDATE_INTERVAL = 2000;
     private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
-    private GeoPoint passedPoint;
+    private Location receivedLocation;
     private Context context;
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     public MapFragment() {
+
     }
 
-    public MapFragment(GeoPoint point) {
-        this.passedPoint = point;
+    public MapFragment(Location receivedLocation) {
+        this.receivedLocation = receivedLocation;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+        setHasOptionsMenu(true);
         preferences = getActivity().getSharedPreferences(getActivity().getPackageName(), Context.MODE_PRIVATE);
         context = getContext();
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         mapInit();
-        locationList = new ArrayList<>();
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         eventsReceiver = new MapEventsReceiver() {
@@ -84,7 +88,7 @@ public class MapFragment extends Fragment {
             @Override
             public boolean longPressHelper(GeoPoint p) {
                 createForm(p);
-                return false;
+                return true;
             }
         };
 
@@ -96,7 +100,9 @@ public class MapFragment extends Fragment {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(android.location.Location location) {
+
                 putMarker(new GeoPoint(location.getLatitude(), location.getLongitude()),
+                        getString(R.string.current_user_position),
                         true);
                 mvOsmView.invalidate();
             }
@@ -129,7 +135,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        storeLastChanges();
+        saveLastChanges();
     }
 
     @Override
@@ -138,12 +144,42 @@ public class MapFragment extends Fragment {
         super.onResume();
     }
 
-    private void putMarker(GeoPoint position, boolean removeLastUserLocation) {
-        if (removeLastUserLocation && userLocationPin != null)
-            mvOsmView.getOverlays().remove(userLocationPin);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem searchItem = menu.findItem(R.id.action_search_item);
+        searchItem.setVisible(true);
+        SearchView searchWidget = (SearchView) searchItem.getActionView();
+        searchWidget.setQueryHint(getString(R.string.place_name));
+        searchWidget.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.length() > 2) {
+                    Location location = new LocationRepository(context).getLocationByPattern(newText);
+                    if (location != null) {
+                        mvOsmView.getController().animateTo(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+    private void putMarker(GeoPoint position, String name, boolean changeUserPosition) {
         Marker pin = new Marker(mvOsmView);
         pin.setPosition(position);
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        pin.setTitle(name);
+        if (changeUserPosition) {
+            if (userLocationPin != null)
+                mvOsmView.getOverlays().remove(userLocationPin);
+            userLocationPin = pin;
+        }
         mvOsmView.getOverlays().add(pin);
     }
 
@@ -176,8 +212,8 @@ public class MapFragment extends Fragment {
                 String description = etDescription.getText().toString();
                 Location locationToInsert = new Location(name,
                         description, point.getLatitude(), point.getLongitude());
+                putMarker(point, locationToInsert.getName(), false);
                 new LocationRepository(context).insertLocation(locationToInsert);
-                putMarker(point, false);
                 dialog.dismiss();
 
             }
@@ -190,7 +226,7 @@ public class MapFragment extends Fragment {
         LocationRepository locationRepository = new LocationRepository(context);
         for(Location location : locationRepository.getAllLocations())
         {
-            putMarker(location.getGeoPoint(), false);
+            putMarker(location.getGeoPoint(), location.getName(), false);
         }
     }
 
@@ -200,16 +236,16 @@ public class MapFragment extends Fragment {
         mvOsmView.setTileSource(TileSourceFactory.MAPNIK);
         mvOsmView.setMultiTouchControls(true);
         mvOsmView.getController().setZoom(getLastZoomLevel());
-        if (passedPoint != null) {
-            putMarker(passedPoint, false);
+        if (receivedLocation != null) {
+            putMarker(receivedLocation.getGeoPoint(), receivedLocation.getName(),false);
             mvOsmView.invalidate();
-            mvOsmView.getController().setCenter(passedPoint);
+            mvOsmView.getController().setCenter(receivedLocation.getGeoPoint());
         } else {
             mvOsmView.getController().setCenter(getLastLocation());
         }
     }
 
-    private void storeLastChanges()
+    private void saveLastChanges()
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putFloat("lastLocationLatitude", (float) mvOsmView.getMapCenter().getLatitude());

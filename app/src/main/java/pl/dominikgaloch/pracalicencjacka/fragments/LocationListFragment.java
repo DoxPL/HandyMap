@@ -61,7 +61,6 @@ public class LocationListFragment extends Fragment {
         searchItem.setVisible(true);
         //SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchWidget = (SearchView) searchItem.getActionView();
-        searchWidget.setVisibility(View.GONE);
         searchWidget.setQueryHint(getString(R.string.place_name));
         searchWidget.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
