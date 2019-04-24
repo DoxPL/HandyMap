@@ -1,5 +1,7 @@
 package pl.dominikgaloch.pracalicencjacka.dao;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.List;
 
 import androidx.room.Dao;
@@ -17,11 +19,15 @@ public interface LocationDao {
     @Query("SELECT location_name FROM location")
     List<String> getAllLocationNames();
 
+    @Query("SELECT (sin((latitude - :lat) / 2) * sin((latitude - :lat) / 2) + cos(:lat) * cos(latitude) * " +
+            "sin((longitude - :lng) / 2) * sin((longitude - :lng) / 2)) AS distance FROM location")
+    List<Integer> getNearbyPlaces(Float lat, Float lng);
+
     @Query("SELECT * FROM location WHERE location_name LIKE :pattern LIMIT 1")
     Location getLocationByPattern(String pattern);
 
     @Insert
-    void insertAllLocations(Location ... locations);
+    void insertAllLocations(Location... locations);
 
     @Insert
     void insertLocation(Location location);
