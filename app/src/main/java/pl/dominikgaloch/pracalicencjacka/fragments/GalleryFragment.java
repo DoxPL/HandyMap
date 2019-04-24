@@ -31,7 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import pl.dominikgaloch.pracalicencjacka.ImageViewActivity;
+import pl.dominikgaloch.pracalicencjacka.activities.ImageViewActivity;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.models.Photo;
 import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;

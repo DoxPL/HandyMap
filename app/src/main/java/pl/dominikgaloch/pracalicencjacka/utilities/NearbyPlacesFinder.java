@@ -1,13 +1,17 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
+import android.content.Context;
+
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
 import pl.dominikgaloch.pracalicencjacka.models.Location;
+import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
 
 public class NearbyPlacesFinder {
     private ArrayList<Location> locationList;
+    private Context context;
     private GeoPoint currentLocation;
 
     public NearbyPlacesFinder(ArrayList<Location> locationsList)

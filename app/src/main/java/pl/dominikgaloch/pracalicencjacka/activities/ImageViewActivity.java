@@ -1,6 +1,7 @@
-package pl.dominikgaloch.pracalicencjacka;
+package pl.dominikgaloch.pracalicencjacka.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import pl.dominikgaloch.pracalicencjacka.R;
 
 import android.os.Bundle;
 import android.widget.ImageView;

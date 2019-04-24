@@ -2,11 +2,13 @@ package pl.dominikgaloch.pracalicencjacka.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 
@@ -16,11 +18,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -55,11 +60,12 @@ public class MapFragment extends Fragment {
     private MapEventsOverlay mapEventsOverlay;
     private MapEventsReceiver eventsReceiver;
     private Marker userLocationPin;
-    private static final long GPS_UPDATE_INTERVAL = 2000;
-    private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     private Location receivedLocation;
     private Context context;
     private SharedPreferences preferences;
+    private static final long GPS_UPDATE_INTERVAL = 2000;
+    private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
+    private static final int USER_PIN_COLOR = 0;
 
     public MapFragment() {
 
@@ -102,7 +108,7 @@ public class MapFragment extends Fragment {
             public void onLocationChanged(android.location.Location location) {
 
                 putMarker(new GeoPoint(location.getLatitude(), location.getLongitude()),
-                        getString(R.string.current_user_position),
+                        getString(R.string.current_user_position), USER_PIN_COLOR,
                         true);
                 mvOsmView.invalidate();
             }
@@ -139,8 +145,7 @@ public class MapFragment extends Fragment {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
     }
 
@@ -159,7 +164,7 @@ public class MapFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.length() > 2) {
+                if (newText.length() > 2) {
                     Location location = new LocationRepository(context).getLocationByPattern(newText);
                     if (location != null) {
                         mvOsmView.getController().animateTo(new GeoPoint(location.getLatitude(), location.getLongitude()));
@@ -170,10 +175,11 @@ public class MapFragment extends Fragment {
         });
     }
 
-    private void putMarker(GeoPoint position, String name, boolean changeUserPosition) {
+    private void putMarker(GeoPoint position, String name, int color, boolean changeUserPosition) {
         Marker pin = new Marker(mvOsmView);
         pin.setPosition(position);
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        pin.setIcon(getPinDrawable(color));
         pin.setTitle(name);
         if (changeUserPosition) {
             if (userLocationPin != null)
@@ -183,16 +189,50 @@ public class MapFragment extends Fragment {
         mvOsmView.getOverlays().add(pin);
     }
 
+    private Drawable getPinDrawable(int type) {
+        int pin = 0;
+        switch (type) {
+            case 0:
+                pin = R.drawable.marker_blue;
+                break;
+            case 1:
+                pin = R.drawable.marker_green;
+                break;
+            case 2:
+                pin = R.drawable.marker_orange;
+                break;
+            case 3:
+                pin = R.drawable.marker_yellow;
+                break;
+            case 4:
+                pin = R.drawable.marker_brown;
+                break;
+            case 5:
+                pin = R.drawable.marker_purple;
+                break;
+            case 6:
+                pin = R.drawable.marker_red;
+                break;
+            default:
+                pin = R.drawable.person;
+                break;
+        }
+        return ContextCompat.getDrawable(context, pin);
+    }
+
     private void createForm(final GeoPoint point) {
+        //Todo move
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         View dialogView = getActivity().getLayoutInflater().inflate(R.layout.place_form_dialog, null);
         final EditText etName = dialogView.findViewById(R.id.tName);
         final EditText etDescription = dialogView.findViewById(R.id.tDescription);
+        final Spinner spPinColor = dialogView.findViewById(R.id.spPinColor);
         final LinearLayout manualCoordinatesForm = dialogView.findViewById(R.id.manualCoordsForm);
         Button btnSave = dialogView.findViewById(R.id.btnSave);
         Switch swInputType = dialogView.findViewById(R.id.swAutoManual);
         dialogBuilder.setView(dialogView);
         final AlertDialog dialog = dialogBuilder.create();
+
 
         swInputType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -210,9 +250,10 @@ public class MapFragment extends Fragment {
             public void onClick(View v) {
                 String name = etName.getText().toString();
                 String description = etDescription.getText().toString();
+                int color = spPinColor.getSelectedItemPosition();
                 Location locationToInsert = new Location(name,
-                        description, point.getLatitude(), point.getLongitude());
-                putMarker(point, locationToInsert.getName(), false);
+                        description, point.getLatitude(), point.getLongitude(), color);
+                putMarker(point, locationToInsert.getName(), locationToInsert.getMarkerColor(), false);
                 new LocationRepository(context).insertLocation(locationToInsert);
                 dialog.dismiss();
 
@@ -221,23 +262,20 @@ public class MapFragment extends Fragment {
         dialog.show();
     }
 
-    private void addLocationsFromDatabase()
-    {
+    private void addLocationsFromDatabase() {
         LocationRepository locationRepository = new LocationRepository(context);
-        for(Location location : locationRepository.getAllLocations())
-        {
-            putMarker(location.getGeoPoint(), location.getName(), false);
+        for (Location location : locationRepository.getAllLocations()) {
+            putMarker(location.getGeoPoint(), location.getName(), location.getMarkerColor(), false);
         }
     }
 
-    private void mapInit()
-    {
+    private void mapInit() {
         Configuration.getInstance().setUserAgentValue(context.getPackageName());
         mvOsmView.setTileSource(TileSourceFactory.MAPNIK);
         mvOsmView.setMultiTouchControls(true);
         mvOsmView.getController().setZoom(getLastZoomLevel());
         if (receivedLocation != null) {
-            putMarker(receivedLocation.getGeoPoint(), receivedLocation.getName(),false);
+            putMarker(receivedLocation.getGeoPoint(), receivedLocation.getName(), receivedLocation.getMarkerColor(), false);
             mvOsmView.invalidate();
             mvOsmView.getController().setCenter(receivedLocation.getGeoPoint());
         } else {
@@ -245,8 +283,7 @@ public class MapFragment extends Fragment {
         }
     }
 
-    private void saveLastChanges()
-    {
+    private void saveLastChanges() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putFloat("lastLocationLatitude", (float) mvOsmView.getMapCenter().getLatitude());
         editor.putFloat("lastLocationLongitude", (float) mvOsmView.getMapCenter().getLongitude());
@@ -260,8 +297,8 @@ public class MapFragment extends Fragment {
         return new GeoPoint(latitude, longitude);
     }
 
-    private double getLastZoomLevel()
-    {
+    private double getLastZoomLevel() {
         return preferences.getFloat("lastZoomLevel", (float) 10d);
     }
+
 }

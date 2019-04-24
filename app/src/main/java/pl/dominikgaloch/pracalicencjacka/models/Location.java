@@ -31,11 +31,12 @@ public class Location {
     private boolean visited;
 
 
-    public Location(String name, String description, double latitude, double longitude) {
+    public Location(String name, String description, double latitude, double longitude, int markerColor) {
         this.name = name;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.markerColor = markerColor;
     }
 
     public int getId() {

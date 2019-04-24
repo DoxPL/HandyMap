@@ -20,7 +20,6 @@
     <string name="place_name">Nazwa miejsca</string>
     <string name="current_user_position">Aktualna pozycja użytkownika</string>
 
-    <!--Dialog -->
     <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>
     <string name="dialog_pos_text">Potwierdź</string>
     <string name="dialog_neg_text">Anuluj</string>
@@ -39,5 +38,15 @@
 
     <string name="perm_gps">Aplikacja potrzebuje uprawnień do lokalizacji</string>
     <string name="perm_storage">Aplikacja potrzebuje uprawnień do odczytu i zapisu w pamięci urządzenia</string>
+
+    <string-array name="color_array">
+        <item>Niebieski</item>
+        <item>Zielony</item>
+        <item>Pomarańczowy</item>
+        <item>Żółty</item>
+        <item>Brązowy</item>
+        <item>Purpurowy</item>
+        <item>Czerwony</item>
+    </string-array>
 
 </resources>
