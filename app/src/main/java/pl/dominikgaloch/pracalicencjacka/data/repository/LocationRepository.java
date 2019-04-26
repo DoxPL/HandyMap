@@ -1,14 +1,17 @@
-package pl.dominikgaloch.pracalicencjacka.repository;
+package pl.dominikgaloch.pracalicencjacka.data.repository;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
-import pl.dominikgaloch.pracalicencjacka.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
 
 public class LocationRepository {
     private static ApplicationDatabase DATABASE_INSTANCE;
@@ -19,8 +22,12 @@ public class LocationRepository {
                 allowMainThreadQueries().build();
     }
 
-    public List<Location> getAllLocations() {
+    public LiveData<List<Location>> getAllLocations() {
         return DATABASE_INSTANCE.locationDao().getAllLocations();
+    }
+
+    public List<NearbyPlace> getNearbyPlaces(GeoPoint point) {
+        return DATABASE_INSTANCE.locationDao().getNearbyPlaces(point.getLatitude(), point.getLongitude());
     }
 
     public List<String> getAllLocationNames() {

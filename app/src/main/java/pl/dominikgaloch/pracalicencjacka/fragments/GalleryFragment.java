@@ -33,9 +33,9 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import pl.dominikgaloch.pracalicencjacka.activities.ImageViewActivity;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.models.Photo;
-import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
-import pl.dominikgaloch.pracalicencjacka.repository.PhotoRepository;
+import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
 import pl.dominikgaloch.pracalicencjacka.utilities.PhotoAdapter;
 
 public class GalleryFragment extends Fragment {

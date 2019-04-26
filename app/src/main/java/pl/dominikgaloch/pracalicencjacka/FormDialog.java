@@ -1,21 +1,15 @@
 package pl.dominikgaloch.pracalicencjacka;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 
 import org.osmdroid.util.GeoPoint;
-
-import pl.dominikgaloch.pracalicencjacka.models.Location;
-import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
 
 public class FormDialog {
 

@@ -1,10 +1,10 @@
-package pl.dominikgaloch.pracalicencjacka.dao;
+package pl.dominikgaloch.pracalicencjacka.data.dao;
 
 import java.util.List;
 
 import androidx.room.Dao;
 import androidx.room.Query;
-import pl.dominikgaloch.pracalicencjacka.models.City;
+import pl.dominikgaloch.pracalicencjacka.data.models.City;
 
 @Dao
 public interface CityDao {

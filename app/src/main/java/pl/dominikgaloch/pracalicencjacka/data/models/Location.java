@@ -1,6 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka.models;
-
-import com.mapbox.mapboxsdk.geometry.LatLng;
+package pl.dominikgaloch.pracalicencjacka.data.models;
 
 import org.osmdroid.util.GeoPoint;
 

@@ -7,7 +7,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
@@ -18,8 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -29,28 +26,24 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import androidx.room.Room;
-import pl.dominikgaloch.pracalicencjacka.FormDialog;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
-import pl.dominikgaloch.pracalicencjacka.models.Location;
-import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
+import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 
 public class MapFragment extends Fragment {
 
@@ -63,6 +56,7 @@ public class MapFragment extends Fragment {
     private Location receivedLocation;
     private Context context;
     private SharedPreferences preferences;
+    private LocationViewModel locationViewModel;
     private static final long GPS_UPDATE_INTERVAL = 2000;
     private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     private static final int USER_PIN_COLOR = 0;
@@ -81,6 +75,7 @@ public class MapFragment extends Fragment {
         setHasOptionsMenu(true);
         preferences = getActivity().getSharedPreferences(getActivity().getPackageName(), Context.MODE_PRIVATE);
         context = getContext();
+        locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         mapInit();
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -106,11 +101,11 @@ public class MapFragment extends Fragment {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(android.location.Location location) {
-
-                putMarker(new GeoPoint(location.getLatitude(), location.getLongitude()),
-                        getString(R.string.current_user_position), USER_PIN_COLOR,
+                GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
+                putMarker(currentPosition, getString(R.string.current_user_position), USER_PIN_COLOR,
                         true);
                 mvOsmView.invalidate();
+                Toast.makeText(context, getNearbyPlacesStr(currentPosition), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -263,10 +258,14 @@ public class MapFragment extends Fragment {
     }
 
     private void addLocationsFromDatabase() {
-        LocationRepository locationRepository = new LocationRepository(context);
-        for (Location location : locationRepository.getAllLocations()) {
-            putMarker(location.getGeoPoint(), location.getName(), location.getMarkerColor(), false);
-        }
+        locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
+            @Override
+            public void onChanged(List<Location> locations) {
+                for (Location location : locations) {
+                    putMarker(location.getGeoPoint(), location.getName(), location.getMarkerColor(), false);
+                }
+            }
+        });
     }
 
     private void mapInit() {
@@ -299,6 +298,15 @@ public class MapFragment extends Fragment {
 
     private double getLastZoomLevel() {
         return preferences.getFloat("lastZoomLevel", (float) 10d);
+    }
+
+    //Todo remove later
+    private String getNearbyPlacesStr(GeoPoint point) {
+        String str = "";
+        for (NearbyPlace nearbyPlace : new LocationRepository(context).getNearbyPlaces(point)) {
+            str += nearbyPlace.getName() + ", " + nearbyPlace.getDistance() + "\n";
+        }
+        return str;
     }
 
 }

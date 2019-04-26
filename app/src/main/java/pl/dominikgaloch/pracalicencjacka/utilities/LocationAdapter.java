@@ -19,13 +19,11 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
-import pl.dominikgaloch.pracalicencjacka.models.Location;
-import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 
@@ -131,6 +129,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
             }
         };
         return listFilter;
+    }
+
+    public void setList(List<Location> locationList) {
+        list = locationList;
+        notifyDataSetChanged();
     }
 
 }

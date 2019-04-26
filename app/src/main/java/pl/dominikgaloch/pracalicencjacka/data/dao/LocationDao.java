@@ -1,27 +1,26 @@
-package pl.dominikgaloch.pracalicencjacka.dao;
-
-import org.osmdroid.util.GeoPoint;
+package pl.dominikgaloch.pracalicencjacka.data.dao;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
-import pl.dominikgaloch.pracalicencjacka.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
 
 @Dao
 public interface LocationDao {
     @Query("SELECT * FROM location")
-    List<Location> getAllLocations();
+    LiveData<List<Location>> getAllLocations();
 
     @Query("SELECT location_name FROM location")
     List<String> getAllLocationNames();
 
-    @Query("SELECT (sin((latitude - :lat) / 2) * sin((latitude - :lat) / 2) + cos(:lat) * cos(latitude) * " +
+    @Query("SELECT location_name, (sin((latitude - :lat) / 2) * sin((latitude - :lat) / 2) + cos(:lat) * cos(latitude) * " +
             "sin((longitude - :lng) / 2) * sin((longitude - :lng) / 2)) AS distance FROM location")
-    List<Integer> getNearbyPlaces(Float lat, Float lng);
+    List<NearbyPlace> getNearbyPlaces(double lat, double lng);
 
     @Query("SELECT * FROM location WHERE location_name LIKE :pattern LIMIT 1")
     Location getLocationByPattern(String pattern);

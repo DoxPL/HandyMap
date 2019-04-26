@@ -1,24 +1,18 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.models.Photo;
-import pl.dominikgaloch.pracalicencjacka.repository.PhotoRepository;
+import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
 
 public class PhotoAdapter extends BaseAdapter {
 

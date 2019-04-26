@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka;
+package pl.dominikgaloch.pracalicencjacka.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.LocationListFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;

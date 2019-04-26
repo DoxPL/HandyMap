@@ -1,13 +1,13 @@
 package pl.dominikgaloch.pracalicencjacka.fragments;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,17 +21,18 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
-import pl.dominikgaloch.pracalicencjacka.models.Location;
-import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.utilities.LocationAdapter;
 
 public class LocationListFragment extends Fragment {
     private RecyclerView recyclerView;
     private LocationAdapter adapter;
+    private LocationViewModel locationViewModel;
 
     @Nullable
     @Override
@@ -40,7 +41,7 @@ public class LocationListFragment extends Fragment {
         setHasOptionsMenu(true);
         ArrayList<Location> list = new ArrayList<Location>();
 
-        list = (ArrayList<Location>) new LocationRepository(getContext()).getAllLocations();
+        locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         adapter = new LocationAdapter(getContext(), list);
@@ -49,7 +50,12 @@ public class LocationListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        adapter.notifyDataSetChanged();
+        locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
+            @Override
+            public void onChanged(List<Location> locations) {
+                adapter.setList(locations);
+            }
+        });
 
         return view;
     }

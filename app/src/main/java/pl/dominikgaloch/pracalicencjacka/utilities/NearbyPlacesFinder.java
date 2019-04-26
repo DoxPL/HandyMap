@@ -6,8 +6,7 @@ import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
-import pl.dominikgaloch.pracalicencjacka.models.Location;
-import pl.dominikgaloch.pracalicencjacka.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 
 public class NearbyPlacesFinder {
     private ArrayList<Location> locationList;

@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka.repository;
+package pl.dominikgaloch.pracalicencjacka.data.repository;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
-import pl.dominikgaloch.pracalicencjacka.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
 
 public class PhotoRepository {
     private static ApplicationDatabase DATABASE_INSTANCE;
