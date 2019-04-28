@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,21 +32,30 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import pl.dominikgaloch.pracalicencjacka.activities.ImageViewActivity;
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.PhotoViewModel;
 import pl.dominikgaloch.pracalicencjacka.utilities.PhotoAdapter;
 
 public class GalleryFragment extends Fragment {
     private Spinner spPlaces;
+    private List<String> locationNames;
     private ArrayAdapter<String> spinnerAdapter;
     private Context context;
     private GridView gvPhotos;
     private FloatingActionButton fabTakePhoto;
     private PhotoAdapter photoAdapter;
     private List<Photo> photoList;
+    private LocationViewModel locationViewModel;
+    private PhotoViewModel photoViewModel;
     private static final int PHOTO_TAKEN_CODE = 1002;
     private static final String FILE_EXTENSION = ".jpg";
 
@@ -54,22 +64,26 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         context = getContext();
+        locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
+        photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
         fabTakePhoto = getActivity().findViewById(R.id.fab);
         spPlaces = view.findViewById(R.id.spPlaces);
+        locationNames = new ArrayList<>();
         gvPhotos = view.findViewById(R.id.gvPhotos);
-        photoList = new PhotoRepository(context).getAllPhotos(1);
-        //getPhotoPathList();
-        photoAdapter = new PhotoAdapter(context, photoList);
+        photoAdapter = new PhotoAdapter(context, photoViewModel);
+        spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item);
         gvPhotos.setAdapter(photoAdapter);
-        spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, getPlaceNames());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spPlaces.setAdapter(spinnerAdapter);
+        populatePhotoItems();
+        populateSpinnerItems();
+
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File file = makePhotoFile();
-                if(file != null) {
+                if (file != null) {
                     Uri photoUri = FileProvider.getUriForFile(context, "pl.dominikgaloch.pracalicencjacka.fileprovider", file);
                     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
@@ -106,8 +120,23 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-    public List<String> getPlaceNames() {
-        return new LocationRepository(context).getAllLocationNames();
+    public void populateSpinnerItems() {
+        locationViewModel.getAllLocationNames().observe(this, new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                spinnerAdapter.addAll(strings);
+            }
+        });
+    }
+
+    public void populatePhotoItems() {
+        //int locationID = spPlaces.getSelectedItem().toString();
+        photoViewModel.getAllPhotos(1).observe(this, new Observer<List<Photo>>() {
+            @Override
+            public void onChanged(List<Photo> photos) {
+                photoAdapter.setList(photos);
+            }
+        });
     }
 
     public String getPhotoPath(int position) {
@@ -128,13 +157,11 @@ public class GalleryFragment extends Fragment {
     }
 
     public void savePhoto(String path) {
-        //
         Photo photo = new Photo();
         photo.setPhotoLocation(path);
-        photo.setPlaceID(1);
+        photo.setPlaceID(10);
         new PhotoRepository(context).insertPhoto(photo);
-        photoList.add(photo);
-        //
+        photoAdapter.insertPhoto(photo);
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File fileToSave = new File(path);
         Uri uri = Uri.fromFile(fileToSave);
@@ -154,7 +181,7 @@ public class GalleryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        String photoPath = photoList.get(currentItemPosition).getPhotoLocation();
+                        String photoPath = photoAdapter.getPhotoPath(currentItemPosition);
                         photoAdapter.removePhoto(currentItemPosition);
                         photoAdapter.notifyDataSetChanged();
                         deletePhoto(photoPath);

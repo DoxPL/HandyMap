@@ -19,6 +19,7 @@
     <string name="database_name">user_database</string>
     <string name="place_name">Nazwa miejsca</string>
     <string name="current_user_position">Aktualna pozycja użytkownika</string>
+    <string name="osm_contributors"> © autorzy OpenStreetMap</string>
 
     <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>
     <string name="dialog_pos_text">Potwierdź</string>

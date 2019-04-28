@@ -160,10 +160,14 @@ public class MapFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 2) {
-                    Location location = new LocationRepository(context).getLocationByPattern(newText);
-                    if (location != null) {
-                        mvOsmView.getController().animateTo(new GeoPoint(location.getLatitude(), location.getLongitude()));
-                    }
+                    locationViewModel.getLocationByPattern(newText).observe(MapFragment.this, new Observer<Location>() {
+                        @Override
+                        public void onChanged(Location location) {
+                            if (location != null) {
+                                mvOsmView.getController().animateTo(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                            }
+                        }
+                    });
                 }
                 return true;
             }
@@ -249,7 +253,7 @@ public class MapFragment extends Fragment {
                 Location locationToInsert = new Location(name,
                         description, point.getLatitude(), point.getLongitude(), color);
                 putMarker(point, locationToInsert.getName(), locationToInsert.getMarkerColor(), false);
-                new LocationRepository(context).insertLocation(locationToInsert);
+                locationViewModel.insert(locationToInsert);
                 dialog.dismiss();
 
             }
@@ -302,11 +306,7 @@ public class MapFragment extends Fragment {
 
     //Todo remove later
     private String getNearbyPlacesStr(GeoPoint point) {
-        String str = "";
-        for (NearbyPlace nearbyPlace : new LocationRepository(context).getNearbyPlaces(point)) {
-            str += nearbyPlace.getName() + ", " + nearbyPlace.getDistance() + "\n";
-        }
-        return str;
+        return null;
     }
 
 }

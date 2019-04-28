@@ -9,26 +9,30 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.PhotoViewModel;
 
 public class PhotoAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Photo> photos;
+    private List<Photo> photoList;
+    private PhotoViewModel photoViewModel;
     public static final int PHOTO_WIDTH = 200;
     public static final int PHOTO_HEIGHT = 180;
 
-    public PhotoAdapter(Context context, List<Photo> photos) {
+    public PhotoAdapter(Context context, PhotoViewModel photoViewModel) {
         this.context = context;
-        this.photos = photos;
+        this.photoViewModel = photoViewModel;
+        this.photoList = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return photos.size();
+        return photoList.size();
     }
 
     @Override
@@ -46,7 +50,6 @@ public class PhotoAdapter extends BaseAdapter {
         ImageView ivPhotoItem = new ImageView(context);
         loadPhoto(getPhotoPath(position), ivPhotoItem);
         ivPhotoItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        //ivPhotoItem.setLayoutParams(new GridView.LayoutParams(PHOTO_WIDTH, PHOTO_HEIGHT));
         return ivPhotoItem;
     }
 
@@ -55,11 +58,21 @@ public class PhotoAdapter extends BaseAdapter {
     }
 
     public String getPhotoPath(int position) {
-        return photos.get(position).getPhotoLocation();
+        return photoList.get(position).getPhotoLocation();
     }
 
     public void removePhoto(int position) {
-        new PhotoRepository(context).deletePhoto(photos.get(position));
-        photos.remove(position);
+        photoViewModel.delete(photoList.get(position));
+        photoList.remove(position);
     }
+
+    public void setList(List<Photo> photoList) {
+        this.photoList = photoList;
+        notifyDataSetChanged();
+    }
+
+    public void insertPhoto(Photo photo) {
+        photoList.add(photo);
+    }
+
 }

@@ -28,4 +28,12 @@ public class LocationViewModel extends AndroidViewModel {
     public LiveData<List<Location>> getAllLocation() {
         return locationRepository.getAllLocations();
     }
+
+    public LiveData<List<String>> getAllLocationNames() {
+        return locationRepository.getAllLocationNames();
+    }
+
+    public LiveData<Location> getLocationByPattern(String pattern) {
+        return locationRepository.getLocationByPattern(pattern);
+    }
 }

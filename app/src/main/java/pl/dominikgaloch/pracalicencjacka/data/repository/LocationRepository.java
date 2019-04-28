@@ -1,49 +1,84 @@
 package pl.dominikgaloch.pracalicencjacka.data.repository;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.List;
 
+import javax.xml.transform.dom.DOMLocator;
+
 import androidx.lifecycle.LiveData;
+import androidx.room.Delete;
 import androidx.room.Room;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
+import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
 
 public class LocationRepository {
-    private static ApplicationDatabase DATABASE_INSTANCE;
+    private static ApplicationDatabase databaseInstance;
+    private LocationDao locationDao;
 
     public LocationRepository(Context context) {
-        DATABASE_INSTANCE = Room.databaseBuilder(context, ApplicationDatabase.class,
-                context.getString(R.string.database_name)).fallbackToDestructiveMigration().
-                allowMainThreadQueries().build();
+        databaseInstance = ApplicationDatabase.getInstance(context);
+        locationDao = databaseInstance.locationDao();
     }
 
     public LiveData<List<Location>> getAllLocations() {
-        return DATABASE_INSTANCE.locationDao().getAllLocations();
+        return locationDao.getAllLocations();
     }
 
     public List<NearbyPlace> getNearbyPlaces(GeoPoint point) {
-        return DATABASE_INSTANCE.locationDao().getNearbyPlaces(point.getLatitude(), point.getLongitude());
+        return locationDao.getNearbyPlaces(point.getLatitude(), point.getLongitude());
     }
 
-    public List<String> getAllLocationNames() {
-        return DATABASE_INSTANCE.locationDao().getAllLocationNames();
+    public LiveData<List<String>> getAllLocationNames() {
+        return locationDao.getAllLocationNames();
     }
 
-    public Location getLocationByPattern(String pattern) {
+    public LiveData<Location> getLocationByPattern(String pattern) {
         pattern += "%";
-        return DATABASE_INSTANCE.locationDao().getLocationByPattern(pattern);
+        return locationDao.getLocationByPattern(pattern);
     }
 
     public void insertLocation(Location location) {
-        DATABASE_INSTANCE.locationDao().insertLocation(location);
+        new InsertLocationAsyncTask(locationDao).execute(location);
     }
 
     public void deleteLocation(Location location) {
-        DATABASE_INSTANCE.locationDao().delete(location);
+        new DeleteLocationAsyncTask(locationDao).execute(location);
+    }
+
+    public class InsertLocationAsyncTask extends AsyncTask<Location, Void, Void> {
+
+        private LocationDao locationDao;
+
+        public InsertLocationAsyncTask(LocationDao locationDao) {
+            this.locationDao = locationDao;
+        }
+
+        @Override
+        protected Void doInBackground(Location... locations) {
+            locationDao.insertLocation(locations[0]);
+            return null;
+        }
+    }
+
+    public class DeleteLocationAsyncTask extends AsyncTask<Location, Void, Void> {
+
+        private LocationDao locationDao;
+
+        public DeleteLocationAsyncTask(LocationDao locationDao) {
+            this.locationDao = locationDao;
+        }
+
+        @Override
+        protected Void doInBackground(Location... locations) {
+            locationDao.deleteLocation(locations[0]);
+            return null;
+        }
     }
 }

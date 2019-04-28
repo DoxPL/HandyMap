@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
@@ -28,13 +29,13 @@ import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 
     private Context context;
-    private List<Location> list;
+    private List<Location> locationList;
     private List<Location> temporaryList;
 
     public LocationAdapter(Context context, List<Location> list)
     {
         this.context = context;
-        this.list = list;
+        this.locationList = list;
         temporaryList = new ArrayList<>();
     }
 
@@ -48,7 +49,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
 
     @Override
     public void onBindViewHolder(@NonNull LocationHolder locationHolder, int i) {
-        final Location location = list.get(i);
+        final Location location = locationList.get(i);
         locationHolder.tvName.setText(location.getName());
         locationHolder.tvDescription.setText(location.getDescription());
         locationHolder.setOnClickListener(new ListItemClickListener() {
@@ -70,7 +71,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return locationList.size();
     }
 
     public void createDialog(final View view, final int currentItemPosition) {
@@ -81,8 +82,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                     case DialogInterface.BUTTON_POSITIVE:
                         Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
                                 setAction("Action", null).show();
-                        new LocationRepository(context).deleteLocation(list.get(currentItemPosition));
-                        list.remove(currentItemPosition);
+                        new LocationRepository(context).deleteLocation(locationList.get(currentItemPosition));
+                        locationList.remove(currentItemPosition);
                         notifyDataSetChanged();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -100,13 +101,13 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
     {
         final List<Location> filteredList = new ArrayList<>();
         if(temporaryList.size() > 0) {
-            list = temporaryList;
+            locationList = temporaryList;
         }
         Filter listFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 if(constraint != null) {
-                    for (Location location : list) {
+                    for (Location location : locationList) {
                         if (location.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                             filteredList.add(location);
                         }
@@ -123,8 +124,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                temporaryList = list;
-                list = (List<Location>) results.values;
+                temporaryList = locationList;
+                locationList = (List<Location>) results.values;
                 notifyDataSetChanged();
             }
         };
@@ -132,7 +133,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
     }
 
     public void setList(List<Location> locationList) {
-        list = locationList;
+        this.locationList = locationList;
         notifyDataSetChanged();
     }
 

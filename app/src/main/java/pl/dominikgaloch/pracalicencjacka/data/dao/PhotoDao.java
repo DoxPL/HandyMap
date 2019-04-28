@@ -2,6 +2,7 @@ package pl.dominikgaloch.pracalicencjacka.data.dao;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -11,7 +12,7 @@ import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
 @Dao
 public interface PhotoDao {
     @Query("SELECT * FROM photo WHERE placeId=:locationID")
-    List<Photo> getPhotosForLocation(int locationID);
+    LiveData<List<Photo>> getPhotosForLocation(int locationID);
 
     @Insert
     public void insertPhoto(Photo photo);

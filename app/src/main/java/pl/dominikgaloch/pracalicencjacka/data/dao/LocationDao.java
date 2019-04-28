@@ -16,14 +16,14 @@ public interface LocationDao {
     LiveData<List<Location>> getAllLocations();
 
     @Query("SELECT location_name FROM location")
-    List<String> getAllLocationNames();
+    LiveData<List<String>> getAllLocationNames();
 
     @Query("SELECT location_name, (sin((latitude - :lat) / 2) * sin((latitude - :lat) / 2) + cos(:lat) * cos(latitude) * " +
             "sin((longitude - :lng) / 2) * sin((longitude - :lng) / 2)) AS distance FROM location")
     List<NearbyPlace> getNearbyPlaces(double lat, double lng);
 
     @Query("SELECT * FROM location WHERE location_name LIKE :pattern LIMIT 1")
-    Location getLocationByPattern(String pattern);
+    LiveData<Location> getLocationByPattern(String pattern);
 
     @Insert
     void insertAllLocations(Location... locations);
@@ -32,7 +32,7 @@ public interface LocationDao {
     void insertLocation(Location location);
 
     @Delete
-    void delete(Location location);
+    void deleteLocation(Location location);
 
     @Query("UPDATE location SET location_name = :name WHERE id = :id")
     void updateName(String name, int id);
