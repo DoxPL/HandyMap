@@ -16,6 +16,7 @@ import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.LocationIndexName;
 import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
 
 public class LocationRepository {
@@ -35,8 +36,8 @@ public class LocationRepository {
         return locationDao.getNearbyPlaces(point.getLatitude(), point.getLongitude());
     }
 
-    public LiveData<List<String>> getAllLocationNames() {
-        return locationDao.getAllLocationNames();
+    public LiveData<List<LocationIndexName>> getAllLocationsIndexName() {
+        return locationDao.getAllLocationsIndexName();
     }
 
     public LiveData<Location> getLocationByPattern(String pattern) {

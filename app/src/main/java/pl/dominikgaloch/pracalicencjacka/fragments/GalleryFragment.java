@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import androidx.lifecycle.ViewModelProviders;
 import pl.dominikgaloch.pracalicencjacka.activities.ImageViewActivity;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.LocationIndexName;
 import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
@@ -46,14 +48,13 @@ import pl.dominikgaloch.pracalicencjacka.data.viewmodel.PhotoViewModel;
 import pl.dominikgaloch.pracalicencjacka.utilities.PhotoAdapter;
 
 public class GalleryFragment extends Fragment {
-    private Spinner spPlaces;
-    private List<String> locationNames;
+    private Spinner spLocations;
+    private List<LocationIndexName> locationIndexNameList;
     private ArrayAdapter<String> spinnerAdapter;
     private Context context;
     private GridView gvPhotos;
     private FloatingActionButton fabTakePhoto;
     private PhotoAdapter photoAdapter;
-    private List<Photo> photoList;
     private LocationViewModel locationViewModel;
     private PhotoViewModel photoViewModel;
     private static final int PHOTO_TAKEN_CODE = 1002;
@@ -67,15 +68,14 @@ public class GalleryFragment extends Fragment {
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
         fabTakePhoto = getActivity().findViewById(R.id.fab);
-        spPlaces = view.findViewById(R.id.spPlaces);
-        locationNames = new ArrayList<>();
+        spLocations = view.findViewById(R.id.spPlaces);
+        locationIndexNameList = new ArrayList<>();
         gvPhotos = view.findViewById(R.id.gvPhotos);
         photoAdapter = new PhotoAdapter(context, photoViewModel);
         spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item);
         gvPhotos.setAdapter(photoAdapter);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spPlaces.setAdapter(spinnerAdapter);
-        populatePhotoItems();
+        spLocations.setAdapter(spinnerAdapter);
         populateSpinnerItems();
 
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +96,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getContext(), ImageViewActivity.class);
-                intent.putExtra("photo_path", getPhotoPath(position));
+                intent.putExtra("photo_path", photoAdapter.getPhotoPath(position));
                 startActivity(intent);
             }
         });
@@ -108,6 +108,19 @@ public class GalleryFragment extends Fragment {
                 return true;
             }
         });
+
+        spLocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                populatePhotoItems(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         return view;
     }
@@ -121,17 +134,23 @@ public class GalleryFragment extends Fragment {
     }
 
     public void populateSpinnerItems() {
-        locationViewModel.getAllLocationNames().observe(this, new Observer<List<String>>() {
+        locationViewModel.getAllLocationIndexNames().observe(this, new Observer<List<LocationIndexName>>() {
             @Override
-            public void onChanged(List<String> strings) {
-                spinnerAdapter.addAll(strings);
+            public void onChanged(List<LocationIndexName> locationIndexNames) {
+                List<String> locationNameTmpList = new ArrayList<>();
+                for (LocationIndexName locationIndexName : locationIndexNames) {
+                    locationNameTmpList.add(locationIndexName.getName());
+                }
+                locationIndexNameList = locationIndexNames;
+                spinnerAdapter.addAll(locationNameTmpList);
+                populatePhotoItems(0);
             }
         });
     }
 
-    public void populatePhotoItems() {
-        //int locationID = spPlaces.getSelectedItem().toString();
-        photoViewModel.getAllPhotos(1).observe(this, new Observer<List<Photo>>() {
+    public void populatePhotoItems(int spinnerSelectedItemPosition) {
+        photoViewModel.getAllPhotos(locationIndexNameList.get(spinnerSelectedItemPosition).getId()).
+                observe(this, new Observer<List<Photo>>() {
             @Override
             public void onChanged(List<Photo> photos) {
                 photoAdapter.setList(photos);
@@ -139,9 +158,6 @@ public class GalleryFragment extends Fragment {
         });
     }
 
-    public String getPhotoPath(int position) {
-        return photoList.get(position).getPhotoLocation();
-    }
 
     public File makePhotoFile() {
         String date = new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date());
@@ -159,8 +175,8 @@ public class GalleryFragment extends Fragment {
     public void savePhoto(String path) {
         Photo photo = new Photo();
         photo.setPhotoLocation(path);
-        photo.setPlaceID(10);
-        new PhotoRepository(context).insertPhoto(photo);
+        int spinnerSelectedPosition = spLocations.getSelectedItemPosition();
+        photo.setPlaceID(locationIndexNameList.get(spinnerSelectedPosition).getId());
         photoAdapter.insertPhoto(photo);
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File fileToSave = new File(path);

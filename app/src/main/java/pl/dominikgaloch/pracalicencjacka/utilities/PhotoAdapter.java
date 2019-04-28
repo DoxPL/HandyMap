@@ -72,7 +72,9 @@ public class PhotoAdapter extends BaseAdapter {
     }
 
     public void insertPhoto(Photo photo) {
+        photoViewModel.insert(photo);
         photoList.add(photo);
+        notifyDataSetChanged();
     }
 
 }

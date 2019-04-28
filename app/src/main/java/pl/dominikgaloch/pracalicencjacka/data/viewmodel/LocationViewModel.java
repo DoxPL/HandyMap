@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.LocationIndexName;
 import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 
 public class LocationViewModel extends AndroidViewModel {
@@ -29,8 +30,8 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.getAllLocations();
     }
 
-    public LiveData<List<String>> getAllLocationNames() {
-        return locationRepository.getAllLocationNames();
+    public LiveData<List<LocationIndexName>> getAllLocationIndexNames() {
+        return locationRepository.getAllLocationsIndexName();
     }
 
     public LiveData<Location> getLocationByPattern(String pattern) {

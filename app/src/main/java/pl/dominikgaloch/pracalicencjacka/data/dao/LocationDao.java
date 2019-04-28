@@ -8,6 +8,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.LocationIndexName;
 import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
 
 @Dao
@@ -15,8 +16,8 @@ public interface LocationDao {
     @Query("SELECT * FROM location")
     LiveData<List<Location>> getAllLocations();
 
-    @Query("SELECT location_name FROM location")
-    LiveData<List<String>> getAllLocationNames();
+    @Query("SELECT id, location_name FROM location")
+    LiveData<List<LocationIndexName>> getAllLocationsIndexName();
 
     @Query("SELECT location_name, (sin((latitude - :lat) / 2) * sin((latitude - :lat) / 2) + cos(:lat) * cos(latitude) * " +
             "sin((longitude - :lng) / 2) * sin((longitude - :lng) / 2)) AS distance FROM location")
