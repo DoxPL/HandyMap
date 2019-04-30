@@ -28,8 +28,10 @@
 
     <string name="action_search_text">Filtruj</string>
 
-    <string name="form_title">Dodawanie miejsca</string>
+    <string name="form_location_title">Dodawanie miejsca</string>
+    <string name="form_category_title">Dodawanie kategorii</string>
     <string name="form_place_name">Nazwa miejsca</string>
+    <string name="form_category_name">Nazwa kategorii</string>
     <string name="form_place_desc">Opis (opcjonalnie)</string>
     <string name="form_marker_color">Kolor znacznika</string>
     <string name="form_switch_text">Wprowadź współrzędne ręcznie</string>
@@ -39,6 +41,8 @@
 
     <string name="perm_gps">Aplikacja potrzebuje uprawnień do lokalizacji</string>
     <string name="perm_storage">Aplikacja potrzebuje uprawnień do odczytu i zapisu w pamięci urządzenia</string>
+
+    <string name="tab_all_locations">Wszystkie</string>
 
     <string-array name="color_array">
         <item>Niebieski</item>

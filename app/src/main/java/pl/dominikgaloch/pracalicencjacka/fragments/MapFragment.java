@@ -40,9 +40,11 @@ import java.util.List;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.models.Category;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
 import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 
 public class MapFragment extends Fragment {
@@ -57,6 +59,7 @@ public class MapFragment extends Fragment {
     private Context context;
     private SharedPreferences preferences;
     private LocationViewModel locationViewModel;
+    private CategoryViewModel categoryViewModel;
     private static final long GPS_UPDATE_INTERVAL = 2000;
     private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     private static final int USER_PIN_COLOR = 0;
@@ -76,6 +79,7 @@ public class MapFragment extends Fragment {
         preferences = getActivity().getSharedPreferences(getActivity().getPackageName(), Context.MODE_PRIVATE);
         context = getContext();
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
+        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         mapInit();
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -253,6 +257,11 @@ public class MapFragment extends Fragment {
                 Location locationToInsert = new Location(name,
                         description, point.getLatitude(), point.getLongitude(), color);
                 putMarker(point, locationToInsert.getName(), locationToInsert.getMarkerColor(), false);
+                //Todo change
+                Category c = new Category("Main");
+                c.setId(1);
+                locationToInsert.setCategoryID(1);
+                categoryViewModel.insertCategory(c);
                 locationViewModel.insert(locationToInsert);
                 dialog.dismiss();
 

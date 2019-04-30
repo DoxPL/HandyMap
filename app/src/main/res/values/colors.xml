@@ -6,4 +6,5 @@
     <color name="colorCardView">#CAD7E8</color>
     <color name="colorButtonBorder">#316AA3</color>
     <color name="colorOsmWatermark">#EAEEF2</color>
+    <color name="colorTabText">#FFFFFF</color>
 </resources>

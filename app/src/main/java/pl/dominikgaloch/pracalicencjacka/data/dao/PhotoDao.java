@@ -19,4 +19,5 @@ public interface PhotoDao {
 
     @Delete
     public void deletePhoto(Photo photo);
+
 }

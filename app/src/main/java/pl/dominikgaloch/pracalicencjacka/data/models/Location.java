@@ -5,10 +5,12 @@ import org.osmdroid.util.GeoPoint;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = "id")})
+@Entity(indices = {@Index(value = "id")}, foreignKeys = @ForeignKey(entity = Category.class, parentColumns = "id",
+        childColumns = "CategoryID", onDelete = ForeignKey.CASCADE))
 public class Location {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -27,6 +29,8 @@ public class Location {
     private int markerColor;
     @ColumnInfo(name = "visit_state")
     private boolean visited;
+    @ColumnInfo(name = "CategoryID")
+    private int categoryID;
 
 
     public Location(String name, String description, double latitude, double longitude, int markerColor) {
@@ -91,6 +95,14 @@ public class Location {
 
     public void setMarkerColor(int markerColor) {
         this.markerColor = markerColor;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
     }
 
     public boolean isVisited() {
