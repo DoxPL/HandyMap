@@ -34,6 +34,7 @@
     <string name="form_category_name">Nazwa kategorii</string>
     <string name="form_place_desc">Opis (opcjonalnie)</string>
     <string name="form_marker_color">Kolor znacznika</string>
+    <string name="form_category">Kategoria</string>
     <string name="form_switch_text">Wprowadź współrzędne ręcznie</string>
     <string name="form_lat">Szerokość geograficzna</string>
     <string name="form_lng">Długość geograficzna</string>

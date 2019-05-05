@@ -128,7 +128,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == PHOTO_TAKEN_CODE) {
-            Toast.makeText(context, "Zrobiono fotke", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Zrobiono zdjęcie", Toast.LENGTH_LONG).show();
             photoAdapter.notifyDataSetChanged();
         }
     }

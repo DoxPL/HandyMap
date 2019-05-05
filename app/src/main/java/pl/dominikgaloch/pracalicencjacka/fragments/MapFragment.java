@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -39,6 +40,7 @@ import java.util.List;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import pl.dominikgaloch.pracalicencjacka.FormDialog;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.models.Category;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
@@ -46,6 +48,7 @@ import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
 import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
 
 public class MapFragment extends Fragment {
 
@@ -63,6 +66,9 @@ public class MapFragment extends Fragment {
     private static final long GPS_UPDATE_INTERVAL = 2000;
     private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     private static final int USER_PIN_COLOR = 0;
+    private static final float DEFAULT_LATITUDE = 0;
+    private static final float DEFAULT_LONGITUDE = 0;
+    private static final float DEFAULT_ZOOM_LEVEL = 10f;
 
     public MapFragment() {
 
@@ -92,7 +98,14 @@ public class MapFragment extends Fragment {
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                createForm(p);
+                //createForm(p);
+                FormDialog.createFormDialog(getActivity(), context, p, new LocationSavedCallback() {
+                    @Override
+                    public void onDialogSuccess(Location locationToInsert) {
+                        locationViewModel.insert(locationToInsert);
+                        putMarker(locationToInsert);
+                    }
+                });
                 return true;
             }
         };
@@ -192,7 +205,16 @@ public class MapFragment extends Fragment {
         mvOsmView.getOverlays().add(pin);
     }
 
-    private Drawable getPinDrawable(int type) {
+    private void putMarker(Location location) {
+        Marker pin = new Marker(mvOsmView);
+        pin.setPosition(location.getGeoPoint());
+        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        pin.setIcon(getPinDrawable(location.getMarkerColor()));
+        pin.setTitle(location.getName());
+        mvOsmView.getOverlays().add(pin);
+    }
+
+    public Drawable getPinDrawable(int type) {
         int pin = 0;
         switch (type) {
             case 0:
@@ -221,53 +243,6 @@ public class MapFragment extends Fragment {
                 break;
         }
         return ContextCompat.getDrawable(context, pin);
-    }
-
-    private void createForm(final GeoPoint point) {
-        //Todo move
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.place_form_dialog, null);
-        final EditText etName = dialogView.findViewById(R.id.tName);
-        final EditText etDescription = dialogView.findViewById(R.id.tDescription);
-        final Spinner spPinColor = dialogView.findViewById(R.id.spPinColor);
-        final LinearLayout manualCoordinatesForm = dialogView.findViewById(R.id.manualCoordsForm);
-        Button btnSave = dialogView.findViewById(R.id.btnSave);
-        Switch swInputType = dialogView.findViewById(R.id.swAutoManual);
-        dialogBuilder.setView(dialogView);
-        final AlertDialog dialog = dialogBuilder.create();
-
-
-        swInputType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    manualCoordinatesForm.setVisibility(View.VISIBLE);
-                } else {
-                    manualCoordinatesForm.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = etName.getText().toString();
-                String description = etDescription.getText().toString();
-                int color = spPinColor.getSelectedItemPosition();
-                Location locationToInsert = new Location(name,
-                        description, point.getLatitude(), point.getLongitude(), color);
-                putMarker(point, locationToInsert.getName(), locationToInsert.getMarkerColor(), false);
-                //Todo change
-                Category c = new Category("Main");
-                c.setId(1);
-                locationToInsert.setCategoryID(1);
-                categoryViewModel.insertCategory(c);
-                locationViewModel.insert(locationToInsert);
-                dialog.dismiss();
-
-            }
-        });
-        dialog.show();
     }
 
     private void addLocationsFromDatabase() {
@@ -304,13 +279,13 @@ public class MapFragment extends Fragment {
     }
 
     private GeoPoint getLastLocation() {
-        double latitude = preferences.getFloat("lastLocationLatitude", 0);
-        double longitude = preferences.getFloat("lastLocationLongitude", 0);
+        double latitude = preferences.getFloat("lastLocationLatitude", DEFAULT_LATITUDE);
+        double longitude = preferences.getFloat("lastLocationLongitude", DEFAULT_LONGITUDE);
         return new GeoPoint(latitude, longitude);
     }
 
     private double getLastZoomLevel() {
-        return preferences.getFloat("lastZoomLevel", (float) 10d);
+        return preferences.getFloat("lastZoomLevel", DEFAULT_ZOOM_LEVEL);
     }
 
     //Todo remove later
