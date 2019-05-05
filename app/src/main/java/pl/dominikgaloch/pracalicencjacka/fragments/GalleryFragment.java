@@ -92,6 +92,7 @@ public class GalleryFragment extends Fragment {
                 startActivityForResult(intent, PHOTO_TAKEN_CODE);
             }
         });
+
         gvPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -121,7 +122,6 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 
@@ -129,6 +129,7 @@ public class GalleryFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == PHOTO_TAKEN_CODE) {
             Toast.makeText(context, "Zrobiono zdjęcie", Toast.LENGTH_LONG).show();
+            //TODO snackbar
             photoAdapter.notifyDataSetChanged();
         }
     }

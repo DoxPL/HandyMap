@@ -32,6 +32,10 @@ public class LocationRepository {
         return locationDao.getAllLocations();
     }
 
+    public LiveData<List<Location>> getAllLocations(int categoryID) {
+        return locationDao.getAllLocations(categoryID);
+    }
+
     public List<NearbyPlace> getNearbyPlaces(GeoPoint point) {
         return locationDao.getNearbyPlaces(point.getLatitude(), point.getLongitude());
     }

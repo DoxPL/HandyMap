@@ -16,6 +16,9 @@ public interface LocationDao {
     @Query("SELECT * FROM location")
     LiveData<List<Location>> getAllLocations();
 
+    @Query("SELECT * FROM location WHERE CategoryID = :categoryID")
+    LiveData<List<Location>> getAllLocations(int categoryID);
+
     @Query("SELECT id, location_name FROM location")
     LiveData<List<LocationIndexName>> getAllLocationsIndexName();
 

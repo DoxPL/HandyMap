@@ -1,5 +1,6 @@
 package pl.dominikgaloch.pracalicencjacka.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -73,13 +74,27 @@ public class LocationListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         addCategoriesFromDatabase();
+        addLocationsFromDatabase(0);
 
-        locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onChanged(List<Location> locations) {
-                adapter.setList(locations);
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                addLocationsFromDatabase(position);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
+
 
         return view;
     }
@@ -123,13 +138,23 @@ public class LocationListFragment extends Fragment {
         dialog.show();
     }
 
-    public void addCategoriesFromDatabase() {
+    private void addCategoriesFromDatabase() {
         categoryViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
-                for(Category category : categories) {
+                for (Category category : categories) {
                     tabLayout.addTab(tabLayout.newTab().setText(category.getName()));
                 }
+            }
+        });
+    }
+
+    private void addLocationsFromDatabase(final int categoryID) {
+        locationViewModel.getAllLocation(categoryID).observe(this, new Observer<List<Location>>() {
+            @Override
+            public void onChanged(List<Location> locations) {
+                adapter.setList(locations);
+                adapter.notifyDataSetChanged();
             }
         });
     }

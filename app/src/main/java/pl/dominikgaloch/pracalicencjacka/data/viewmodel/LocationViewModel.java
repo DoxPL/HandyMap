@@ -30,6 +30,13 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.getAllLocations();
     }
 
+    public LiveData<List<Location>> getAllLocation(int categoryID) {
+        if(categoryID == 0)
+            return locationRepository.getAllLocations();
+        else
+            return locationRepository.getAllLocations(categoryID);
+    }
+
     public LiveData<List<LocationIndexName>> getAllLocationIndexNames() {
         return locationRepository.getAllLocationsIndexName();
     }

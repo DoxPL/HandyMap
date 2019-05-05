@@ -33,12 +33,13 @@ public class Location {
     private int categoryID;
 
 
-    public Location(String name, String description, double latitude, double longitude, int markerColor) {
+    public Location(String name, String description, double latitude, double longitude, int markerColor, int categoryID) {
         this.name = name;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
         this.markerColor = markerColor;
+        this.categoryID = categoryID;
     }
 
     public int getId() {
