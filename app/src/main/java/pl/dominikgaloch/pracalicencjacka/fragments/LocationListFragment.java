@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -75,6 +76,7 @@ public class LocationListFragment extends Fragment {
 
         addCategoriesFromDatabase();
         addLocationsFromDatabase(0);
+        setTabLongClickListeners();
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -157,6 +159,23 @@ public class LocationListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void setTabLongClickListeners() {
+        LinearLayout tabStrip = (LinearLayout) tabLayout.getChildAt(0);
+
+        for (int i = 0; i < tabStrip.getChildCount(); i++) {
+
+            // Set LongClick listener to each Tab
+            tabStrip.getChildAt(i).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    Toast.makeText(getContext(), "Tab clicked" , Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
+        }
     }
 
 }

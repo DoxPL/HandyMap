@@ -1,6 +1,7 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -13,8 +14,9 @@ public class NearbyPlacesFinder {
     private Context context;
     private GeoPoint currentLocation;
 
-    public NearbyPlacesFinder(ArrayList<Location> locationsList)
+    public NearbyPlacesFinder(Context context, ArrayList<Location> locationsList)
     {
+        this.context = context;
         this.locationList = locationsList;
     }
 
@@ -22,15 +24,13 @@ public class NearbyPlacesFinder {
     {
         for(Location location : locationList)
         {
-            if(point.distanceToAsDouble(new GeoPoint(location.getLatitude(), location.getLongitude())) < 100)
+            double distance = point.distanceToAsDouble(location.getGeoPoint());
+            if(distance < 100)
             {
-
+                Toast.makeText(context, location.getName() + " - " + distance + " m", Toast.LENGTH_LONG).show();
             }
         }
         return true;
     }
 
-    public ArrayList<Location> getLocationList() {
-        return locationList;
-    }
 }

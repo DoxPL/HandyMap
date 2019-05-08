@@ -3,13 +3,10 @@ package pl.dominikgaloch.pracalicencjacka.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,15 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.Toast;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
@@ -42,19 +31,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import pl.dominikgaloch.pracalicencjacka.FormDialog;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
+import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
-import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
+import pl.dominikgaloch.pracalicencjacka.utilities.NearbyPlacesFinder;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements LocationChangedListener {
 
     private MapView mvOsmView;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
     private MapEventsOverlay mapEventsOverlay;
     private MapEventsReceiver eventsReceiver;
     private Marker userLocationPin;
@@ -63,9 +50,7 @@ public class MapFragment extends Fragment {
     private SharedPreferences preferences;
     private LocationViewModel locationViewModel;
     private CategoryViewModel categoryViewModel;
-    private static final long GPS_UPDATE_INTERVAL = 2000;
-    private static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
-    private static final int USER_PIN_COLOR = 0;
+    private static final int USER_PIN_COLOR = -1;
     private static final float DEFAULT_LATITUDE = 0;
     private static final float DEFAULT_LONGITUDE = 0;
     private static final float DEFAULT_ZOOM_LEVEL = 10f;
@@ -88,7 +73,6 @@ public class MapFragment extends Fragment {
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         mapInit();
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         eventsReceiver = new MapEventsReceiver() {
             @Override
@@ -115,37 +99,7 @@ public class MapFragment extends Fragment {
 
         addLocationsFromDatabase();
 
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(android.location.Location location) {
-                GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
-                putMarker(currentPosition, getString(R.string.current_user_position), USER_PIN_COLOR,
-                        true);
-                mvOsmView.invalidate();
-                Toast.makeText(context, getNearbyPlacesStr(currentPosition), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                GPS_UPDATE_INTERVAL,
-                MIN_DISTANCE_TO_GPS_UPDATE,
-                locationListener
-        );
+        ((MainActivity) getActivity()).setLocationListener(this);
 
         return view;
     }
@@ -293,4 +247,17 @@ public class MapFragment extends Fragment {
         return null;
     }
 
+
+    @Override
+    public void onChange(final GeoPoint currentPosition) {
+        putMarker(currentPosition, getString(R.string.current_user_position), USER_PIN_COLOR,
+                true);
+        mvOsmView.invalidate();
+        locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
+            @Override
+            public void onChanged(List<Location> locations) {
+                new NearbyPlacesFinder(context, (ArrayList<Location>)locations).findNearbyPlaces(currentPosition);
+            }
+        });
+    }
 }

@@ -45,6 +45,9 @@
 
     <string name="tab_all_locations">Wszystkie</string>
 
+    <string name="pref_gps">GPS</string>
+    <string name="pref_distance_to_alert">Dystans do powiadomienia</string>
+
     <string-array name="color_array">
         <item>Niebieski</item>
         <item>Zielony</item>

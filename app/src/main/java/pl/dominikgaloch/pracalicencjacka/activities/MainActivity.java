@@ -4,15 +4,15 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.nfc.NfcAdapter;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,22 +31,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.osmdroid.util.GeoPoint;
+
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.LocationListFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.NFCFragment;
+import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private NfcAdapter nfcAdapter;
     private Context context;
+    private LocationChangedListener locationChangedCallback;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    public static final long GPS_UPDATE_INTERVAL = 2000;
+    public static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     public static final int REQUEST_PERMISSIONS = 1001;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,6 +82,36 @@ public class MainActivity extends AppCompatActivity
         if (!checkPermissions()) {
             allowPermissions();
         }
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(android.location.Location location) {
+                GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
+                locationChangedCallback.onChange(currentPosition);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                GPS_UPDATE_INTERVAL,
+                MIN_DISTANCE_TO_GPS_UPDATE,
+                locationListener
+        );
+
     }
 
     @Override
@@ -93,13 +133,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -143,7 +182,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        //  nfcAdapter.enableForegroundDispatch(this);
     }
 
     @Override
@@ -168,10 +206,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void switchFragment(Fragment currentFragment) {
+    public void switchFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (currentFragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.content, currentFragment).addToBackStack(null)
+        if (fragment != null) {
+            fragmentManager.beginTransaction().replace(R.id.content, fragment).addToBackStack(null)
                     .commit();
         }
     }
@@ -200,5 +238,7 @@ public class MainActivity extends AppCompatActivity
             requestPermissions(permissionsArray, REQUEST_PERMISSIONS);
     }
 
-
+    public void setLocationListener(LocationChangedListener listener) {
+        this.locationChangedCallback = listener;
+    }
 }
