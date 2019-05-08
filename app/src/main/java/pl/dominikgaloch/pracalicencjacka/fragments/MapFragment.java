@@ -253,11 +253,5 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         putMarker(currentPosition, getString(R.string.current_user_position), USER_PIN_COLOR,
                 true);
         mvOsmView.invalidate();
-        locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
-            @Override
-            public void onChanged(List<Location> locations) {
-                new NearbyPlacesFinder(context, (ArrayList<Location>)locations).findNearbyPlaces(currentPosition);
-            }
-        });
     }
 }

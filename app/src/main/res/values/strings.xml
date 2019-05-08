@@ -15,6 +15,7 @@
     <string name="galleryView">Galeria zdjęć</string>
     <string name="commTitle">Komunikacja</string>
     <string name="nfcView">Komunikacja NFC</string>
+    <string name="nearbyPlacesView">Miejsca w pobliżu</string>
     <string name="nfcModuleNotFound">Moduł NFC nie jest obsługiwany na tym urządzeniu</string>
     <string name="database_name">user_database</string>
     <string name="place_name">Nazwa miejsca</string>
@@ -47,6 +48,7 @@
 
     <string name="pref_gps">GPS</string>
     <string name="pref_distance_to_alert">Dystans do powiadomienia</string>
+    <string name="pref_center_position">Wyśrodkuj pozycję</string>
 
     <string-array name="color_array">
         <item>Niebieski</item>
@@ -57,5 +59,8 @@
         <item>Purpurowy</item>
         <item>Czerwony</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

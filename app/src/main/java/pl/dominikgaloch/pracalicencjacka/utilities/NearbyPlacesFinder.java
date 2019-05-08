@@ -6,31 +6,39 @@ import android.widget.Toast;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.interfaces.NearbyPlacesListener;
 
 public class NearbyPlacesFinder {
     private ArrayList<Location> locationList;
     private Context context;
     private GeoPoint currentLocation;
-
-    public NearbyPlacesFinder(Context context, ArrayList<Location> locationsList)
-    {
-        this.context = context;
-        this.locationList = locationsList;
-    }
+    private NearbyPlacesListener listener;
 
     public boolean findNearbyPlaces(GeoPoint point)
     {
+        LinkedHashMap<String, Double> nearbyPlacesList = new LinkedHashMap<>();
         for(Location location : locationList)
         {
             double distance = point.distanceToAsDouble(location.getGeoPoint());
-            if(distance < 100)
+            if(distance < 2000)
             {
-                Toast.makeText(context, location.getName() + " - " + distance + " m", Toast.LENGTH_LONG).show();
+                nearbyPlacesList.put(location.getName(), distance);
             }
         }
+        listener.onCheckedNearbyLocations(nearbyPlacesList);
         return true;
+    }
+
+    public void setList(ArrayList<Location> list) {
+        this.locationList = list;
+    }
+
+    public void setListener(NearbyPlacesListener listener) {
+        this.listener = listener;
     }
 
 }

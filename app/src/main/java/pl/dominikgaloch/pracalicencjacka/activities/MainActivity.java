@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
+import pl.dominikgaloch.pracalicencjacka.fragments.NearbyPlacesFragment;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.LocationListFragment;
@@ -160,6 +161,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_gallery:
                 currentFragment = new GalleryFragment();
+                break;
+            case R.id.nav_nearby_places:
+                currentFragment = new NearbyPlacesFragment();
                 break;
             case R.id.nav_nfc:
                 currentFragment = new NFCFragment();
