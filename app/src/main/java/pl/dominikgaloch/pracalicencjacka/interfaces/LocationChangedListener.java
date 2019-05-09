@@ -4,4 +4,5 @@ import org.osmdroid.util.GeoPoint;
 
 public interface LocationChangedListener {
     public void onChange(GeoPoint currentPosition);
+    public void onProviderStatusChanged(boolean status);
 }

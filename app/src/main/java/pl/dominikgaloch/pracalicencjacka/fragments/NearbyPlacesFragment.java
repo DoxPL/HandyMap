@@ -21,6 +21,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mapbox.mapboxsdk.style.layers.Property;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -33,9 +37,11 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
 
     private Context context;
     private ListView listView;
+    private TextView tvStatus;
     private ArrayAdapter<String> listAdapter;
     private LocationViewModel locationViewModel;
     private NearbyPlacesFinder nearbyPlacesFinder;
+    private boolean gpsStatus;
 
     public NearbyPlacesFragment() {
 
@@ -47,9 +53,11 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         View view = inflater.inflate(R.layout.fragment_nearby_places, container, false);
         context = getContext();
         listView = view.findViewById(R.id.listView);
+        tvStatus = view.findViewById(R.id.tvStatus);
         listAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         nearbyPlacesFinder = new NearbyPlacesFinder();
+        gpsStatus = false;
 
         locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
             @Override
@@ -64,6 +72,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         nearbyPlacesFinder.setListener(new NearbyPlacesListener() {
             @Override
             public void onCheckedNearbyLocations(LinkedHashMap<String, Double> nearbyPlaces) {
+                listAdapter.clear();
                 for(Map.Entry<String, Double> entry : nearbyPlaces.entrySet()) {
                     listAdapter.add(entry.getKey() + " - " + entry.getValue());
                     listAdapter.notifyDataSetChanged();
@@ -74,8 +83,25 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         return view;
     }
 
+    private void setStatusLabel() {
+        if(!gpsStatus) {
+            listAdapter.clear();
+            tvStatus.setVisibility(View.VISIBLE);
+            tvStatus.setText(getString(R.string.status_provider_disabled));
+        } else {
+            tvStatus.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void onChange(GeoPoint currentPosition) {
         nearbyPlacesFinder.findNearbyPlaces(currentPosition);
     }
+
+    @Override
+    public void onProviderStatusChanged(boolean status) {
+        this.gpsStatus = status;
+        setStatusLabel();
+    }
+
 }

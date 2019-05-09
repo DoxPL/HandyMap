@@ -254,4 +254,9 @@ public class MapFragment extends Fragment implements LocationChangedListener {
                 true);
         mvOsmView.invalidate();
     }
+
+    @Override
+    public void onProviderStatusChanged(boolean status) {
+
+    }
 }

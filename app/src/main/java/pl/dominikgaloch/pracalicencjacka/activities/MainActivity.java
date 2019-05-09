@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onProviderEnabled(String provider) {
-
+                locationChangedCallback.onProviderStatusChanged(true);
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
+                locationChangedCallback.onProviderStatusChanged(false);
             }
         };
 
