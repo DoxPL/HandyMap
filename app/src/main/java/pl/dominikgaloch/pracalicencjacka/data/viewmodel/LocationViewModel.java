@@ -26,6 +26,10 @@ public class LocationViewModel extends AndroidViewModel {
         locationRepository.deleteLocation(location);
     }
 
+    public void deleteAllLocationsByCategoryName(String name) {
+        locationRepository.deleteAllLocationsByCategoryName(name);
+    }
+
     public LiveData<List<Location>> getAllLocation() {
         return locationRepository.getAllLocations();
     }
@@ -35,6 +39,10 @@ public class LocationViewModel extends AndroidViewModel {
             return locationRepository.getAllLocations();
         else
             return locationRepository.getAllLocations(categoryID);
+    }
+
+    public LiveData<List<Location>> getAllLocationsByCategoryName(String categoryName) {
+        return locationRepository.getAllLocationsByCategoryName(categoryName);
     }
 
     public LiveData<List<LocationIndexName>> getAllLocationIndexNames() {

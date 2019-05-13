@@ -1,5 +1,8 @@
 package pl.dominikgaloch.pracalicencjacka.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -26,12 +29,16 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.activities.SettingsActivity;
 import pl.dominikgaloch.pracalicencjacka.data.models.Category;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
@@ -45,7 +52,8 @@ public class LocationListFragment extends Fragment {
     private LocationAdapter adapter;
     private LocationViewModel locationViewModel;
     private CategoryViewModel categoryViewModel;
-    private FloatingActionButton fabAddCategory;
+    private Context context;
+    private SearchView searchWidget;
 
     @Nullable
     @Override
@@ -53,20 +61,13 @@ public class LocationListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         setHasOptionsMenu(true);
         ArrayList<Location> list = new ArrayList<Location>();
+        context = getContext();
 
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
-        fabAddCategory = getActivity().findViewById(R.id.fab);
         tabLayout = view.findViewById(R.id.tabLayout);
         recyclerView = view.findViewById(R.id.recyclerView);
-
-        fabAddCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createForm();
-            }
-        });
 
         adapter = new LocationAdapter(getContext(), list);
 
@@ -75,15 +76,13 @@ public class LocationListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         addCategoriesFromDatabase();
-        addLocationsFromDatabase(0);
-        setTabLongClickListeners();
-
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                addLocationsFromDatabase(position);
+                String name = tab.getText().toString();
+                addLocationsFromDatabase(name);
+                hideSearchWidget();
             }
 
             @Override
@@ -97,7 +96,6 @@ public class LocationListFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 
@@ -105,8 +103,12 @@ public class LocationListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem searchItem = menu.findItem(R.id.action_search_item);
+        MenuItem addCategoryItem = menu.findItem(R.id.action_add_category);
+        MenuItem removeCategoryItem = menu.findItem(R.id.action_remove_category);
         searchItem.setVisible(true);
-        SearchView searchWidget = (SearchView) searchItem.getActionView();
+        addCategoryItem.setVisible(true);
+        removeCategoryItem.setVisible(true);
+        searchWidget = (SearchView) searchItem.getActionView();
         searchWidget.setQueryHint(getString(R.string.place_name));
         searchWidget.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -122,22 +124,65 @@ public class LocationListFragment extends Fragment {
         });
     }
 
-    public void createForm() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_add_category:
+                createFormDialog();
+                return true;
+            case R.id.action_remove_category:
+                createDeleteConfirmDialog();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void createFormDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         View dialogView = getActivity().getLayoutInflater().inflate(R.layout.category_form_dialog, null);
         final EditText etCategoryName = dialogView.findViewById(R.id.etCategoryName);
         Button btnSave = dialogView.findViewById(R.id.btnSaveCategory);
+        dialogBuilder.setView(dialogView);
+        final AlertDialog dialog = dialogBuilder.create();
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Category categoryToInsert = new Category(etCategoryName.getText().toString());
-                tabLayout.addTab(tabLayout.newTab().setText(categoryToInsert.getName()));
+                tabLayout.removeAllTabs();
+                String tabName = etCategoryName.getText().toString();
+                Category categoryToInsert = new Category(tabName);
                 categoryViewModel.insertCategory(categoryToInsert);
+                dialog.dismiss();
             }
         });
-        dialogBuilder.setView(dialogView);
-        final AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    public void createDeleteConfirmDialog() {
+        DialogInterface.OnClickListener dialogCallback = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        int tabPosition = tabLayout.getSelectedTabPosition();
+                        TabLayout.Tab tabToRemove = tabLayout.getTabAt(tabPosition);
+                        String categoryName = tabToRemove.getText().toString();
+                        categoryViewModel.deleteCategoryByName(categoryName);
+                        locationViewModel.deleteAllLocationsByCategoryName(categoryName);
+                        tabLayout.removeAllTabs();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setMessage(getString(R.string.dialog_remove_question))
+                .setPositiveButton(getString(R.string.dialog_pos_text), dialogCallback)
+                .setNegativeButton(getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 
     private void addCategoriesFromDatabase() {
@@ -145,36 +190,29 @@ public class LocationListFragment extends Fragment {
             @Override
             public void onChanged(List<Category> categories) {
                 for (Category category : categories) {
-                    tabLayout.addTab(tabLayout.newTab().setText(category.getName()));
+                    addTab(category.getName());
                 }
             }
         });
     }
 
-    private void addLocationsFromDatabase(final int categoryID) {
-        locationViewModel.getAllLocation(categoryID).observe(this, new Observer<List<Location>>() {
+    private void addLocationsFromDatabase(String categoryName) {
+        locationViewModel.getAllLocationsByCategoryName(categoryName).observe(this, new Observer<List<Location>>() {
             @Override
             public void onChanged(List<Location> locations) {
                 adapter.setList(locations);
-                adapter.notifyDataSetChanged();
             }
         });
     }
 
-    private void setTabLongClickListeners() {
-        LinearLayout tabStrip = (LinearLayout) tabLayout.getChildAt(0);
+    private void addTab(String name) {
+        tabLayout.addTab(tabLayout.newTab().setText(name));
+    }
 
-        for (int i = 0; i < tabStrip.getChildCount(); i++) {
-
-            // Set LongClick listener to each Tab
-            tabStrip.getChildAt(i).setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-
-                    Toast.makeText(getContext(), "Tab clicked" , Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
+    private void hideSearchWidget() {
+        if(!searchWidget.isIconified()) {
+            searchWidget.setQuery(null, false);
+            searchWidget.setIconified(true);
         }
     }
 

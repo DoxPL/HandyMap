@@ -82,8 +82,8 @@ public class MapFragment extends Fragment implements LocationChangedListener {
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                //createForm(p);
-                FormDialog.createFormDialog(getActivity(), context, p, new LocationSavedCallback() {
+                FormDialog formDialog = new FormDialog(getActivity(), context, p);
+                formDialog.create(new LocationSavedCallback() {
                     @Override
                     public void onDialogSuccess(Location locationToInsert) {
                         locationViewModel.insert(locationToInsert);

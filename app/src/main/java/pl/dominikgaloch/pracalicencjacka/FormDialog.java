@@ -33,22 +33,48 @@ import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
 
 public class FormDialog {
 
-    public static void createFormDialog(Activity activity, Context context, final GeoPoint point, final LocationSavedCallback callback) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.place_form_dialog, null);
-        final EditText etName = dialogView.findViewById(R.id.tName);
-        final EditText etDescription = dialogView.findViewById(R.id.tDescription);
-        final Spinner spPinColor = dialogView.findViewById(R.id.spPinColor);
-        final Spinner spCategory = dialogView.findViewById(R.id.spCategory);
-        final LinearLayout manualCoordinatesForm = dialogView.findViewById(R.id.manualCoordsForm);
-        Button btnSave = dialogView.findViewById(R.id.btnSave);
-        Switch swInputType = dialogView.findViewById(R.id.swAutoManual);
+    private Activity activity;
+    private Context context;
+    private GeoPoint point;
+    private ArrayAdapter<String> spinnerAdapter;
+    private View dialogView;
+    private EditText etName;
+    private EditText etDescription;
+    private Spinner spPinColor;
+    private Spinner spCategory;
+    private LinearLayout manualCoordinatesForm;
+    private Button btnSave;
+    private Switch swInputType;
+    private AlertDialog.Builder dialogBuilder;
+    private List<Integer> categoryIdList;
+
+    public FormDialog(Activity activity, Context context, GeoPoint geoPoint) {
+        this.activity = activity;
+        this.context = context;
+        this.point = geoPoint;
+        categoryIdList = new ArrayList<>();
+        initComponents();
+    }
+
+    private void initComponents() {
+        dialogView = activity.getLayoutInflater().inflate(R.layout.place_form_dialog, null);
+        etName = dialogView.findViewById(R.id.tName);
+        etDescription = dialogView.findViewById(R.id.tDescription);
+        spPinColor = dialogView.findViewById(R.id.spPinColor);
+        spCategory = dialogView.findViewById(R.id.spCategory);
+        manualCoordinatesForm = dialogView.findViewById(R.id.manualCoordsForm);
+        btnSave = dialogView.findViewById(R.id.btnSave);
+        swInputType = dialogView.findViewById(R.id.swAutoManual);
+    }
+
+
+    public void create(final LocationSavedCallback callback) {
+        dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setView(dialogView);
         final AlertDialog dialog = dialogBuilder.create();
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item);
-        final List<Category> allCategories = new ArrayList<>();
+        spinnerAdapter = new ArrayAdapter(activity.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item);
         spCategory.setAdapter(spinnerAdapter);
-        fillSpinner(activity, allCategories, spinnerAdapter);
+        addSpinnerElementsFromDatabase();
 
         swInputType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -66,9 +92,10 @@ public class FormDialog {
             public void onClick(View v) {
                 String name = etName.getText().toString();
                 String description = etDescription.getText().toString();
-                int color = spPinColor.getSelectedItemPosition();
-                int category = allCategories.get(spCategory.getSelectedItemPosition()).getId();
-                Location locationToInsert = new Location(name, description, point.getLatitude(), point.getLongitude(), color, category);
+                int selectedColor = spPinColor.getSelectedItemPosition();
+                int selectedCategory = spCategory.getSelectedItemPosition();
+                int categoryId = categoryIdList.get(selectedCategory);
+                Location locationToInsert = new Location(name, description, point.getLatitude(), point.getLongitude(), selectedColor, categoryId);
                 callback.onDialogSuccess(locationToInsert);
                 dialog.dismiss();
             }
@@ -76,16 +103,20 @@ public class FormDialog {
         dialog.show();
     }
 
-    private static void fillSpinner(Activity activity, final List<Category> allCategories, final ArrayAdapter<String> adapter) {
-        CategoryViewModel categoryViewModel = ViewModelProviders.of((FragmentActivity) activity).get(CategoryViewModel.class);
+    private void addSpinnerElementsFromDatabase() {
+        final CategoryViewModel categoryViewModel = ViewModelProviders.of((FragmentActivity) activity).get(CategoryViewModel.class);
         categoryViewModel.getAllCategories().observe((FragmentActivity) activity, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
-                allCategories.addAll(categories);
-                for(Category category : categories) {
-                    adapter.add(category.getName());
+                if(categories.size() == 0) {
+                    categoryViewModel.insertCategory(new Category(context.getString(R.string.tab_default)));
                 }
-                adapter.notifyDataSetChanged();
+
+                for(Category category : categories) {
+                    spinnerAdapter.add(category.getName());
+                    categoryIdList.add(category.getId());
+                }
+                spinnerAdapter.notifyDataSetChanged();
             }
         });
     }

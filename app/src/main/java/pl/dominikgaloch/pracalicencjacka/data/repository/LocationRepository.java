@@ -36,8 +36,8 @@ public class LocationRepository {
         return locationDao.getAllLocations(categoryID);
     }
 
-    public List<NearbyPlace> getNearbyPlaces(GeoPoint point) {
-        return locationDao.getNearbyPlaces(point.getLatitude(), point.getLongitude());
+    public LiveData<List<Location>> getAllLocationsByCategoryName(String categoryName) {
+        return locationDao.getAllLocationsByCategoryName(categoryName);
     }
 
     public LiveData<List<LocationIndexName>> getAllLocationsIndexName() {
@@ -55,6 +55,10 @@ public class LocationRepository {
 
     public void deleteLocation(Location location) {
         new DeleteLocationAsyncTask(locationDao).execute(location);
+    }
+
+    public void deleteAllLocationsByCategoryName(String categoryName) {
+        new DeleteLocationByCategoryNameAsyncTask(locationDao).execute(categoryName);
     }
 
     public class InsertLocationAsyncTask extends AsyncTask<Location, Void, Void> {
@@ -83,6 +87,21 @@ public class LocationRepository {
         @Override
         protected Void doInBackground(Location... locations) {
             locationDao.deleteLocation(locations[0]);
+            return null;
+        }
+    }
+
+    public class DeleteLocationByCategoryNameAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private LocationDao locationDao;
+
+        public DeleteLocationByCategoryNameAsyncTask(LocationDao locationDao) {
+            this.locationDao = locationDao;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            locationDao.deleteAllLocationsByCategoryName(strings[0]);
             return null;
         }
     }

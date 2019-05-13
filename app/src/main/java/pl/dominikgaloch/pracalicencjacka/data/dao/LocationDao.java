@@ -19,18 +19,14 @@ public interface LocationDao {
     @Query("SELECT * FROM location WHERE CategoryID = :categoryID")
     LiveData<List<Location>> getAllLocations(int categoryID);
 
+    @Query("SELECT * FROM location INNER JOIN category ON location.CategoryID = category.id WHERE category.CategoryName = :categoryName")
+    LiveData<List<Location>> getAllLocationsByCategoryName(String categoryName);
+
     @Query("SELECT id, location_name FROM location")
     LiveData<List<LocationIndexName>> getAllLocationsIndexName();
 
-    @Query("SELECT location_name, (sin((latitude - :lat) / 2) * sin((latitude - :lat) / 2) + cos(:lat) * cos(latitude) * " +
-            "sin((longitude - :lng) / 2) * sin((longitude - :lng) / 2)) AS distance FROM location")
-    List<NearbyPlace> getNearbyPlaces(double lat, double lng);
-
     @Query("SELECT * FROM location WHERE location_name LIKE :pattern LIMIT 1")
     LiveData<Location> getLocationByPattern(String pattern);
-
-    @Insert
-    void insertAllLocations(Location... locations);
 
     @Insert
     void insertLocation(Location location);
@@ -38,8 +34,8 @@ public interface LocationDao {
     @Delete
     void deleteLocation(Location location);
 
-    @Query("DELETE FROM location")
-    void deleteAllLocations();
+    @Query("DELETE FROM location WHERE CategoryID IN (SELECT id FROM category WHERE CategoryName = :categoryName)")
+    void deleteAllLocationsByCategoryName(String categoryName);
 
     @Query("UPDATE location SET location_name = :name WHERE id = :id")
     void updateName(String name, int id);

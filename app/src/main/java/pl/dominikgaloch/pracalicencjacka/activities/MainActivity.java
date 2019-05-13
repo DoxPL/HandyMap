@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
+import androidx.fragment.app.FragmentTransaction;
 import pl.dominikgaloch.pracalicencjacka.fragments.NearbyPlacesFragment;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
@@ -78,8 +79,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         switchFragment(new MapFragment());
+
         if (!checkPermissions()) {
             allowPermissions();
         }
@@ -149,7 +152,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment currentFragment = null;
         switch (id) {
@@ -211,9 +213,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void switchFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.content, fragment).addToBackStack(null)
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.content, fragment)
+                    .addToBackStack(null)
                     .commit();
         }
     }
@@ -239,7 +243,7 @@ public class MainActivity extends AppCompatActivity
     public void allowPermissions() {
         final String[] permissionsArray = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            requestPermissions(permissionsArray, REQUEST_PERMISSIONS);
+        requestPermissions(permissionsArray, REQUEST_PERMISSIONS);
     }
 
     public void setLocationListener(LocationChangedListener listener) {

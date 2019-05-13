@@ -29,8 +29,8 @@ public class CategoryRepository {
         new InsertCategoryAsyncTask(categoryDao).execute(category);
     }
 
-    public void deleteCategory(Category category) {
-        new DeleteCategoryAsyncTask(categoryDao).execute(category);
+    public void deleteCategoryByName(String name) {
+        new DeleteCategoryByNameAsyncTask(categoryDao).execute(name);
     }
 
     public class InsertCategoryAsyncTask extends AsyncTask<Category, Void, Void> {
@@ -48,18 +48,19 @@ public class CategoryRepository {
         }
     }
 
-    public class DeleteCategoryAsyncTask extends AsyncTask<Category, Void, Void> {
+    public class DeleteCategoryByNameAsyncTask extends AsyncTask<String, Void, Void> {
 
         private CategoryDao categoryDao;
 
-        public DeleteCategoryAsyncTask(CategoryDao categoryDao) {
+        public DeleteCategoryByNameAsyncTask(CategoryDao categoryDao) {
             this.categoryDao = categoryDao;
         }
 
         @Override
-        protected Void doInBackground(Category... categories) {
-            categoryDao.deleteCategory(categories[0]);
+        protected Void doInBackground(String... strings) {
+            categoryDao.deleteCategoryByName(strings[0]);
             return null;
         }
     }
+
 }

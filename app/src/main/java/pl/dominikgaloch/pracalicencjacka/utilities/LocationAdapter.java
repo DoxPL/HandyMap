@@ -30,13 +30,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
 
     private Context context;
     private List<Location> locationList;
-    private List<Location> temporaryList;
+    private List<Location> listCopy;
 
     public LocationAdapter(Context context, List<Location> list)
     {
         this.context = context;
         this.locationList = list;
-        temporaryList = new ArrayList<>();
     }
 
     @NonNull
@@ -92,16 +91,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
             }
         };
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        dialogBuilder.setMessage(context.getResources().getString(R.string.dialog_question))
-                .setPositiveButton(context.getResources().getString(R.string.dialog_pos_text), dialogCallback)
-                .setNegativeButton(context.getResources().getString(R.string.dialog_neg_text), dialogCallback).show();
+        dialogBuilder.setMessage(context.getString(R.string.dialog_question))
+                .setPositiveButton(context.getString(R.string.dialog_pos_text), dialogCallback)
+                .setNegativeButton(context.getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 
     public Filter getFilter()
     {
         final List<Location> filteredList = new ArrayList<>();
-        if(temporaryList.size() > 0) {
-            locationList = temporaryList;
+        if(listCopy != null) {
+            locationList = listCopy;
         }
         Filter listFilter = new Filter() {
             @Override
@@ -112,6 +111,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                             filteredList.add(location);
                         }
                     }
+
                     FilterResults results = new FilterResults();
                     results.values = filteredList;
                     results.count = filteredList.size();
@@ -124,7 +124,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                temporaryList = locationList;
+                listCopy = locationList;
                 locationList = (List<Location>) results.values;
                 notifyDataSetChanged();
             }
@@ -133,8 +133,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
     }
 
     public void setList(List<Location> locationList) {
+        this.listCopy = null;
         this.locationList = locationList;
         notifyDataSetChanged();
     }
+
 
 }

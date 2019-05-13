@@ -75,8 +75,8 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
                 listAdapter.clear();
                 for(Map.Entry<String, Double> entry : nearbyPlaces.entrySet()) {
                     listAdapter.add(entry.getKey() + " - " + entry.getValue());
-                    listAdapter.notifyDataSetChanged();
                 }
+                listAdapter.notifyDataSetChanged();
             }
         });
 
