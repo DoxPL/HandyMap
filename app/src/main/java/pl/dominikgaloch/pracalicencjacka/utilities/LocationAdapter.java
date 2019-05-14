@@ -132,6 +132,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
     }
 
     public void setList(List<Location> locationList) {
+        System.out.println("Teraz teraz teraz434r5345345345345345345345345345345345345345");
         listCopy = null;
         this.locationList = locationList;
         notifyDataSetChanged();

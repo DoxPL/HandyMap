@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -56,6 +57,8 @@ public class LocationListFragment extends Fragment {
     private Context context;
     private SearchView searchWidget;
     private MenuItem removeCategoryItem;
+    private int selectedCategoryId;
+    private LiveData<List<Location>> locationListLiveData;
 
     @Nullable
     @Override
@@ -63,6 +66,7 @@ public class LocationListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         setHasOptionsMenu(true);
         context = getContext();
+        selectedCategoryId = 0;
 
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
@@ -81,6 +85,8 @@ public class LocationListFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                if(locationListLiveData != null)
+                    removeObservers();
                 hideSearchField();
                 addLocationsFromDatabase((Integer) tab.getTag());
                 System.out.println("tab selected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -183,13 +189,20 @@ public class LocationListFragment extends Fragment {
         });
     }
 
-    private void addLocationsFromDatabase(int categoryId) {
-        locationViewModel.getAllLocation(categoryId).observe(this, new Observer<List<Location>>() {
+    private void addLocationsFromDatabase(final int categoryId) {
+        final Observer <List<Location>> dataObserver = new Observer<List<Location>>() {
             @Override
             public void onChanged(List<Location> locations) {
                 adapter.setList(locations);
             }
-        });
+        };
+        locationListLiveData = locationViewModel.getAllLocation(categoryId);
+        locationListLiveData.observe(this, dataObserver);
+    }
+
+    private void removeObservers() {
+        locationListLiveData.removeObservers(this);
+        System.out.println("REMD OBSVR");
     }
 
     private void addTab(Category category) {
