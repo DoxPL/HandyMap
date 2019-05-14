@@ -37,6 +37,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.dominikgaloch.pracalicencjacka.CategoryDialog;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.activities.SettingsActivity;
 import pl.dominikgaloch.pracalicencjacka.data.models.Category;
@@ -54,13 +55,13 @@ public class LocationListFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
     private Context context;
     private SearchView searchWidget;
+    private MenuItem removeCategoryItem;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         setHasOptionsMenu(true);
-        ArrayList<Location> list = new ArrayList<Location>();
         context = getContext();
 
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
@@ -69,7 +70,7 @@ public class LocationListFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        adapter = new LocationAdapter(getContext(), list);
+        adapter = new LocationAdapter(getContext());
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -80,9 +81,9 @@ public class LocationListFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                String name = tab.getText().toString();
-                addLocationsFromDatabase(name);
-                hideSearchWidget();
+                hideSearchField();
+                addLocationsFromDatabase((Integer) tab.getTag());
+                System.out.println("tab selected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
 
             @Override
@@ -96,6 +97,7 @@ public class LocationListFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
@@ -104,9 +106,9 @@ public class LocationListFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem searchItem = menu.findItem(R.id.action_search_item);
         MenuItem addCategoryItem = menu.findItem(R.id.action_add_category);
-        MenuItem removeCategoryItem = menu.findItem(R.id.action_remove_category);
         searchItem.setVisible(true);
         addCategoryItem.setVisible(true);
+        removeCategoryItem = menu.findItem(R.id.action_remove_category);
         removeCategoryItem.setVisible(true);
         searchWidget = (SearchView) searchItem.getActionView();
         searchWidget.setQueryHint(getString(R.string.place_name));
@@ -131,7 +133,8 @@ public class LocationListFragment extends Fragment {
 
         switch (id) {
             case R.id.action_add_category:
-                createFormDialog();
+                CategoryDialog categoryDialog = new CategoryDialog(getActivity(), context);
+                categoryDialog.create(tabLayout);
                 return true;
             case R.id.action_remove_category:
                 createDeleteConfirmDialog();
@@ -139,26 +142,6 @@ public class LocationListFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void createFormDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.category_form_dialog, null);
-        final EditText etCategoryName = dialogView.findViewById(R.id.etCategoryName);
-        Button btnSave = dialogView.findViewById(R.id.btnSaveCategory);
-        dialogBuilder.setView(dialogView);
-        final AlertDialog dialog = dialogBuilder.create();
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tabLayout.removeAllTabs();
-                String tabName = etCategoryName.getText().toString();
-                Category categoryToInsert = new Category(tabName);
-                categoryViewModel.insertCategory(categoryToInsert);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
     public void createDeleteConfirmDialog() {
@@ -171,7 +154,6 @@ public class LocationListFragment extends Fragment {
                         TabLayout.Tab tabToRemove = tabLayout.getTabAt(tabPosition);
                         String categoryName = tabToRemove.getText().toString();
                         categoryViewModel.deleteCategoryByName(categoryName);
-                        locationViewModel.deleteAllLocationsByCategoryName(categoryName);
                         tabLayout.removeAllTabs();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -190,14 +172,19 @@ public class LocationListFragment extends Fragment {
             @Override
             public void onChanged(List<Category> categories) {
                 for (Category category : categories) {
-                    addTab(category.getName());
+                    addTab(category);
+                }
+                if(tabLayout.getTabCount() == 0) {
+                    removeCategoryItem.setEnabled(false);
+                } else {
+                    removeCategoryItem.setEnabled(true);
                 }
             }
         });
     }
 
-    private void addLocationsFromDatabase(String categoryName) {
-        locationViewModel.getAllLocationsByCategoryName(categoryName).observe(this, new Observer<List<Location>>() {
+    private void addLocationsFromDatabase(int categoryId) {
+        locationViewModel.getAllLocation(categoryId).observe(this, new Observer<List<Location>>() {
             @Override
             public void onChanged(List<Location> locations) {
                 adapter.setList(locations);
@@ -205,15 +192,17 @@ public class LocationListFragment extends Fragment {
         });
     }
 
-    private void addTab(String name) {
-        tabLayout.addTab(tabLayout.newTab().setText(name));
+    private void addTab(Category category) {
+        TabLayout.Tab tab = tabLayout.newTab().setText(category.getName()).setTag(category.getId());
+        tabLayout.addTab(tab);
     }
 
-    private void hideSearchWidget() {
+    private void hideSearchField() {
         if(!searchWidget.isIconified()) {
-            searchWidget.setQuery(null, false);
+            //searchWidet.setQuery(null, false);
             searchWidget.setIconified(true);
         }
     }
+
 
 }

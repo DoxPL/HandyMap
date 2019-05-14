@@ -57,10 +57,6 @@ public class LocationRepository {
         new DeleteLocationAsyncTask(locationDao).execute(location);
     }
 
-    public void deleteAllLocationsByCategoryName(String categoryName) {
-        new DeleteLocationByCategoryNameAsyncTask(locationDao).execute(categoryName);
-    }
-
     public class InsertLocationAsyncTask extends AsyncTask<Location, Void, Void> {
 
         private LocationDao locationDao;
@@ -87,21 +83,6 @@ public class LocationRepository {
         @Override
         protected Void doInBackground(Location... locations) {
             locationDao.deleteLocation(locations[0]);
-            return null;
-        }
-    }
-
-    public class DeleteLocationByCategoryNameAsyncTask extends AsyncTask<String, Void, Void> {
-
-        private LocationDao locationDao;
-
-        public DeleteLocationByCategoryNameAsyncTask(LocationDao locationDao) {
-            this.locationDao = locationDao;
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            locationDao.deleteAllLocationsByCategoryName(strings[0]);
             return null;
         }
     }

@@ -16,10 +16,10 @@ public interface LocationDao {
     @Query("SELECT * FROM location")
     LiveData<List<Location>> getAllLocations();
 
-    @Query("SELECT * FROM location WHERE CategoryID = :categoryID")
+    @Query("SELECT * FROM location WHERE category_id = :categoryID")
     LiveData<List<Location>> getAllLocations(int categoryID);
 
-    @Query("SELECT * FROM location INNER JOIN category ON location.CategoryID = category.id WHERE category.CategoryName = :categoryName")
+    @Query("SELECT * FROM location INNER JOIN category ON location.category_id = category.id WHERE category.category_name = :categoryName")
     LiveData<List<Location>> getAllLocationsByCategoryName(String categoryName);
 
     @Query("SELECT id, location_name FROM location")
@@ -34,16 +34,8 @@ public interface LocationDao {
     @Delete
     void deleteLocation(Location location);
 
-    @Query("DELETE FROM location WHERE CategoryID IN (SELECT id FROM category WHERE CategoryName = :categoryName)")
-    void deleteAllLocationsByCategoryName(String categoryName);
 
     @Query("UPDATE location SET location_name = :name WHERE id = :id")
     void updateName(String name, int id);
-
-    @Query("UPDATE location SET description = :description WHERE id = :id")
-    void updateDescription(String description, int id);
-
-    @Query("UPDATE location SET marker_color = :color WHERE id = :id")
-    void updateMarkerColor(int color, int id);
 
 }

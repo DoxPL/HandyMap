@@ -16,7 +16,7 @@ import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.repository.CategoryRepository;
 
-@Database(entities = {Location.class, Photo.class, Category.class}, version = 3)
+@Database(entities = {Location.class, Photo.class, Category.class}, version = 6)
 public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static ApplicationDatabase DATABASE_INSTANCE;
@@ -27,12 +27,19 @@ public abstract class ApplicationDatabase extends RoomDatabase {
 
     public abstract CategoryDao categoryDao();
 
-    public static ApplicationDatabase getInstance(Context context) {
+    public static ApplicationDatabase getInstance(final Context context) {
         if (DATABASE_INSTANCE == null) {
             synchronized (ApplicationDatabase.class) {
                 DATABASE_INSTANCE = Room.databaseBuilder(context, ApplicationDatabase.class,
                         context.getString(R.string.database_name)).
                         fallbackToDestructiveMigration().
+                        addCallback(new Callback() {
+                            @Override
+                            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                super.onCreate(db);
+                                new CategoryRepository(context).insertCategory(new Category(context.getString(R.string.tab_default)));
+                            }
+                        }).
                         build();
             }
         }

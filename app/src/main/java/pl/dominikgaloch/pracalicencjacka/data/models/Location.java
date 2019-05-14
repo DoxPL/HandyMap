@@ -10,7 +10,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(indices = {@Index(value = "id")}, foreignKeys = @ForeignKey(entity = Category.class, parentColumns = "id",
-        childColumns = "CategoryID", onDelete = ForeignKey.CASCADE))
+        childColumns = "category_id", onDelete = ForeignKey.CASCADE))
 public class Location {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -29,9 +29,8 @@ public class Location {
     private int markerColor;
     @ColumnInfo(name = "visit_state")
     private boolean visited;
-    @ColumnInfo(name = "CategoryID")
+    @ColumnInfo(name = "category_id")
     private int categoryID;
-
 
     public Location(String name, String description, double latitude, double longitude, int markerColor, int categoryID) {
         this.name = name;
@@ -114,8 +113,7 @@ public class Location {
         this.visited = visited;
     }
 
-    public GeoPoint getGeoPoint()
-    {
+    public GeoPoint getGeoPoint() {
         return new GeoPoint(this.latitude, this.longitude);
     }
 }

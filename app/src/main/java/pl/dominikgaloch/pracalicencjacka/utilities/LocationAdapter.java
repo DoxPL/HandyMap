@@ -1,10 +1,13 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
@@ -24,18 +27,18 @@ import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 
     private Context context;
     private List<Location> locationList;
     private List<Location> listCopy;
+    private LocationViewModel locationViewModel;
 
-    public LocationAdapter(Context context, List<Location> list)
-    {
+    public LocationAdapter(Context context) {
         this.context = context;
-        this.locationList = list;
+        this.locationList = new ArrayList<>();
+        locationViewModel = ViewModelProviders.of((FragmentActivity) context).get(LocationViewModel.class);
     }
 
     @NonNull
@@ -54,10 +57,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
         locationHolder.setOnClickListener(new ListItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean longClick) {
-                if(longClick) {
+                if (longClick) {
                     createDialog(view, position);
-                }
-                else {
+                } else {
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     fragmentManager.beginTransaction().
                             replace(R.id.content, new MapFragment(location)).
@@ -79,11 +81,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
+                        removeLocationFromDatabase(locationList.get(currentItemPosition));
+                        System.out.println("remove!!!!!!!!!!!");
                         Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
                                 setAction("Action", null).show();
-                        new LocationRepository(context).deleteLocation(locationList.get(currentItemPosition));
-                        locationList.remove(currentItemPosition);
-                        notifyDataSetChanged();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
@@ -96,28 +97,26 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                 .setNegativeButton(context.getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 
-    public Filter getFilter()
-    {
+    public Filter getFilter() {
         final List<Location> filteredList = new ArrayList<>();
-        if(listCopy != null) {
+        if (listCopy != null) {
             locationList = listCopy;
         }
+
         Filter listFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                if(constraint != null) {
+                if (constraint != null || constraint.length() == 0) {
                     for (Location location : locationList) {
                         if (location.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                             filteredList.add(location);
                         }
                     }
-
                     FilterResults results = new FilterResults();
                     results.values = filteredList;
                     results.count = filteredList.size();
                     return results;
-                }
-                else {
+                } else {
                     return new FilterResults();
                 }
             }
@@ -133,10 +132,13 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
     }
 
     public void setList(List<Location> locationList) {
-        this.listCopy = null;
+        listCopy = null;
         this.locationList = locationList;
         notifyDataSetChanged();
     }
 
+    private void removeLocationFromDatabase(Location location) {
+        locationViewModel.delete(location);
+    }
 
 }

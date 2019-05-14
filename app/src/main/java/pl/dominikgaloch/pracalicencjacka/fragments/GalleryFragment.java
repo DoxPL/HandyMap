@@ -76,6 +76,7 @@ public class GalleryFragment extends Fragment {
         gvPhotos.setAdapter(photoAdapter);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spLocations.setAdapter(spinnerAdapter);
+
         populateSpinnerItems();
 
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +85,8 @@ public class GalleryFragment extends Fragment {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File file = makePhotoFile();
                 if (file != null) {
-                    Uri photoUri = FileProvider.getUriForFile(context, "pl.dominikgaloch.pracalicencjacka.fileprovider", file);
+                    Uri photoUri = FileProvider.getUriForFile(context,
+                            "pl.dominikgaloch.pracalicencjacka.fileprovider", file);
                     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 }
@@ -144,7 +146,9 @@ public class GalleryFragment extends Fragment {
                 }
                 locationIndexNameList = locationIndexNames;
                 spinnerAdapter.addAll(locationNameTmpList);
-                populatePhotoItems(0);
+                if (spLocations.getCount() != 0) {
+                    populatePhotoItems(0);
+                }
             }
         });
     }
@@ -152,11 +156,11 @@ public class GalleryFragment extends Fragment {
     public void populatePhotoItems(int spinnerSelectedItemPosition) {
         photoViewModel.getAllPhotos(locationIndexNameList.get(spinnerSelectedItemPosition).getId()).
                 observe(this, new Observer<List<Photo>>() {
-            @Override
-            public void onChanged(List<Photo> photos) {
-                photoAdapter.setList(photos);
-            }
-        });
+                    @Override
+                    public void onChanged(List<Photo> photos) {
+                        photoAdapter.setList(photos);
+                    }
+                });
     }
 
 

@@ -10,7 +10,7 @@ public class Category {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int id;
-    @ColumnInfo(name = "CategoryName")
+    @ColumnInfo(name = "category_name")
     private String name;
 
     public Category(String name) {

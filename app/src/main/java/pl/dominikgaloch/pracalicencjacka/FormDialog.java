@@ -10,25 +10,16 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Switch;
-
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Marker;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
-
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
 import pl.dominikgaloch.pracalicencjacka.data.models.Category;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
-import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
 
 public class FormDialog {
@@ -47,12 +38,14 @@ public class FormDialog {
     private Switch swInputType;
     private AlertDialog.Builder dialogBuilder;
     private List<Integer> categoryIdList;
+    private CategoryViewModel categoryViewModel;
 
     public FormDialog(Activity activity, Context context, GeoPoint geoPoint) {
         this.activity = activity;
         this.context = context;
         this.point = geoPoint;
         categoryIdList = new ArrayList<>();
+        categoryViewModel = ViewModelProviders.of((FragmentActivity) activity).get(CategoryViewModel.class);
         initComponents();
     }
 
@@ -98,25 +91,25 @@ public class FormDialog {
                 Location locationToInsert = new Location(name, description, point.getLatitude(), point.getLongitude(), selectedColor, categoryId);
                 callback.onDialogSuccess(locationToInsert);
                 dialog.dismiss();
+
             }
         });
         dialog.show();
     }
 
     private void addSpinnerElementsFromDatabase() {
-        final CategoryViewModel categoryViewModel = ViewModelProviders.of((FragmentActivity) activity).get(CategoryViewModel.class);
         categoryViewModel.getAllCategories().observe((FragmentActivity) activity, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
-                if(categories.size() == 0) {
-                    categoryViewModel.insertCategory(new Category(context.getString(R.string.tab_default)));
-                }
-
-                for(Category category : categories) {
+                for (Category category : categories) {
                     spinnerAdapter.add(category.getName());
                     categoryIdList.add(category.getId());
                 }
                 spinnerAdapter.notifyDataSetChanged();
+
+                if(spCategory.getCount() == 0) {
+                    categoryViewModel.insertCategory(new Category(context.getString(R.string.tab_default)));
+                }
             }
         });
     }

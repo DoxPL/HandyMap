@@ -18,7 +18,7 @@ public interface CategoryDao {
     @Insert
     void insertCategory(Category category);
 
-    @Query("DELETE FROM category WHERE CategoryName = :categoryName")
+    @Query("DELETE FROM category WHERE category_name = :categoryName")
     void deleteCategoryByName(String categoryName);
 
 }

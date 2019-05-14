@@ -26,19 +26,13 @@ public class LocationViewModel extends AndroidViewModel {
         locationRepository.deleteLocation(location);
     }
 
-    public void deleteAllLocationsByCategoryName(String name) {
-        locationRepository.deleteAllLocationsByCategoryName(name);
-    }
 
     public LiveData<List<Location>> getAllLocation() {
         return locationRepository.getAllLocations();
     }
 
     public LiveData<List<Location>> getAllLocation(int categoryID) {
-        if(categoryID == 0)
-            return locationRepository.getAllLocations();
-        else
-            return locationRepository.getAllLocations(categoryID);
+        return locationRepository.getAllLocations(categoryID);
     }
 
     public LiveData<List<Location>> getAllLocationsByCategoryName(String categoryName) {
