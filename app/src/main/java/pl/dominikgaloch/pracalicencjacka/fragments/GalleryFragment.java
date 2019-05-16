@@ -79,6 +79,7 @@ public class GalleryFragment extends Fragment {
 
         populateSpinnerItems();
 
+        fabTakePhoto.setImageResource(R.drawable.camera_icon);
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
