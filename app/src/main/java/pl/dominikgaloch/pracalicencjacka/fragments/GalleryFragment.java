@@ -79,7 +79,6 @@ public class GalleryFragment extends Fragment {
 
         populateSpinnerItems();
 
-        fabTakePhoto.setImageResource(R.drawable.camera_icon);
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,5 +215,11 @@ public class GalleryFragment extends Fragment {
         dialogBuilder.setMessage(context.getResources().getString(R.string.dialog_question))
                 .setPositiveButton(context.getResources().getString(R.string.dialog_pos_text), dialogCallback)
                 .setNegativeButton(context.getResources().getString(R.string.dialog_neg_text), dialogCallback).show();
+    }
+
+    @Override
+    public void onResume() {
+        fabTakePhoto.setImageResource(R.drawable.camera_icon);
+        super.onResume();
     }
 }

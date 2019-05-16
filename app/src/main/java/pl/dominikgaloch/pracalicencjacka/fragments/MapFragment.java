@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -54,6 +56,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
     private static final float DEFAULT_LATITUDE = 0;
     private static final float DEFAULT_LONGITUDE = 0;
     private static final float DEFAULT_ZOOM_LEVEL = 10f;
+    private FloatingActionButton fabAddPlace;
 
     public MapFragment() {
 
@@ -72,6 +75,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
+        fabAddPlace = getActivity().findViewById(R.id.fab);
         mapInit();
 
         eventsReceiver = new MapEventsReceiver() {
@@ -112,6 +116,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
 
     @Override
     public void onResume() {
+        fabAddPlace.setImageResource(R.drawable.plus_icon);
         super.onResume();
     }
 
@@ -169,7 +174,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
     }
 
     public Drawable getPinDrawable(int type) {
-        int pin = 0;
+        int pin;
         switch (type) {
             case 0:
                 pin = R.drawable.marker_blue;

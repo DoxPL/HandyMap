@@ -19,15 +19,11 @@
 
     </group>
 
-    <item android:title="@string/commTitle">
+    <item android:title="@string/nav_tools_title">
         <menu>
             <item
-                android:id="@+id/nav_nfc"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/nfcView" />
-            <item
                 android:id="@+id/nav_nearby_places"
-                android:icon="@drawable/ic_mr_button_connected_02_light"
+                android:icon="@drawable/binoculars_icon"
                 android:title="@string/nearbyPlacesView" />
         </menu>
     </item>

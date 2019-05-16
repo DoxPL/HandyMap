@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageResource(R.drawable.plus_icon);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,9 +166,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_nearby_places:
                 currentFragment = new NearbyPlacesFragment();
-                break;
-            case R.id.nav_nfc:
-                currentFragment = new NFCFragment();
                 break;
         }
         switchFragment(currentFragment);

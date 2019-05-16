@@ -5,6 +5,7 @@
     <string name="nav_header_title">HandyMap</string>
     <string name="nav_header_subtitle">Autor: Dominik Galoch</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_tools_title">Narzędzia</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_add_category">Dodaj kategorię</string>
     <string name="action_remove_category">Usuń kategorię</string>
@@ -15,7 +16,6 @@
     <string name="mapView">Wyświetl mapę</string>
     <string name="listView">Lista miejsc</string>
     <string name="galleryView">Galeria zdjęć</string>
-    <string name="commTitle">Komunikacja</string>
     <string name="nfcView">Komunikacja NFC</string>
     <string name="nearbyPlacesView">Miejsca w pobliżu</string>
     <string name="nfcModuleNotFound">Moduł NFC nie jest obsługiwany na tym urządzeniu</string>
