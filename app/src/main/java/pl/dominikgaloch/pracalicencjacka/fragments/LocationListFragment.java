@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +45,7 @@ import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
 import pl.dominikgaloch.pracalicencjacka.utilities.LocationAdapter;
 
 public class LocationListFragment extends Fragment {
@@ -54,6 +54,7 @@ public class LocationListFragment extends Fragment {
     private LocationAdapter adapter;
     private LocationViewModel locationViewModel;
     private CategoryViewModel categoryViewModel;
+    private FragmentUtilities fragmentUtilities;
     private Context context;
     private SearchView searchWidget;
     private MenuItem removeCategoryItem;
@@ -70,11 +71,14 @@ public class LocationListFragment extends Fragment {
 
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        fragmentUtilities = new FragmentUtilities(getActivity());
+        fragmentUtilities.setToolbarTitle(getString(R.string.listView));
 
         tabLayout = view.findViewById(R.id.tabLayout);
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        adapter = new LocationAdapter(getContext());
+
+        adapter = new LocationAdapter(getContext(), getActivity());
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -89,7 +93,6 @@ public class LocationListFragment extends Fragment {
                     removeObservers();
                 hideSearchField();
                 addLocationsFromDatabase((Integer) tab.getTag());
-                System.out.println("tab selected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
 
             @Override
@@ -202,7 +205,6 @@ public class LocationListFragment extends Fragment {
 
     private void removeObservers() {
         locationListLiveData.removeObservers(this);
-        System.out.println("REMD OBSVR");
     }
 
     private void addTab(Category category) {
@@ -212,7 +214,6 @@ public class LocationListFragment extends Fragment {
 
     private void hideSearchField() {
         if(!searchWidget.isIconified()) {
-            //searchWidet.setQuery(null, false);
             searchWidget.setIconified(true);
         }
     }

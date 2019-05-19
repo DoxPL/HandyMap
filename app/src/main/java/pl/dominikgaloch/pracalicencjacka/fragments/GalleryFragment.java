@@ -45,6 +45,7 @@ import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
 import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.PhotoViewModel;
+import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
 import pl.dominikgaloch.pracalicencjacka.utilities.PhotoAdapter;
 
 public class GalleryFragment extends Fragment {
@@ -57,6 +58,7 @@ public class GalleryFragment extends Fragment {
     private PhotoAdapter photoAdapter;
     private LocationViewModel locationViewModel;
     private PhotoViewModel photoViewModel;
+    private FragmentUtilities fragmentUtilities;
     private static final int PHOTO_TAKEN_CODE = 1002;
     private static final String FILE_EXTENSION = ".jpg";
 
@@ -67,6 +69,8 @@ public class GalleryFragment extends Fragment {
         context = getContext();
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
+        fragmentUtilities = new FragmentUtilities(getActivity());
+        fragmentUtilities.setToolbarTitle(getString(R.string.galleryView));
         fabTakePhoto = getActivity().findViewById(R.id.fab);
         spLocations = view.findViewById(R.id.spPlaces);
         locationIndexNameList = new ArrayList<>();

@@ -13,6 +13,7 @@ import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 import pl.dominikgaloch.pracalicencjacka.interfaces.NearbyPlacesListener;
+import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
 import pl.dominikgaloch.pracalicencjacka.utilities.NearbyPlacesFinder;
 
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     private TextView tvStatus;
     private ArrayAdapter<String> listAdapter;
     private LocationViewModel locationViewModel;
+    private FragmentUtilities fragmentUtilities;
     private NearbyPlacesFinder nearbyPlacesFinder;
     private boolean gpsStatus;
 
@@ -56,6 +58,8 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         tvStatus = view.findViewById(R.id.tvStatus);
         listAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
+        fragmentUtilities = new FragmentUtilities(getActivity());
+        fragmentUtilities.setToolbarTitle(getString(R.string.nearbyPlacesView));
         nearbyPlacesFinder = new NearbyPlacesFinder();
         gpsStatus = false;
 

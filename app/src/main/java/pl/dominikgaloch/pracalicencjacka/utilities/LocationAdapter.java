@@ -1,5 +1,6 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -31,14 +32,18 @@ import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 
     private Context context;
+    private FragmentActivity activity;
     private List<Location> locationList;
     private List<Location> listCopy;
     private LocationViewModel locationViewModel;
+    private FragmentUtilities fragmentUtilities;
 
-    public LocationAdapter(Context context) {
+    public LocationAdapter(Context context, FragmentActivity activity) {
         this.context = context;
+        this.activity = activity;
         this.locationList = new ArrayList<>();
         locationViewModel = ViewModelProviders.of((FragmentActivity) context).get(LocationViewModel.class);
+        fragmentUtilities = new FragmentUtilities(activity);
     }
 
     @NonNull
@@ -60,11 +65,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                 if (longClick) {
                     createDialog(view, position);
                 } else {
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    fragmentManager.beginTransaction().
-                            replace(R.id.content, new MapFragment(location)).
-                            addToBackStack(null)
-                            .commit();
+                    fragmentUtilities.switchFragment(new MapFragment(location));
                 }
             }
         });
@@ -82,7 +83,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         removeLocationFromDatabase(locationList.get(currentItemPosition));
-                        System.out.println("remove!!!!!!!!!!!");
                         Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
                                 setAction("Action", null).show();
                         break;

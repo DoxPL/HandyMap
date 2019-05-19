@@ -26,7 +26,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.Observer;
@@ -39,7 +38,7 @@ import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
-import pl.dominikgaloch.pracalicencjacka.utilities.NearbyPlacesFinder;
+import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
 
 public class MapFragment extends Fragment implements LocationChangedListener {
 
@@ -52,6 +51,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
     private SharedPreferences preferences;
     private LocationViewModel locationViewModel;
     private CategoryViewModel categoryViewModel;
+    private FragmentUtilities fragmentUtilities;
     private static final int USER_PIN_COLOR = -1;
     private static final float DEFAULT_LATITUDE = 0;
     private static final float DEFAULT_LONGITUDE = 0;
@@ -74,6 +74,8 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         context = getContext();
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        fragmentUtilities = new FragmentUtilities(getActivity());
+        fragmentUtilities.setToolbarTitle(getString(R.string.mapView));
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         fabAddPlace = getActivity().findViewById(R.id.fab);
         mapInit();

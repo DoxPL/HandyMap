@@ -44,6 +44,5 @@ dependencies {
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'androidx.preference:preference:1.0.0'
-
-
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 }

@@ -39,7 +39,9 @@ import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.LocationListFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
+import pl.dominikgaloch.pracalicencjacka.fragments.QRScannerFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
+import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private LocationManager locationManager;
     private LocationListener locationListener;
     private Toolbar toolbar;
+    private FragmentUtilities fragmentUtilities;
     public static final long GPS_UPDATE_INTERVAL = 2000;
     public static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     public static final int REQUEST_PERMISSIONS = 1001;
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        fragmentUtilities = new FragmentUtilities(this);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -74,8 +78,8 @@ public class MainActivity extends AppCompatActivity
         if (!checkPermissions()) {
             allowPermissions();
         }
-        
-        switchFragment(new MapFragment());
+
+        fragmentUtilities.switchFragment(new MapFragment());
 
         locationListener = new LocationListener() {
             @Override
@@ -146,26 +150,22 @@ public class MainActivity extends AppCompatActivity
         Fragment currentFragment = null;
         switch (id) {
             case R.id.nav_map:
-                toolbar.setTitle(getString(R.string.mapView));
                 currentFragment = new MapFragment();
                 break;
             case R.id.nav_list:
-                toolbar.setTitle(getString(R.string.listView));
                 currentFragment = new LocationListFragment();
                 break;
             case R.id.nav_gallery:
-                toolbar.setTitle(getString(R.string.galleryView));
                 currentFragment = new GalleryFragment();
                 break;
             case R.id.nav_nearby_places:
-                toolbar.setTitle(getString(R.string.nearbyPlacesView));
                 currentFragment = new NearbyPlacesFragment();
                 break;
             case R.id.nav_qrscanner:
-                toolbar.setTitle(getString(R.string.qrscannerView));
+                currentFragment = new QRScannerFragment();
                 break;
         }
-        switchFragment(currentFragment);
+        fragmentUtilities.switchFragment(currentFragment);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
