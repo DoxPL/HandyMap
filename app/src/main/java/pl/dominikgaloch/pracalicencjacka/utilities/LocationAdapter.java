@@ -97,16 +97,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                 .setNegativeButton(context.getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 
+
     public Filter getFilter() {
         final List<Location> filteredList = new ArrayList<>();
         if (listCopy != null) {
             locationList = listCopy;
         }
-
         Filter listFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                if (constraint != null || constraint.length() == 0) {
+                if (constraint != null) {
                     for (Location location : locationList) {
                         if (location.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                             filteredList.add(location);
@@ -120,7 +120,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                     return new FilterResults();
                 }
             }
-
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 listCopy = locationList;
@@ -132,7 +131,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
     }
 
     public void setList(List<Location> locationList) {
-        System.out.println("Teraz teraz teraz434r5345345345345345345345345345345345345345");
         listCopy = null;
         this.locationList = locationList;
         notifyDataSetChanged();

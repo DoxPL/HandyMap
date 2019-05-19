@@ -34,7 +34,6 @@ public class CategoryRepository {
     }
 
     public class InsertCategoryAsyncTask extends AsyncTask<Category, Void, Void> {
-
         private CategoryDao categoryDao;
 
         public InsertCategoryAsyncTask(CategoryDao categoryDao) {
@@ -49,7 +48,6 @@ public class CategoryRepository {
     }
 
     public class DeleteCategoryByNameAsyncTask extends AsyncTask<String, Void, Void> {
-
         private CategoryDao categoryDao;
 
         public DeleteCategoryByNameAsyncTask(CategoryDao categoryDao) {

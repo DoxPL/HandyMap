@@ -25,6 +25,10 @@
                 android:id="@+id/nav_nearby_places"
                 android:icon="@drawable/binoculars_icon"
                 android:title="@string/nearbyPlacesView" />
+            <item
+                android:id="@+id/nav_qrscanner"
+                android:icon="@drawable/qrcode_icon"
+                android:title="@string/qrscannerView" />
         </menu>
     </item>
 

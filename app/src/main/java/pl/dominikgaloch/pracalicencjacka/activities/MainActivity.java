@@ -39,16 +39,15 @@ import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.LocationListFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
-import pl.dominikgaloch.pracalicencjacka.fragments.NFCFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private NfcAdapter nfcAdapter;
     private Context context;
     private LocationChangedListener locationChangedCallback;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private Toolbar toolbar;
     public static final long GPS_UPDATE_INTERVAL = 2000;
     public static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     public static final int REQUEST_PERMISSIONS = 1001;
@@ -60,32 +59,23 @@ public class MainActivity extends AppCompatActivity
         context = getApplicationContext();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        switchFragment(new MapFragment());
 
         if (!checkPermissions()) {
             allowPermissions();
         }
+        
+        switchFragment(new MapFragment());
 
         locationListener = new LocationListener() {
             @Override
@@ -156,16 +146,23 @@ public class MainActivity extends AppCompatActivity
         Fragment currentFragment = null;
         switch (id) {
             case R.id.nav_map:
+                toolbar.setTitle(getString(R.string.mapView));
                 currentFragment = new MapFragment();
                 break;
             case R.id.nav_list:
+                toolbar.setTitle(getString(R.string.listView));
                 currentFragment = new LocationListFragment();
                 break;
             case R.id.nav_gallery:
+                toolbar.setTitle(getString(R.string.galleryView));
                 currentFragment = new GalleryFragment();
                 break;
             case R.id.nav_nearby_places:
+                toolbar.setTitle(getString(R.string.nearbyPlacesView));
                 currentFragment = new NearbyPlacesFragment();
+                break;
+            case R.id.nav_qrscanner:
+                toolbar.setTitle(getString(R.string.qrscannerView));
                 break;
         }
         switchFragment(currentFragment);

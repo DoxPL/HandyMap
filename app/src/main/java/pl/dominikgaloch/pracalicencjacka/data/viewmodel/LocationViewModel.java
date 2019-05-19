@@ -31,7 +31,7 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.getAllLocations();
     }
 
-    public LiveData<List<Location>> getAllLocation(int categoryID) {
+    public LiveData<List<Location>> getAllLocations(int categoryID) {
         return locationRepository.getAllLocations(categoryID);
     }
 

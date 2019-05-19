@@ -1,23 +1,20 @@
 <resources>
-    <string name="app_name">Praca Licencjacka</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="app_name">HandyMap</string>
+    <string name="navigation_drawer_open">Otwórz szufladę nawigacyjną</string>
+    <string name="navigation_drawer_close">Zamknij szufladę nawigacyjną</string>
     <string name="nav_header_title">HandyMap</string>
     <string name="nav_header_subtitle">Autor: Dominik Galoch</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="nav_tools_title">Narzędzia</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_add_category">Dodaj kategorię</string>
     <string name="action_remove_category">Usuń kategorię</string>
-    <string name="latitude">Latitude</string>
-    <string name="longitude">Longitude</string>
-    <string name="marker_color">Marker color</string>
-    <string name="name">Place name</string>
-    <string name="mapView">Wyświetl mapę</string>
+
+    <string name="mapView">Mapa</string>
     <string name="listView">Lista miejsc</string>
     <string name="galleryView">Galeria zdjęć</string>
-    <string name="nfcView">Komunikacja NFC</string>
     <string name="nearbyPlacesView">Miejsca w pobliżu</string>
+    <string name="qrscannerView">Skaner QR</string>
+
     <string name="nfcModuleNotFound">Moduł NFC nie jest obsługiwany na tym urządzeniu</string>
     <string name="database_name">user_database</string>
     <string name="place_name">Nazwa miejsca</string>
@@ -31,6 +28,8 @@
     <string name="dialog_pos_text">Potwierdź</string>
     <string name="dialog_neg_text">Anuluj</string>
     <string name="text_item_removed">Element został usunięty</string>
+
+    <string name="text_photo_saved">Zdjęcie zostało zapisane</string>
 
     <string name="action_search_text">Filtruj</string>
 
@@ -65,7 +64,5 @@
         <item>Czerwony</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

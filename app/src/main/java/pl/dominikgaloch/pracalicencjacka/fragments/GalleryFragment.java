@@ -89,9 +89,8 @@ public class GalleryFragment extends Fragment {
                             "pl.dominikgaloch.pracalicencjacka.fileprovider", file);
                     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    startActivityForResult(intent, PHOTO_TAKEN_CODE);
                 }
-
-                startActivityForResult(intent, PHOTO_TAKEN_CODE);
             }
         });
 
@@ -130,9 +129,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == PHOTO_TAKEN_CODE) {
-            Toast.makeText(context, "Zrobiono zdjęcie", Toast.LENGTH_LONG).show();
-            //TODO snackbar
-            photoAdapter.notifyDataSetChanged();
+            Snackbar.make(getView(), getString(R.string.text_photo_saved), Snackbar.LENGTH_LONG).show();
         }
     }
 

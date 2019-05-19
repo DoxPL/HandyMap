@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka;
+package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

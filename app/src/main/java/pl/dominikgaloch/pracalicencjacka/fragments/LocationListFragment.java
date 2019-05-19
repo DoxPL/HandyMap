@@ -196,7 +196,7 @@ public class LocationListFragment extends Fragment {
                 adapter.setList(locations);
             }
         };
-        locationListLiveData = locationViewModel.getAllLocation(categoryId);
+        locationListLiveData = locationViewModel.getAllLocations(categoryId);
         locationListLiveData.observe(this, dataObserver);
     }
 
