@@ -72,6 +72,7 @@ public class GalleryFragment extends Fragment {
         fragmentUtilities = new FragmentUtilities(getActivity());
         fragmentUtilities.setToolbarTitle(getString(R.string.galleryView));
         fabTakePhoto = getActivity().findViewById(R.id.fab);
+        fabTakePhoto.setVisibility(View.VISIBLE);
         spLocations = view.findViewById(R.id.spPlaces);
         locationIndexNameList = new ArrayList<>();
         gvPhotos = view.findViewById(R.id.gvPhotos);

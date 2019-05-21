@@ -39,11 +39,22 @@ public class FormDialog {
     private AlertDialog.Builder dialogBuilder;
     private List<Integer> categoryIdList;
     private CategoryViewModel categoryViewModel;
+    private String locationName;
 
     public FormDialog(Activity activity, Context context, GeoPoint geoPoint) {
         this.activity = activity;
         this.context = context;
         this.point = geoPoint;
+        categoryIdList = new ArrayList<>();
+        categoryViewModel = ViewModelProviders.of((FragmentActivity) activity).get(CategoryViewModel.class);
+        initComponents();
+    }
+
+    public FormDialog(Activity activity, Context context, GeoPoint geoPoint, String name) {
+        this.activity = activity;
+        this.context = context;
+        this.point = geoPoint;
+        this.locationName = name;
         categoryIdList = new ArrayList<>();
         categoryViewModel = ViewModelProviders.of((FragmentActivity) activity).get(CategoryViewModel.class);
         initComponents();
@@ -58,6 +69,9 @@ public class FormDialog {
         manualCoordinatesForm = dialogView.findViewById(R.id.manualCoordsForm);
         btnSave = dialogView.findViewById(R.id.btnSave);
         swInputType = dialogView.findViewById(R.id.swAutoManual);
+        if(locationName != null) {
+            etName.setText(locationName);
+        }
     }
 
 

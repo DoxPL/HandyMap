@@ -25,6 +25,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.mapboxsdk.style.layers.Property;
 
 import org.osmdroid.util.GeoPoint;
@@ -39,6 +40,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     private Context context;
     private ListView listView;
     private TextView tvStatus;
+    private FloatingActionButton fab;
     private ArrayAdapter<String> listAdapter;
     private LocationViewModel locationViewModel;
     private FragmentUtilities fragmentUtilities;
@@ -56,6 +58,8 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         context = getContext();
         listView = view.findViewById(R.id.listView);
         tvStatus = view.findViewById(R.id.tvStatus);
+        fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
         listAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         fragmentUtilities = new FragmentUtilities(getActivity());

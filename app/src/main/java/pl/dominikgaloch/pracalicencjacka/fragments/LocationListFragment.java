@@ -51,6 +51,7 @@ import pl.dominikgaloch.pracalicencjacka.utilities.LocationAdapter;
 public class LocationListFragment extends Fragment {
     private TabLayout tabLayout;
     private RecyclerView recyclerView;
+    private FloatingActionButton fab;
     private LocationAdapter adapter;
     private LocationViewModel locationViewModel;
     private CategoryViewModel categoryViewModel;
@@ -76,7 +77,8 @@ public class LocationListFragment extends Fragment {
 
         tabLayout = view.findViewById(R.id.tabLayout);
         recyclerView = view.findViewById(R.id.recyclerView);
-
+        fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
 
         adapter = new LocationAdapter(getContext(), getActivity());
 

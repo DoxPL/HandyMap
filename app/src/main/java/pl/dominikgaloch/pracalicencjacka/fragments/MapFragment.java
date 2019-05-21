@@ -78,6 +78,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         fragmentUtilities.setToolbarTitle(getString(R.string.mapView));
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         fabAddPlace = getActivity().findViewById(R.id.fab);
+        fabAddPlace.setVisibility(View.VISIBLE);
         mapInit();
 
         eventsReceiver = new MapEventsReceiver() {
