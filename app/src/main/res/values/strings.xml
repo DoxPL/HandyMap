@@ -52,9 +52,16 @@
 
     <string name="tab_default">Domyślne</string>
 
-    <string name="pref_gps">GPS</string>
-    <string name="pref_distance_to_alert">Dystans do powiadomienia</string>
-    <string name="pref_center_position">Wyśrodkuj pozycję</string>
+    <string name="pref_center_position">Wyśrodkowanie pozycji</string>
+    <string name="pref_center_position_description">Wyśrodkuj pozycję użytkownika na mapie po każdej zmianie lokalizacji</string>
+    <string name="pref_coordinates">Wyświetlanie współrzędnych</string>
+    <string name="pref_coordinates_description">Wyświetlaj współrzędne geograficzne miejsca po kliknięciu na jego znacznik</string>
+    <string name="pref_radius">Promień wyszukiwania</string>
+    <string name="pref_radius_description">Maksymalny promień do określania pobliskich miejsc w metrach</string>
+    <string name="pref_refresh_time">Czas do odświeżenia stanu pozycji</string>
+    <string name="pref_refresh_time_description">Minimalny odstęp czasu pomiędzy aktualizacjami stanu lokalizacji użytkownika w sekundach</string>
+    <string name="pref_refresh_distance">Dystans odświeżenia stanu pozycji</string>
+    <string name="pref_refresh_distance_description">Minimalna odległość między aktualizacjami stanu lokalizacji użytkownika w metrach</string>
 
     <string-array name="color_array">
         <item>Niebieski</item>

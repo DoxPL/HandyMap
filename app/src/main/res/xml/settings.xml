@@ -5,16 +5,33 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="switch_preference_1"
-        android:title="@string/pref_gps" />
-    <SwitchPreference
-        android:defaultValue="false"
         android:key="switch_preference_2"
-        android:title="@string/pref_center_position" />
+        android:title="@string/pref_center_position"
+        android:summary="@string/pref_center_position_description" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="switch_preference_2"
+        android:title="@string/pref_coordinates"
+        android:summary="@string/pref_coordinates_description" />
     <EditTextPreference
-        android:defaultValue="Default value"
-        android:key="edit_text_preference_1"
+        android:defaultValue="100"
+        android:key="radius"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_distance_to_alert" />
+        android:title="@string/pref_radius"
+        android:summary="@string/pref_radius_description" />
+    <EditTextPreference
+        android:defaultValue="100"
+        android:key="location_refresh_time"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_refresh_time"
+        android:summary="@string/pref_refresh_time_description" />
+    <EditTextPreference
+        android:defaultValue="100"
+        android:key="location_refresh_distance"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_refresh_distance"
+        android:summary="@string/pref_refresh_distance_description" />
 </PreferenceScreen>

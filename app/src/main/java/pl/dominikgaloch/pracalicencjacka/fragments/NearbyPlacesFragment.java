@@ -1,12 +1,14 @@
 package pl.dominikgaloch.pracalicencjacka.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
@@ -46,6 +48,8 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     private FragmentUtilities fragmentUtilities;
     private NearbyPlacesFinder nearbyPlacesFinder;
     private boolean gpsStatus;
+    private SharedPreferences preferences;
+    private static String DEFAULT_RADIUS_STR = "100";
 
     public NearbyPlacesFragment() {
 
@@ -64,8 +68,11 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         fragmentUtilities = new FragmentUtilities(getActivity());
         fragmentUtilities.setToolbarTitle(getString(R.string.nearbyPlacesView));
-        nearbyPlacesFinder = new NearbyPlacesFinder();
         gpsStatus = false;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        nearbyPlacesFinder = new NearbyPlacesFinder(preferences.getString("radius", DEFAULT_RADIUS_STR));
+
 
         locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
             @Override
@@ -111,5 +118,4 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         this.gpsStatus = status;
         setStatusLabel();
     }
-
 }

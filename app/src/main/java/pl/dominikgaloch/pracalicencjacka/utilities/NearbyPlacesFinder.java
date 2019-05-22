@@ -17,6 +17,12 @@ public class NearbyPlacesFinder {
     private Context context;
     private GeoPoint currentLocation;
     private NearbyPlacesListener listener;
+    private double radius;
+
+    public NearbyPlacesFinder(String radius) {
+        this.radius = Float.parseFloat(radius);
+        System.out.println(radius);
+    }
 
     public boolean findNearbyPlaces(GeoPoint point)
     {
@@ -24,7 +30,7 @@ public class NearbyPlacesFinder {
         for(Location location : locationList)
         {
             double distance = point.distanceToAsDouble(location.getGeoPoint());
-            if(distance < 2000)
+            if(distance <= radius)
             {
                 nearbyPlacesList.put(location.getName(), distance);
             }
@@ -39,6 +45,10 @@ public class NearbyPlacesFinder {
 
     public void setListener(NearbyPlacesListener listener) {
         this.listener = listener;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
 }

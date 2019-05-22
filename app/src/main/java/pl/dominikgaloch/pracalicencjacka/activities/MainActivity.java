@@ -172,14 +172,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (intent.hasExtra(NfcAdapter.EXTRA_TAG)) {
-            Toast.makeText(getApplicationContext(), "NFC found", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
     }
@@ -203,16 +195,6 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(context, getString(R.string.perm_storage), Toast.LENGTH_LONG).show();
                     }
                 }
-        }
-    }
-
-    public void switchFragment(Fragment fragment) {
-        if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.content, fragment)
-                    .addToBackStack(null)
-                    .commit();
         }
     }
 
