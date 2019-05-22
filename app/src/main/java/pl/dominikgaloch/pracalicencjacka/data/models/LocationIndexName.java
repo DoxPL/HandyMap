@@ -1,5 +1,6 @@
 package pl.dominikgaloch.pracalicencjacka.data.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 
 public class LocationIndexName {
@@ -22,5 +23,11 @@ public class LocationIndexName {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }
