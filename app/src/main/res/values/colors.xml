@@ -7,4 +7,5 @@
     <color name="colorButtonBorder">#316AA3</color>
     <color name="colorOsmWatermark">#EAEEF2</color>
     <color name="colorTabContent">#FFFFFF</color>
+    <color name="colorNearbyPlacesList">#D0DCE8</color>
 </resources>

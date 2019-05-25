@@ -1,5 +1,6 @@
 package pl.dominikgaloch.pracalicencjacka.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,6 +63,7 @@ public class LocationListFragment extends Fragment {
     private int selectedCategoryId;
     private LiveData<List<Location>> locationListLiveData;
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,15 +88,14 @@ public class LocationListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        addCategoriesFromDatabase();
+        setCategoriesObserver();
+        setLocationsObserver();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(locationListLiveData != null)
-                    removeObservers();
+                locationViewModel.setCategoryId((Integer)tab.getTag());
                 hideSearchField();
-                addLocationsFromDatabase((Integer) tab.getTag());
             }
 
             @Override
@@ -178,7 +179,7 @@ public class LocationListFragment extends Fragment {
                 .setNegativeButton(getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 
-    private void addCategoriesFromDatabase() {
+    private void setCategoriesObserver() {
         categoryViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
@@ -190,6 +191,15 @@ public class LocationListFragment extends Fragment {
                 } else {
                     removeCategoryItem.setEnabled(true);
                 }
+            }
+        });
+    }
+
+    private void setLocationsObserver() {
+        locationViewModel.getLocationsByCategoryId().observe(this, new Observer<List<Location>>() {
+            @Override
+            public void onChanged(List<Location> locations) {
+                adapter.setList(locations);
             }
         });
     }
@@ -216,9 +226,7 @@ public class LocationListFragment extends Fragment {
 
     private void hideSearchField() {
         if(!searchWidget.isIconified()) {
-            searchWidget.setIconified(true);
         }
     }
-
 
 }

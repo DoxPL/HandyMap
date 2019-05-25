@@ -39,7 +39,6 @@ public class CategoryRepository {
         public InsertCategoryAsyncTask(CategoryDao categoryDao) {
             this.categoryDao = categoryDao;
         }
-
         @Override
         protected Void doInBackground(Category... categories) {
             categoryDao.insertCategory(categories[0]);
@@ -53,7 +52,6 @@ public class CategoryRepository {
         public DeleteCategoryByNameAsyncTask(CategoryDao categoryDao) {
             this.categoryDao = categoryDao;
         }
-
         @Override
         protected Void doInBackground(String... strings) {
             categoryDao.deleteCategoryByName(strings[0]);

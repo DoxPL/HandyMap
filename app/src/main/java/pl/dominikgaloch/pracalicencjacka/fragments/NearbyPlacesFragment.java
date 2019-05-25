@@ -33,9 +33,13 @@ import com.mapbox.mapboxsdk.style.layers.Property;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class NearbyPlacesFragment extends Fragment implements LocationChangedListener {
 
@@ -82,14 +86,19 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         });
 
         listView.setAdapter(listAdapter);
+        setStatusLabel();
 
         ((MainActivity) getActivity()).setLocationListener(this);
         nearbyPlacesFinder.setListener(new NearbyPlacesListener() {
             @Override
-            public void onCheckedNearbyLocations(LinkedHashMap<String, Double> nearbyPlaces) {
+            public void onCheckedNearbyLocations(TreeMap<String, Double> nearbyPlacesMap) {
                 listAdapter.clear();
-                for(Map.Entry<String, Double> entry : nearbyPlaces.entrySet()) {
-                    listAdapter.add(entry.getKey() + " - " + entry.getValue());
+                MapComparator mapComparator = new MapComparator(nearbyPlacesMap);
+                TreeMap<String, Double> sortedMap = new TreeMap(mapComparator);
+                sortedMap.putAll(nearbyPlacesMap);
+                for (Map.Entry<String, Double> entry : sortedMap.entrySet()) {
+                    long roundedDistance = Math.round(entry.getValue());
+                    listAdapter.add(entry.getKey() + " - " + roundedDistance + "m");
                 }
                 listAdapter.notifyDataSetChanged();
             }
@@ -99,9 +108,9 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     }
 
     private void setStatusLabel() {
-        if(!gpsStatus) {
+        if (!gpsStatus) {
             listAdapter.clear();
-            tvStatus.setVisibility(View.VISIBLE);
+            //tvStatus.setVisibility(View.VISIBLE);
             tvStatus.setText(getString(R.string.status_provider_disabled));
         } else {
             tvStatus.setVisibility(View.GONE);
@@ -118,4 +127,27 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         this.gpsStatus = status;
         setStatusLabel();
     }
+
+    class MapComparator implements Comparator<String> {
+
+        private Map<String, Double> map;
+        public MapComparator(Map<String, Double> map) {
+            this.map = map;
+        }
+
+
+        @Override
+        public int compare(String first, String second) {
+            if(map.get(first) < map.get(second)) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+
+        public TreeMap<String, Double> getSortedMap() {
+            return new TreeMap<>(map);
+        }
+    }
 }
+

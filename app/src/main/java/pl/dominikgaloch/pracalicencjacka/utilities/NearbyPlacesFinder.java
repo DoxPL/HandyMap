@@ -1,15 +1,17 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.NearbyPlacesListener;
 
 public class NearbyPlacesFinder {
@@ -26,16 +28,16 @@ public class NearbyPlacesFinder {
 
     public boolean findNearbyPlaces(GeoPoint point)
     {
-        LinkedHashMap<String, Double> nearbyPlacesList = new LinkedHashMap<>();
+        Map<String, Double> nearbyPlacesMap = new HashMap<>();
         for(Location location : locationList)
         {
             double distance = point.distanceToAsDouble(location.getGeoPoint());
             if(distance <= radius)
             {
-                nearbyPlacesList.put(location.getName(), distance);
+                nearbyPlacesMap.put(location.getName(), distance);
             }
         }
-        listener.onCheckedNearbyLocations(nearbyPlacesList);
+        listener.onCheckedNearbyLocations(new TreeMap<>(nearbyPlacesMap));
         return true;
     }
 
@@ -45,10 +47,6 @@ public class NearbyPlacesFinder {
 
     public void setListener(NearbyPlacesListener listener) {
         this.listener = listener;
-    }
-
-    public double getRadius() {
-        return radius;
     }
 
 }

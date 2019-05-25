@@ -1,7 +1,7 @@
 package pl.dominikgaloch.pracalicencjacka.interfaces;
 
-import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 public interface NearbyPlacesListener {
-    void onCheckedNearbyLocations(LinkedHashMap<String, Double> nearbyPlaces);
+    void onCheckedNearbyLocations(TreeMap<String, Double> nearbyPlacesMap);
 }

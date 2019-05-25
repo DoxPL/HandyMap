@@ -12,18 +12,23 @@ import pl.dominikgaloch.pracalicencjacka.data.repository.CategoryRepository;
 
 public class CategoryViewModel extends AndroidViewModel {
     private CategoryRepository categoryRepository;
+    private LiveData<List<Category>> allCategories;
+
     public CategoryViewModel(@NonNull Application application) {
         super(application);
         categoryRepository = new CategoryRepository(application);
+        allCategories = categoryRepository.getAllCategories();
     }
-
     public LiveData<List<Category>> getAllCategories() {
-        return categoryRepository.getAllCategories();
+        return allCategories;
     }
-
     public void insertCategory(Category category) {
         categoryRepository.insertCategory(category);
     }
+
+   // public void deleteCategoryById(int categoryId) {
+   //     categoryRepository.deleteCategoryById(categoryId);
+    //}
 
     public void deleteCategoryByName(String name) {
         categoryRepository.deleteCategoryByName(name);

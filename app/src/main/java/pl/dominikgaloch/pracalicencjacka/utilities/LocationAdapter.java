@@ -97,29 +97,31 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                 .setNegativeButton(context.getString(R.string.dialog_neg_text), dialogCallback).show();
     }
 
-
     public Filter getFilter() {
-        final List<Location> filteredList = new ArrayList<>();
-        if (listCopy != null) {
+        if(listCopy != null) {
             locationList = listCopy;
         }
         Filter listFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                if (constraint != null) {
-                    for (Location location : locationList) {
-                        if (location.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
-                            filteredList.add(location);
+                List<Location> updatedList = new ArrayList<>();
+                String inputLowerCase = constraint.toString().toLowerCase();
+                if(inputLowerCase.length() == 0) {
+                    updatedList = locationList;
+                } else {
+                    for(Location location : locationList) {
+                        String locationNameLowerCase = location.getName().toLowerCase();
+                        if(locationNameLowerCase.contains(inputLowerCase)) {
+                            updatedList.add(location);
                         }
                     }
-                    FilterResults results = new FilterResults();
-                    results.values = filteredList;
-                    results.count = filteredList.size();
-                    return results;
-                } else {
-                    return new FilterResults();
                 }
+                FilterResults results = new FilterResults();
+                results.values = updatedList;
+                results.count = updatedList.size();
+                return results;
             }
+
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 listCopy = locationList;
@@ -130,9 +132,45 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
         return listFilter;
     }
 
+    /*
+        public Filter getFilter() {
+            final List<Location> filteredList = new ArrayList<>();
+            if (listCopy != null) {
+                locationList = listCopy;
+            }
+            Filter listFilter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    if (constraint != null) {
+                        for (Location location : locationList) {
+                            String input = constraint.toString().toLowerCase();
+                            if (location.getName().toLowerCase().contains(input)) {
+                                filteredList.add(location);
+                            }
+                        }
+                        FilterResults results = new FilterResults();
+                        results.values = filteredList;
+                        results.count = filteredList.size();
+                        return results;
+                    } else {
+                        return new FilterResults();
+                    }
+                }
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    listCopy = locationList;
+                    locationList = (List<Location>) results.values;
+                    notifyDataSetChanged();
+                }
+            };
+            return listFilter;
+        }
+
+    */
     public void setList(List<Location> locationList) {
         listCopy = null;
         this.locationList = locationList;
+        getFilter().filter("");
         notifyDataSetChanged();
     }
 

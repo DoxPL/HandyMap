@@ -49,6 +49,11 @@ public class LocationRepository {
         return locationDao.getLocationByPattern(pattern);
     }
 
+    public LiveData<List<Location>> getAllLocationsByPattern(String pattern) {
+        pattern += "%";
+        return locationDao.getAllLocationsByPattern(pattern);
+    }
+
     public void insertLocation(Location location) {
         new InsertLocationAsyncTask(locationDao).execute(location);
     }

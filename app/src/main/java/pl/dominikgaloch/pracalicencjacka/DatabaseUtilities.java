@@ -24,7 +24,7 @@ public class DatabaseUtilities extends SQLiteOpenHelper {
 
     public DatabaseUtilities(Context context)
     {
-        super(context, context.getResources().getString(R.string.database_name), null, 1);
+        super(context, "jj", null, 1);
     }
 
     @Override

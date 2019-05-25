@@ -28,6 +28,9 @@ public interface LocationDao {
     @Query("SELECT * FROM location WHERE location_name LIKE :pattern LIMIT 1")
     LiveData<Location> getLocationByPattern(String pattern);
 
+    @Query("SELECT * FROM location WHERE location_name LIKE :pattern")
+    LiveData<List<Location>> getAllLocationsByPattern(String pattern);
+
     @Insert
     void insertLocation(Location location);
 

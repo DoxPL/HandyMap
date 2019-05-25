@@ -17,6 +17,15 @@ public class Photo {
     @ColumnInfo(name = "placeID")
     private int placeID;
 
+    public Photo(String photoLocation, int placeID) {
+        this.photoLocation = photoLocation;
+        this.placeID = placeID;
+    }
+
+    public Photo() {
+
+    }
+
     public int getId() {
         return id;
     }

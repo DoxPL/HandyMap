@@ -18,26 +18,23 @@ import pl.dominikgaloch.pracalicencjacka.data.repository.CategoryRepository;
 
 @Database(entities = {Location.class, Photo.class, Category.class}, version = 6)
 public abstract class ApplicationDatabase extends RoomDatabase {
-
     private static ApplicationDatabase DATABASE_INSTANCE;
-
     public abstract LocationDao locationDao();
-
     public abstract PhotoDao photoDao();
-
     public abstract CategoryDao categoryDao();
+    public static final String DATABASE_NAME = "user_database";
 
     public static ApplicationDatabase getInstance(final Context context) {
         if (DATABASE_INSTANCE == null) {
             synchronized (ApplicationDatabase.class) {
-                DATABASE_INSTANCE = Room.databaseBuilder(context, ApplicationDatabase.class,
-                        context.getString(R.string.database_name)).
+                DATABASE_INSTANCE = Room.databaseBuilder(context, ApplicationDatabase.class, DATABASE_NAME).
                         fallbackToDestructiveMigration().
                         addCallback(new Callback() {
                             @Override
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                 super.onCreate(db);
-                                new CategoryRepository(context).insertCategory(new Category(context.getString(R.string.tab_default)));
+                                Category defaultCategory = new Category(context.getString(R.string.tab_default));
+                                new CategoryRepository(context).insertCategory(defaultCategory);
                             }
                         }).
                         build();
