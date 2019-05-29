@@ -5,12 +5,12 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="switch_preference_2"
+        android:key="center_user_position"
         android:title="@string/pref_center_position"
         android:summary="@string/pref_center_position_description" />
     <SwitchPreference
         android:defaultValue="true"
-        android:key="switch_preference_2"
+        android:key="display_coordinates"
         android:title="@string/pref_coordinates"
         android:summary="@string/pref_coordinates_description" />
     <EditTextPreference

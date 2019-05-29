@@ -101,6 +101,20 @@ public class MapFragment extends Fragment implements LocationChangedListener {
             }
         };
 
+        fabAddPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FormDialog formDialog = new FormDialog(getActivity(), context, (GeoPoint) mvOsmView.getMapCenter());
+                formDialog.create(new LocationSavedCallback() {
+                    @Override
+                    public void onDialogSuccess(Location locationToInsert) {
+                        locationViewModel.insert(locationToInsert);
+                        putMarker(locationToInsert);
+                    }
+                });
+            }
+        });
+
         mapEventsOverlay = new MapEventsOverlay(eventsReceiver);
         mvOsmView.getOverlays().add(mapEventsOverlay);
 

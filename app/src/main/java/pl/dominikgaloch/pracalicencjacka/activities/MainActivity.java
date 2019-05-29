@@ -1,8 +1,10 @@
 package pl.dominikgaloch.pracalicencjacka.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
@@ -51,11 +54,13 @@ public class MainActivity extends AppCompatActivity
     private LocationListener locationListener;
     private Toolbar toolbar;
     private FragmentUtilities fragmentUtilities;
-    public static final long GPS_UPDATE_INTERVAL = 2000;
-    public static final int MIN_DISTANCE_TO_GPS_UPDATE = 1;
+    private SharedPreferences preferences;
+    public static long GPS_UPDATE_INTERVAL = 2;
+    public static int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     public static final int REQUEST_PERMISSIONS = 1001;
 
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +76,16 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         if (!checkPermissions()) {
             allowPermissions();
         }
+
+        loadPreferences();
 
         fragmentUtilities.switchFragment(new MapFragment());
 
@@ -103,9 +111,12 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
+        System.out.println("DIS" + MIN_DISTANCE_TO_GPS_UPDATE);
+        System.out.println("INT" + GPS_UPDATE_INTERVAL);
+
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                GPS_UPDATE_INTERVAL,
+                GPS_UPDATE_INTERVAL * 1000,
                 MIN_DISTANCE_TO_GPS_UPDATE,
                 locationListener
         );
@@ -220,6 +231,13 @@ public class MainActivity extends AppCompatActivity
         final String[] permissionsArray = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         requestPermissions(permissionsArray, REQUEST_PERMISSIONS);
+    }
+
+    public void loadPreferences() {
+        String defaultIntervalStr = String.valueOf(GPS_UPDATE_INTERVAL);
+        String defaultDistanceStr = String.valueOf(MIN_DISTANCE_TO_GPS_UPDATE);
+        GPS_UPDATE_INTERVAL = Long.parseLong(preferences.getString("location_refresh_time", defaultIntervalStr));
+        MIN_DISTANCE_TO_GPS_UPDATE = Integer.parseInt(preferences.getString("location_refresh_distance", defaultDistanceStr));
     }
 
     public void setLocationListener(LocationChangedListener listener) {

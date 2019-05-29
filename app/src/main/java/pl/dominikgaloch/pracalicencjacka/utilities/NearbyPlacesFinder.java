@@ -26,19 +26,15 @@ public class NearbyPlacesFinder {
         System.out.println(radius);
     }
 
-    public boolean findNearbyPlaces(GeoPoint point)
-    {
+    public void findNearbyPlaces(GeoPoint point) {
         Map<String, Double> nearbyPlacesMap = new HashMap<>();
-        for(Location location : locationList)
-        {
+        for (Location location : locationList) {
             double distance = point.distanceToAsDouble(location.getGeoPoint());
-            if(distance <= radius)
-            {
+            if (distance <= radius) {
                 nearbyPlacesMap.put(location.getName(), distance);
             }
         }
         listener.onCheckedNearbyLocations(new TreeMap<>(nearbyPlacesMap));
-        return true;
     }
 
     public void setList(ArrayList<Location> list) {
