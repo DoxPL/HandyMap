@@ -41,6 +41,15 @@ public class Location {
         this.categoryID = categoryID;
     }
 
+    public Location(String name, String description, GeoPoint point, int markerColor, int categoryID) {
+        this.name = name;
+        this.description = description;
+        this.latitude = point.getLatitude();
+        this.longitude = point.getLongitude();
+        this.markerColor = markerColor;
+        this.categoryID = categoryID;
+    }
+
     public int getId() {
         return id;
     }

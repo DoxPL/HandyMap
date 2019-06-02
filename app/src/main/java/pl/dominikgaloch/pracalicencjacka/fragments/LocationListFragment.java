@@ -95,7 +95,6 @@ public class LocationListFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 locationViewModel.setCategoryId((Integer)tab.getTag());
-                hideSearchField();
             }
 
             @Override
@@ -164,8 +163,8 @@ public class LocationListFragment extends Fragment {
                     case DialogInterface.BUTTON_POSITIVE:
                         int tabPosition = tabLayout.getSelectedTabPosition();
                         TabLayout.Tab tabToRemove = tabLayout.getTabAt(tabPosition);
-                        String categoryName = tabToRemove.getText().toString();
-                        categoryViewModel.deleteCategoryByName(categoryName);
+                        int categoryId = (int) tabToRemove.getTag();
+                        categoryViewModel.deleteCategoryById(categoryId);
                         tabLayout.removeAllTabs();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -213,10 +212,6 @@ public class LocationListFragment extends Fragment {
         };
         locationListLiveData = locationViewModel.getAllLocations(categoryId);
         locationListLiveData.observe(this, dataObserver);
-    }
-
-    private void removeObservers() {
-        locationListLiveData.removeObservers(this);
     }
 
     private void addTab(Category category) {

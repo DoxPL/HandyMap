@@ -112,8 +112,12 @@ public class FormDialog {
                     int selectedColor = spPinColor.getSelectedItemPosition();
                     int selectedCategory = spCategory.getSelectedItemPosition();
                     int categoryId = categoryIdList.get(selectedCategory);
-                   
-                    Location locationToInsert = new Location(name, description, point.getLatitude(), point.getLongitude(), selectedColor, categoryId);
+                    if(swManualInput.isChecked()) {
+                        double latitude = Double.parseDouble(etLatitude.getText().toString());
+                        double longitude = Double.parseDouble(etLongitude.getText().toString());
+                        point = new GeoPoint(latitude, longitude);
+                    }
+                    Location locationToInsert = new Location(name, description, point, selectedColor, categoryId);
                     callback.onDialogSuccess(locationToInsert);
                     dialog.dismiss();
                 }

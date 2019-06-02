@@ -25,6 +25,7 @@
     <string name="qr_incorrect_coordinates">Niepoprawne współrzędne</string>
 
     <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>
+    <string name="dialog_remove_photo_question">Czy chcesz usunąć wybrane zdjęcie?</string>
     <string name="dialog_remove_question">Wszystkie miejsca przypisane do tej kategorii zostaną usunięte</string>
     <string name="dialog_pos_text">Potwierdź</string>
     <string name="dialog_neg_text">Anuluj</string>

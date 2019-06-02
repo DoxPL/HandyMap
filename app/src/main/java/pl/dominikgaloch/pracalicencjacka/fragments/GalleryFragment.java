@@ -212,7 +212,7 @@ public class GalleryFragment extends Fragment {
             }
         };
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        dialogBuilder.setMessage(context.getResources().getString(R.string.dialog_question))
+        dialogBuilder.setMessage(context.getResources().getString(R.string.dialog_remove_photo_question))
                 .setPositiveButton(context.getResources().getString(R.string.dialog_pos_text), dialogCallback)
                 .setNegativeButton(context.getResources().getString(R.string.dialog_neg_text), dialogCallback).show();
     }

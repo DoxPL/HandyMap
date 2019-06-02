@@ -19,19 +19,16 @@ public class CategoryViewModel extends AndroidViewModel {
         categoryRepository = new CategoryRepository(application);
         allCategories = categoryRepository.getAllCategories();
     }
+
     public LiveData<List<Category>> getAllCategories() {
         return allCategories;
     }
+
     public void insertCategory(Category category) {
         categoryRepository.insertCategory(category);
     }
 
-   // public void deleteCategoryById(int categoryId) {
-   //     categoryRepository.deleteCategoryById(categoryId);
-    //}
-
-    public void deleteCategoryByName(String name) {
-        categoryRepository.deleteCategoryByName(name);
+    public void deleteCategoryById(int categoryId) {
+        categoryRepository.deleteCategoryById(categoryId);
     }
-
 }

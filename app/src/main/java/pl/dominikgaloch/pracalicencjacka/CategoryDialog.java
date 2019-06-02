@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AlertDialog;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import pl.dominikgaloch.pracalicencjacka.data.models.Category;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
+import pl.dominikgaloch.pracalicencjacka.utilities.Validator;
 
 public class CategoryDialog {
     private View dialogView;
@@ -41,12 +43,16 @@ public class CategoryDialog {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(categoryTabLayout != null)
-                    categoryTabLayout.removeAllTabs();
-                String tabName = etCategoryName.getText().toString();
-                Category categoryToInsert = new Category(tabName);
-                insertCategoryIntoDatabase(categoryToInsert);
-                dialog.dismiss();
+                if(Validator.validateName(etCategoryName.getText().toString())) {
+                    if (categoryTabLayout != null)
+                        categoryTabLayout.removeAllTabs();
+                    String tabName = etCategoryName.getText().toString();
+                    Category categoryToInsert = new Category(tabName);
+                    insertCategoryIntoDatabase(categoryToInsert);
+                    dialog.dismiss();
+                } else {
+                    Snackbar.make(dialogView, context.getString(R.string.form_incorrect_name), Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
         dialog.show();
