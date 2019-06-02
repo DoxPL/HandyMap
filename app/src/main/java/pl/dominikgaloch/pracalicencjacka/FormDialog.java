@@ -11,9 +11,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -21,6 +26,7 @@ import pl.dominikgaloch.pracalicencjacka.data.models.Category;
 import pl.dominikgaloch.pracalicencjacka.data.models.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
+import pl.dominikgaloch.pracalicencjacka.utilities.Validator;
 
 public class FormDialog {
 
@@ -31,11 +37,13 @@ public class FormDialog {
     private View dialogView;
     private EditText etName;
     private EditText etDescription;
+    private EditText etLatitude;
+    private EditText etLongitude;
     private Spinner spPinColor;
     private Spinner spCategory;
     private LinearLayout manualCoordinatesForm;
     private Button btnSave;
-    private Switch swInputType;
+    private Switch swManualInput;
     private AlertDialog.Builder dialogBuilder;
     private List<Integer> categoryIdList;
     private CategoryViewModel categoryViewModel;
@@ -62,18 +70,19 @@ public class FormDialog {
 
     private void initComponents() {
         dialogView = activity.getLayoutInflater().inflate(R.layout.place_form_dialog, null);
-        etName = dialogView.findViewById(R.id.tName);
-        etDescription = dialogView.findViewById(R.id.tDescription);
+        etName = dialogView.findViewById(R.id.etName);
+        etDescription = dialogView.findViewById(R.id.etDescription);
+        etLatitude = dialogView.findViewById(R.id.etLat);
+        etLongitude = dialogView.findViewById(R.id.etLng);
         spPinColor = dialogView.findViewById(R.id.spPinColor);
         spCategory = dialogView.findViewById(R.id.spCategory);
         manualCoordinatesForm = dialogView.findViewById(R.id.manualCoordsForm);
         btnSave = dialogView.findViewById(R.id.btnSave);
-        swInputType = dialogView.findViewById(R.id.swAutoManual);
-        if(locationName != null) {
+        swManualInput = dialogView.findViewById(R.id.swAutoManual);
+        if (locationName != null) {
             etName.setText(locationName);
         }
     }
-
 
     public void create(final LocationSavedCallback callback) {
         dialogBuilder = new AlertDialog.Builder(context);
@@ -83,7 +92,7 @@ public class FormDialog {
         spCategory.setAdapter(spinnerAdapter);
         addSpinnerElementsFromDatabase();
 
-        swInputType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swManualInput.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -97,15 +106,17 @@ public class FormDialog {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = etName.getText().toString();
-                String description = etDescription.getText().toString();
-                int selectedColor = spPinColor.getSelectedItemPosition();
-                int selectedCategory = spCategory.getSelectedItemPosition();
-                int categoryId = categoryIdList.get(selectedCategory);
-                Location locationToInsert = new Location(name, description, point.getLatitude(), point.getLongitude(), selectedColor, categoryId);
-                callback.onDialogSuccess(locationToInsert);
-                dialog.dismiss();
-
+                if (checkInputData()) {
+                    String name = etName.getText().toString();
+                    String description = etDescription.getText().toString();
+                    int selectedColor = spPinColor.getSelectedItemPosition();
+                    int selectedCategory = spCategory.getSelectedItemPosition();
+                    int categoryId = categoryIdList.get(selectedCategory);
+                   
+                    Location locationToInsert = new Location(name, description, point.getLatitude(), point.getLongitude(), selectedColor, categoryId);
+                    callback.onDialogSuccess(locationToInsert);
+                    dialog.dismiss();
+                }
             }
         });
         dialog.show();
@@ -121,11 +132,28 @@ public class FormDialog {
                 }
                 spinnerAdapter.notifyDataSetChanged();
 
-                if(spCategory.getCount() == 0) {
+                if (spCategory.getCount() == 0) {
                     categoryViewModel.insertCategory(new Category(context.getString(R.string.tab_default)));
                 }
             }
         });
+    }
+
+    private boolean checkInputData() {
+        if (!Validator.validateName(etName.getText().toString())) {
+            Snackbar.make(dialogView, context.getString(R.string.form_incorrect_name), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!Validator.validateDescription(etDescription.getText().toString())) {
+            Snackbar.make(dialogView, context.getString(R.string.form_incorrect_description), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (swManualInput.isChecked() && (!Validator.validateCoord(etLatitude.getText().toString()) ||
+                !Validator.validateCoord(etLongitude.getText().toString()))) {
+            Snackbar.make(dialogView, context.getString(R.string.form_incorrect_coordinates), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
 }

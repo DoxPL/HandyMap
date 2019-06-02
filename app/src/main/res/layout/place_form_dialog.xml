@@ -40,7 +40,7 @@
                     android:text="@string/form_place_name" />
 
                 <EditText
-                    android:id="@+id/tName"
+                    android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -53,7 +53,7 @@
                     android:text="@string/form_place_desc" />
 
                 <EditText
-                    android:id="@+id/tDescription"
+                    android:id="@+id/etDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
