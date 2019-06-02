@@ -53,7 +53,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     private NearbyPlacesFinder nearbyPlacesFinder;
     private boolean gpsStatus;
     private SharedPreferences preferences;
-    private static String DEFAULT_RADIUS_STR = "100";
+    private static final int DEFAULT_RADIUS_STR = 100;
 
     public NearbyPlacesFragment() {
 
@@ -75,8 +75,11 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         gpsStatus = false;
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        nearbyPlacesFinder = new NearbyPlacesFinder(preferences.getString("radius", DEFAULT_RADIUS_STR));
-
+        try {
+            nearbyPlacesFinder = new NearbyPlacesFinder(preferences.getString("radius", String.valueOf(DEFAULT_RADIUS_STR)));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
         locationViewModel.getAllLocation().observe(this, new Observer<List<Location>>() {
             @Override
@@ -110,7 +113,6 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     private void setStatusLabel() {
         if (!gpsStatus) {
             listAdapter.clear();
-            //tvStatus.setVisibility(View.VISIBLE);
             tvStatus.setText(getString(R.string.status_provider_disabled));
         } else {
             tvStatus.setVisibility(View.GONE);
@@ -118,7 +120,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     }
 
     @Override
-    public void onChange(GeoPoint currentPosition) {
+    public void onChange(GeoPoint currentPosition, boolean setAsCenter) {
         nearbyPlacesFinder.findNearbyPlaces(currentPosition);
     }
 

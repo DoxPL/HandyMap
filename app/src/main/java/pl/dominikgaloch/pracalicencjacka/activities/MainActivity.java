@@ -2,6 +2,7 @@ package pl.dominikgaloch.pracalicencjacka.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -55,10 +57,10 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private FragmentUtilities fragmentUtilities;
     private SharedPreferences preferences;
+    private boolean prefCenterStatus;
     public static long GPS_UPDATE_INTERVAL = 2;
     public static int MIN_DISTANCE_TO_GPS_UPDATE = 1;
     public static final int REQUEST_PERMISSIONS = 1001;
-
 
     @SuppressLint("MissingPermission")
     @Override
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onLocationChanged(android.location.Location location) {
                 GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
-                locationChangedCallback.onChange(currentPosition);
+                locationChangedCallback.onChange(currentPosition, prefCenterStatus);
             }
 
             @Override
@@ -110,9 +112,6 @@ public class MainActivity extends AppCompatActivity
                 locationChangedCallback.onProviderStatusChanged(false);
             }
         };
-
-        System.out.println("DIS" + MIN_DISTANCE_TO_GPS_UPDATE);
-        System.out.println("INT" + GPS_UPDATE_INTERVAL);
 
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
@@ -135,7 +134,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -227,6 +225,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void allowPermissions() {
         final String[] permissionsArray = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -236,8 +235,13 @@ public class MainActivity extends AppCompatActivity
     public void loadPreferences() {
         String defaultIntervalStr = String.valueOf(GPS_UPDATE_INTERVAL);
         String defaultDistanceStr = String.valueOf(MIN_DISTANCE_TO_GPS_UPDATE);
-        GPS_UPDATE_INTERVAL = Long.parseLong(preferences.getString("location_refresh_time", defaultIntervalStr));
-        MIN_DISTANCE_TO_GPS_UPDATE = Integer.parseInt(preferences.getString("location_refresh_distance", defaultDistanceStr));
+        try {
+            GPS_UPDATE_INTERVAL = Long.parseLong(preferences.getString("location_refresh_time", defaultIntervalStr));
+            MIN_DISTANCE_TO_GPS_UPDATE = Integer.parseInt(preferences.getString("location_refresh_distance", defaultDistanceStr));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        prefCenterStatus = preferences.getBoolean("center_user_position", false);
     }
 
     public void setLocationListener(LocationChangedListener listener) {

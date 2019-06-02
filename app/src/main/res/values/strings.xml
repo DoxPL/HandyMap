@@ -20,7 +20,7 @@
     <string name="current_user_position">Aktualna pozycja użytkownika</string>
     <string name="osm_contributors"> © autorzy OpenStreetMap</string>
     <string name="status">Status</string>
-    <string name="status_provider_disabled">Moduł GPS został wyłączony</string>
+    <string name="status_provider_disabled">Moduł GPS jest wyłączony</string>
     <string name="qr_read_failed">Nie udało się zeskanować kodu QR</string>
     <string name="qr_incorrect_coordinates">Niepoprawne współrzędne</string>
 
