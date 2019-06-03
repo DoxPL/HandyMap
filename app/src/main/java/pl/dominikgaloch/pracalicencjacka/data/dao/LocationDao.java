@@ -37,8 +37,10 @@ public interface LocationDao {
     @Delete
     void deleteLocation(Location location);
 
+    @Query("DELETE FROM location")
+    void deleteAllLocations();
 
-    @Query("UPDATE location SET location_name = :name WHERE id = :id")
-    void updateName(String name, int id);
+    @Query("SELECT COUNT(*) FROM location")
+    int getCount();
 
 }

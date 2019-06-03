@@ -20,4 +20,10 @@ public interface PhotoDao {
     @Delete
     public void deletePhoto(Photo photo);
 
+    @Query("DELETE FROM photo")
+    void deleteAllPhotos();
+
+    @Query("SELECT COUNT(*) FROM photo")
+    int getCount();
+
 }

@@ -9,17 +9,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
-import pl.dominikgaloch.pracalicencjacka.data.dao.CategoryDao;
+import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
+import pl.dominikgaloch.pracalicencjacka.data.dao.PhotoDao;
 import pl.dominikgaloch.pracalicencjacka.data.models.Category;
+import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
 
 @Config(manifest = "src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)
-public class CategoryDaoTest {
+public class PhotoDaoTest {
     private ApplicationDatabase database;
-    private CategoryDao categoryDao;
+    private PhotoDao photoDao;
 
     @Before
     public void init() {
@@ -27,20 +31,23 @@ public class CategoryDaoTest {
         database = Room.inMemoryDatabaseBuilder(context, ApplicationDatabase.class).
                 allowMainThreadQueries().
                 build();
-        categoryDao = database.categoryDao();
+        photoDao = database.photoDao();
+        database.categoryDao().insertCategory(new Category("Test1"));
+        database.locationDao().insertLocation(new Location("TestName1", "TestDescription1",
+                55.011206, 18.120005, 1, 1));
     }
 
     @Test
-    public void insertCategoryTest() {
-        categoryDao.insertCategory(new Category("Test1"));
-        categoryDao.insertCategory(new Category("Test2"));
-        Assert.assertEquals(2, categoryDao.getCount());
+    public void insertPhotoTest() {
+        photoDao.insertPhoto(new Photo("root/sdcard/test1", 1));
+        photoDao.insertPhoto(new Photo("root/sdcard/test2", 1));
+        Assert.assertEquals(2, photoDao.getCount());
     }
 
     @Test
     public void deleteAllCategoriesTest() {
-        categoryDao.deleteAllCategories();
-        Assert.assertEquals(0, categoryDao.getCount());
+        photoDao.deleteAllPhotos();
+        Assert.assertEquals(0, photoDao.getCount());
     }
 
     @After
