@@ -2,7 +2,7 @@ package pl.dominikgaloch.pracalicencjacka.utilities;
 
 public class Validator {
     public static boolean validateName(String name) {
-        return name.matches("^[A-Za-z0-9 ]{3,}$");
+        return name.matches("^[A-Za-z0-9ĄĆĘŁŃÓŚŹŻąćęłńóśźż ]{3,30}$");
     }
 
     public static boolean validateDescription(String description) {
