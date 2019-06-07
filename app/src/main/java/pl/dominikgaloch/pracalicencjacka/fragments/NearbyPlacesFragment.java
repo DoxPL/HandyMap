@@ -120,6 +120,12 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((MainActivity) getActivity()).setLocationListener(null);
+    }
+
+    @Override
     public void onChange(GeoPoint currentPosition, boolean setAsCenter) {
         nearbyPlacesFinder.findNearbyPlaces(currentPosition);
     }

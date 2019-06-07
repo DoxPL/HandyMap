@@ -94,8 +94,11 @@ public class MainActivity extends AppCompatActivity
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(android.location.Location location) {
-                GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
-                locationChangedCallback.onChange(currentPosition, prefCenterStatus);
+                if (locationChangedCallback != null) {
+                    GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
+                    locationChangedCallback.onChange(currentPosition, prefCenterStatus);
+                }
+                System.out.println("Location changed");
             }
 
             @Override

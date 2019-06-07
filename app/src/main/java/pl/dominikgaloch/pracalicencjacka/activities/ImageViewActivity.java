@@ -18,7 +18,9 @@ public class ImageViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
         ivPhoto = findViewById(R.id.ivFullSizePhoto);
-        String path = getIntent().getStringExtra("photo_path");
-        Picasso.get().load(new File(path)).into(ivPhoto);
+        if(getIntent().hasExtra("photo_path")) {
+            String path = getIntent().getStringExtra("photo_path");
+            Picasso.get().load(new File(path)).into(ivPhoto);
+        }
     }
 }

@@ -23,7 +23,6 @@ public class NearbyPlacesFinder {
 
     public NearbyPlacesFinder(String radius) {
         this.radius = Float.parseFloat(radius);
-        System.out.println(radius);
     }
 
     public void findNearbyPlaces(GeoPoint point) {

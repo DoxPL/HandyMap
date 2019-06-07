@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka;
+package pl.dominikgaloch.pracalicencjacka.DaoTests;
 
 import android.content.Context;
 
