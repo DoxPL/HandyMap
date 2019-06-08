@@ -19,9 +19,6 @@ public interface LocationDao {
     @Query("SELECT * FROM location WHERE category_id = :categoryID")
     LiveData<List<Location>> getAllLocations(int categoryID);
 
-    @Query("SELECT * FROM location INNER JOIN category ON location.category_id = category.id WHERE category.category_name = :categoryName")
-    LiveData<List<Location>> getAllLocationsByCategoryName(String categoryName);
-
     @Query("SELECT id, location_name FROM location")
     LiveData<List<LocationIndexName>> getAllLocationsIndexName();
 

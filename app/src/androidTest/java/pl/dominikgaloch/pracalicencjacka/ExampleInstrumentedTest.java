@@ -25,8 +25,13 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
         assertEquals("pl.dominikgaloch.pracalicencjacka", appContext.getPackageName());
+    }
+
+    @Test
+    public void checkFragmentNotNull() {
+        FragmentScenario scenario = FragmentScenario.launchInContainer(MapFragment.class);
+        scenario.moveToState(Lifecycle.State.CREATED);
     }
 }

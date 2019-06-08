@@ -36,10 +36,6 @@ public class LocationRepository {
         return locationDao.getAllLocations(categoryID);
     }
 
-    public LiveData<List<Location>> getAllLocationsByCategoryName(String categoryName) {
-        return locationDao.getAllLocationsByCategoryName(categoryName);
-    }
-
     public LiveData<List<LocationIndexName>> getAllLocationsIndexName() {
         return locationDao.getAllLocationsIndexName();
     }

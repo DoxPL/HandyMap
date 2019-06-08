@@ -39,6 +39,7 @@ import android.widget.Toast;
 import org.osmdroid.util.GeoPoint;
 
 import androidx.fragment.app.FragmentTransaction;
+import kotlin.Suppress;
 import pl.dominikgaloch.pracalicencjacka.fragments.NearbyPlacesFragment;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
@@ -98,7 +99,6 @@ public class MainActivity extends AppCompatActivity
                     GeoPoint currentPosition = new GeoPoint(location.getLatitude(), location.getLongitude());
                     locationChangedCallback.onChange(currentPosition, prefCenterStatus);
                 }
-                System.out.println("Location changed");
             }
 
             @Override
@@ -206,6 +206,9 @@ public class MainActivity extends AppCompatActivity
                     if (grantResults[2] != PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(context, getString(R.string.perm_storage), Toast.LENGTH_LONG).show();
                     }
+                    if (grantResults[3] != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(context, getString(R.string.perm_camera), Toast.LENGTH_LONG).show();
+                    }
                 }
         }
     }
@@ -225,13 +228,17 @@ public class MainActivity extends AppCompatActivity
                 != PackageManager.PERMISSION_GRANTED) {
             return false;
         }
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
         return true;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     public void allowPermissions() {
         final String[] permissionsArray = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
         requestPermissions(permissionsArray, REQUEST_PERMISSIONS);
     }
 

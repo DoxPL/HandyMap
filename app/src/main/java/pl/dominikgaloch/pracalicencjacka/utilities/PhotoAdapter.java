@@ -62,8 +62,12 @@ public class PhotoAdapter extends BaseAdapter {
     }
 
     public void removePhoto(int position) {
-        photoViewModel.delete(photoList.get(position));
+        Photo photoToDelete = photoList.get(position);
+        File fileToDelete = new File(photoToDelete.getPhotoLocation());
+        fileToDelete.delete();
+        photoViewModel.delete(photoToDelete);
         photoList.remove(position);
+        notifyDataSetChanged();
     }
 
     public void setList(List<Photo> photoList) {

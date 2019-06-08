@@ -2,6 +2,7 @@ package pl.dominikgaloch.pracalicencjacka.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -22,7 +23,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
 
     private Context context;
     private ListView listView;
+    private LinearLayout alertPopup;
     private TextView tvStatus;
     private FloatingActionButton fab;
     private ArrayAdapter<String> listAdapter;
@@ -65,6 +69,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         View view = inflater.inflate(R.layout.fragment_nearby_places, container, false);
         context = getContext();
         listView = view.findViewById(R.id.listView);
+        alertPopup = view.findViewById(R.id.alertPopup);
         tvStatus = view.findViewById(R.id.tvStatus);
         fab = getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
@@ -72,7 +77,8 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
         fragmentUtilities = new FragmentUtilities(getActivity());
         fragmentUtilities.setToolbarTitle(getString(R.string.nearbyPlacesView));
-        gpsStatus = false;
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        gpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         try {
@@ -89,7 +95,7 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         });
 
         listView.setAdapter(listAdapter);
-        setStatusLabel();
+        setAlertPopup();
 
         ((MainActivity) getActivity()).setLocationListener(this);
         nearbyPlacesFinder.setListener(new NearbyPlacesListener() {
@@ -110,12 +116,13 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
         return view;
     }
 
-    private void setStatusLabel() {
+    private void setAlertPopup() {
         if (!gpsStatus) {
             listAdapter.clear();
+            alertPopup.setVisibility(View.VISIBLE);
             tvStatus.setText(getString(R.string.status_provider_disabled));
         } else {
-            tvStatus.setVisibility(View.GONE);
+            alertPopup.setVisibility(View.GONE);
         }
     }
 
@@ -128,17 +135,24 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
     @Override
     public void onChange(GeoPoint currentPosition, boolean setAsCenter) {
         nearbyPlacesFinder.findNearbyPlaces(currentPosition);
+        if (listAdapter.isEmpty()) {
+            alertPopup.setVisibility(View.VISIBLE);
+            tvStatus.setText(R.string.empty_list);
+        } else {
+            alertPopup.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onProviderStatusChanged(boolean status) {
         this.gpsStatus = status;
-        setStatusLabel();
+        setAlertPopup();
     }
 
     class MapComparator implements Comparator<String> {
 
         private Map<String, Double> map;
+
         public MapComparator(Map<String, Double> map) {
             this.map = map;
         }
@@ -146,15 +160,11 @@ public class NearbyPlacesFragment extends Fragment implements LocationChangedLis
 
         @Override
         public int compare(String first, String second) {
-            if(map.get(first) < map.get(second)) {
+            if (map.get(first) < map.get(second)) {
                 return -1;
             } else {
                 return 1;
             }
-        }
-
-        public TreeMap<String, Double> getSortedMap() {
-            return new TreeMap<>(map);
         }
     }
 }

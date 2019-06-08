@@ -70,6 +70,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         this.receivedLocation = receivedLocation;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);

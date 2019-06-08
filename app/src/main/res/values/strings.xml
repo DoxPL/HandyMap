@@ -20,21 +20,18 @@
     <string name="current_user_position">Aktualna pozycja użytkownika</string>
     <string name="osm_contributors"> © autorzy OpenStreetMap</string>
     <string name="status">Status</string>
+    <string name="empty_list">Lista jest pusta</string>
     <string name="status_provider_disabled">Moduł GPS jest wyłączony</string>
     <string name="qr_read_failed">Nie udało się zeskanować kodu QR</string>
     <string name="qr_incorrect_coordinates">Niepoprawne współrzędne</string>
-
     <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>
     <string name="dialog_remove_photo_question">Czy chcesz usunąć wybrane zdjęcie?</string>
     <string name="dialog_remove_question">Wszystkie miejsca przypisane do tej kategorii zostaną usunięte</string>
     <string name="dialog_pos_text">Potwierdź</string>
     <string name="dialog_neg_text">Anuluj</string>
-    
     <string name="text_item_removed">Element został usunięty</string>
     <string name="text_photo_saved">Zdjęcie zostało zapisane</string>
-
     <string name="action_search_text">Filtruj</string>
-
     <string name="form_location_title">Dodawanie miejsca</string>
     <string name="form_category_title">Dodawanie kategorii</string>
     <string name="form_place_name">Nazwa miejsca</string>
@@ -46,16 +43,13 @@
     <string name="form_lat">Szerokość geograficzna</string>
     <string name="form_lng">Długość geograficzna</string>
     <string name="form_save_text">Zapisz</string>
-
     <string name="form_incorrect_name">Wprowadzona nazwa jest nieprawidłowa</string>
     <string name="form_incorrect_description">Wprowadzony opis jest nieprawidłowy</string>
     <string name="form_incorrect_coordinates">Wprowadzone współrzędne są nieprawidłowe</string>
-
     <string name="perm_gps">Aplikacja potrzebuje uprawnień do lokalizacji</string>
     <string name="perm_storage">Aplikacja potrzebuje uprawnień do odczytu i zapisu w pamięci urządzenia</string>
-
+    <string name="perm_camera">Aplikacja potrzebuje uprawnień do robienia zdjęć</string>
     <string name="tab_default">Domyślne</string>
-
     <string name="pref_center_position">Wyśrodkowanie pozycji</string>
     <string name="pref_center_position_description">Wyśrodkuj pozycję użytkownika na mapie po każdej zmianie lokalizacji</string>
     <string name="pref_coordinates">Wyświetlanie współrzędnych</string>

@@ -61,7 +61,6 @@ public class LocationListFragment extends Fragment {
     private SearchView searchWidget;
     private MenuItem removeCategoryItem;
     private int selectedCategoryId;
-    private LiveData<List<Location>> locationListLiveData;
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -203,25 +202,8 @@ public class LocationListFragment extends Fragment {
         });
     }
 
-    private void addLocationsFromDatabase(final int categoryId) {
-        final Observer <List<Location>> dataObserver = new Observer<List<Location>>() {
-            @Override
-            public void onChanged(List<Location> locations) {
-                adapter.setList(locations);
-            }
-        };
-        locationListLiveData = locationViewModel.getAllLocations(categoryId);
-        locationListLiveData.observe(this, dataObserver);
-    }
-
     private void addTab(Category category) {
         TabLayout.Tab tab = tabLayout.newTab().setText(category.getName()).setTag(category.getId());
         tabLayout.addTab(tab);
     }
-
-    private void hideSearchField() {
-        if(!searchWidget.isIconified()) {
-        }
-    }
-
 }

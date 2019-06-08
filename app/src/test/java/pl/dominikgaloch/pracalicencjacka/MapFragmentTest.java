@@ -16,7 +16,7 @@ import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 
-@Config(manifest = "src/main/AndroidManifest.xml")
+@Config(manifest = "AndroidManifest.xml", sdk=21)
 @RunWith(RobolectricTestRunner.class)
 public class MapFragmentTest {
     @Test

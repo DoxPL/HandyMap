@@ -58,8 +58,8 @@ public class GalleryFragment extends Fragment {
     private PhotoAdapter photoAdapter;
     private LocationViewModel locationViewModel;
     private PhotoViewModel photoViewModel;
-    private LiveData<List<Photo>> photoListLiveData;
     private FragmentUtilities fragmentUtilities;
+    private String currentPhotoPath;
     private static final int PHOTO_TAKEN_CODE = 1002;
     private static final String FILE_EXTENSION = ".jpg";
 
@@ -78,12 +78,12 @@ public class GalleryFragment extends Fragment {
         gvPhotos = view.findViewById(R.id.gvPhotos);
         photoAdapter = new PhotoAdapter(context, photoViewModel);
         spinnerAdapter = new ArrayAdapter<>(context, R.layout.spinner_style);
-       // spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item);
         gvPhotos.setAdapter(photoAdapter);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spLocations.setAdapter(spinnerAdapter);
 
         populateSpinnerItems();
+        populatePhotoItems();
 
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,10 +120,8 @@ public class GalleryFragment extends Fragment {
         spLocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(photoListLiveData != null)
-                    removeObservers();
                 int locationId = ((LocationIndexName)parent.getItemAtPosition(position)).getId();
-                populatePhotoItems(locationId);
+                photoViewModel.setLocationId(locationId);
             }
 
             @Override
@@ -138,6 +136,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == PHOTO_TAKEN_CODE) {
+            savePhoto(currentPhotoPath, ((LocationIndexName)spLocations.getSelectedItem()).getId());
             Snackbar.make(getView(), getString(R.string.text_photo_saved), Snackbar.LENGTH_LONG).show();
         }
     }
@@ -151,18 +150,13 @@ public class GalleryFragment extends Fragment {
         });
     }
 
-    public void populatePhotoItems(int locationId) {
-        Observer<List<Photo>> dataObserver = new Observer<List<Photo>>() {
+    public void populatePhotoItems() {
+        photoViewModel.getPhotosByLocationId().observe(this, new Observer<List<Photo>>() {
             @Override
             public void onChanged(List<Photo> photos) {
                 photoAdapter.setList(photos);
             }
-        };
-        photoViewModel.getAllPhotos(locationId).observe(this, dataObserver);
-    }
-
-    private void removeObservers() {
-        photoListLiveData.removeObservers(this);
+        });
     }
 
     public File makePhotoFile() {
@@ -174,7 +168,7 @@ public class GalleryFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        savePhoto(temporaryFile.getAbsolutePath(), ((LocationIndexName)spLocations.getSelectedItem()).getId());
+        currentPhotoPath = temporaryFile.getAbsolutePath();
         return temporaryFile;
     }
 
@@ -190,11 +184,6 @@ public class GalleryFragment extends Fragment {
         getActivity().sendBroadcast(intent);
     }
 
-    public boolean deletePhoto(String path) {
-        File fileToDelete = new File(path);
-        return fileToDelete.delete();
-    }
-
 
     public void createDialog(final View view, final int currentItemPosition) {
         DialogInterface.OnClickListener dialogCallback = new DialogInterface.OnClickListener() {
@@ -202,10 +191,7 @@ public class GalleryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        String photoPath = photoAdapter.getPhotoPath(currentItemPosition);
                         photoAdapter.removePhoto(currentItemPosition);
-                        photoAdapter.notifyDataSetChanged();
-                        deletePhoto(photoPath);
                         Snackbar.make(view, context.getString(R.string.text_item_removed), Snackbar.LENGTH_LONG).
                                 setAction("Action", null).show();
                 }

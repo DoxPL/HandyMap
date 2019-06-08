@@ -67,10 +67,6 @@ public class LocationViewModel extends AndroidViewModel {
         return locationsByPattern;
     }
 
-    public LiveData<List<Location>> getAllLocations(int categoryID) {
-        return locationRepository.getAllLocations(categoryID);
-    }
-
     public LiveData<List<LocationIndexName>> getAllLocationIndexNames() {
         return locationRepository.getAllLocationsIndexName();
     }
