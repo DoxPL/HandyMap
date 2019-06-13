@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,9 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -33,17 +30,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import pl.dominikgaloch.pracalicencjacka.activities.ImageViewActivity;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.LocationIndexName;
-import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
-import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
-import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
+import pl.dominikgaloch.pracalicencjacka.data.model.LocationIndexName;
+import pl.dominikgaloch.pracalicencjacka.data.model.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.PhotoViewModel;
 import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
@@ -175,7 +167,7 @@ public class GalleryFragment extends Fragment {
     public void savePhoto(String path, int locationId) {
         Photo photo = new Photo();
         photo.setPhotoLocation(path);
-        photo.setPlaceID(locationId);
+        photo.setLocationID(locationId);
         photoAdapter.insertPhoto(photo);
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File fileToSave = new File(path);

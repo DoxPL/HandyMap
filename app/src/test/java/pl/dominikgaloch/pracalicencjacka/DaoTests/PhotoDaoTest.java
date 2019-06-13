@@ -13,11 +13,10 @@ import org.robolectric.annotation.Config;
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
-import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
 import pl.dominikgaloch.pracalicencjacka.data.dao.PhotoDao;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Photo;
 
 @Config(manifest = "src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)

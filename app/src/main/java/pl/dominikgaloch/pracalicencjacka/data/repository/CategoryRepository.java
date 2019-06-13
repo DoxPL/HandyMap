@@ -8,9 +8,7 @@ import java.util.List;
 import androidx.lifecycle.LiveData;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.data.dao.CategoryDao;
-import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
 
 public class CategoryRepository {
     private static ApplicationDatabase databaseInstance;

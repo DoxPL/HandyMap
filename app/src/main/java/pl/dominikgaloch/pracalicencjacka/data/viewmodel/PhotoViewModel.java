@@ -10,8 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.model.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
 
 public class PhotoViewModel extends AndroidViewModel {

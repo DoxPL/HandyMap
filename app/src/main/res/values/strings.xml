@@ -3,7 +3,7 @@
     <string name="navigation_drawer_open">Otwórz szufladę nawigacyjną</string>
     <string name="navigation_drawer_close">Zamknij szufladę nawigacyjną</string>
     <string name="nav_header_title">HandyMap</string>
-    <string name="nav_header_subtitle">Autor: Dominik Galoch</string>
+    <string name="nav_header_subtitle">Aplikacja do lokalizowania miejsc na mapie</string>
     <string name="nav_tools_title">Narzędzia</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_add_category">Dodaj kategorię</string>

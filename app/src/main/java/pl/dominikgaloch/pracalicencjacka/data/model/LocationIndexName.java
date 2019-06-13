@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka.data.models;
+package pl.dominikgaloch.pracalicencjacka.data.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka;
+package pl.dominikgaloch.pracalicencjacka.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,8 +22,9 @@ import java.util.List;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
 import pl.dominikgaloch.pracalicencjacka.utilities.Validator;

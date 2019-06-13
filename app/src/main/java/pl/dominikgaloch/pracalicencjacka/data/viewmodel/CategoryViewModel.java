@@ -7,7 +7,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
 import pl.dominikgaloch.pracalicencjacka.data.repository.CategoryRepository;
 
 public class CategoryViewModel extends AndroidViewModel {

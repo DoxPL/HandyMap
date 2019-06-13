@@ -32,10 +32,10 @@ import java.util.List;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import pl.dominikgaloch.pracalicencjacka.FormDialog;
+import pl.dominikgaloch.pracalicencjacka.dialogs.FormDialog;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;

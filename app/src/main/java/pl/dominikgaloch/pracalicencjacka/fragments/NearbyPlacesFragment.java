@@ -3,7 +3,6 @@ package pl.dominikgaloch.pracalicencjacka.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,7 +11,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 import pl.dominikgaloch.pracalicencjacka.interfaces.NearbyPlacesListener;
@@ -25,21 +24,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mapbox.mapboxsdk.style.layers.Property;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;

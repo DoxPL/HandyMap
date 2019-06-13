@@ -7,9 +7,8 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.LocationIndexName;
-import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.LocationIndexName;
 
 @Dao
 public interface LocationDao {

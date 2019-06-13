@@ -4,10 +4,9 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
 
 @Dao
 public interface CategoryDao {

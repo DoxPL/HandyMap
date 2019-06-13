@@ -3,15 +3,12 @@ package pl.dominikgaloch.pracalicencjacka.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,27 +20,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import org.osmdroid.util.GeoPoint;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import pl.dominikgaloch.pracalicencjacka.CategoryDialog;
+import pl.dominikgaloch.pracalicencjacka.dialogs.CategoryDialog;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.activities.SettingsActivity;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.repository.LocationRepository;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;

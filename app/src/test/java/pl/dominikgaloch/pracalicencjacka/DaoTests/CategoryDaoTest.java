@@ -13,7 +13,7 @@ import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.data.dao.CategoryDao;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
 
 @Config(manifest = "src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)

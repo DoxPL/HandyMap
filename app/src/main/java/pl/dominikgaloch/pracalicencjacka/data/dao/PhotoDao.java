@@ -7,11 +7,11 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.model.Photo;
 
 @Dao
 public interface PhotoDao {
-    @Query("SELECT * FROM photo WHERE placeId=:locationID")
+    @Query("SELECT * FROM photo WHERE location_id=:locationID")
     LiveData<List<Photo>> getPhotosForLocation(int locationID);
 
     @Insert

@@ -1,13 +1,10 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
-import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +24,7 @@ import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 

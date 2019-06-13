@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka.data.models;
+package pl.dominikgaloch.pracalicencjacka.data.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -7,19 +7,19 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(foreignKeys = @ForeignKey(entity = Location.class, parentColumns = "id",
-        childColumns = "placeID", onDelete = ForeignKey.CASCADE))
+        childColumns = "location_id", onDelete = ForeignKey.CASCADE))
 public class Photo {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int id;
-    @ColumnInfo(name = "photoLocation")
+    @ColumnInfo(name = "photo_location")
     private String photoLocation;
-    @ColumnInfo(name = "placeID")
-    private int placeID;
+    @ColumnInfo(name = "location_id")
+    private int locationID;
 
-    public Photo(String photoLocation, int placeID) {
+    public Photo(String photoLocation, int locationID) {
         this.photoLocation = photoLocation;
-        this.placeID = placeID;
+        this.locationID = locationID;
     }
 
     public Photo() {
@@ -42,11 +42,11 @@ public class Photo {
         this.photoLocation = photoLocation;
     }
 
-    public int getPlaceID() {
-        return placeID;
+    public int getLocationID() {
+        return locationID;
     }
 
-    public void setPlaceID(int placeID) {
-        this.placeID = placeID;
+    public void setLocationID(int placeID) {
+        this.locationID = placeID;
     }
 }

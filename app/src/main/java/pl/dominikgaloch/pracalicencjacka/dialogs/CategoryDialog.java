@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka;
+package pl.dominikgaloch.pracalicencjacka.dialogs;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,8 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
+import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.utilities.Validator;
 

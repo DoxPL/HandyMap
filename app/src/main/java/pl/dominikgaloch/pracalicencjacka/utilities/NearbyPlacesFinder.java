@@ -5,13 +5,11 @@ import android.content.Context;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.interfaces.NearbyPlacesListener;
 
 public class NearbyPlacesFinder {

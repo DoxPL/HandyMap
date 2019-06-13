@@ -12,8 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
-import pl.dominikgaloch.pracalicencjacka.data.repository.PhotoRepository;
+import pl.dominikgaloch.pracalicencjacka.data.model.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.PhotoViewModel;
 
 public class PhotoAdapter extends BaseAdapter {

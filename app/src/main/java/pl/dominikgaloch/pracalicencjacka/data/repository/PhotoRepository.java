@@ -6,13 +6,9 @@ import android.os.AsyncTask;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Room;
-import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
-import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
 import pl.dominikgaloch.pracalicencjacka.data.dao.PhotoDao;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.model.Photo;
 
 public class PhotoRepository {
     private static ApplicationDatabase databaseInstance;

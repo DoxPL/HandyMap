@@ -3,21 +3,13 @@ package pl.dominikgaloch.pracalicencjacka.data.repository;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.util.List;
 
-import javax.xml.transform.dom.DOMLocator;
-
 import androidx.lifecycle.LiveData;
-import androidx.room.Delete;
-import androidx.room.Room;
-import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;
 import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.LocationIndexName;
-import pl.dominikgaloch.pracalicencjacka.data.models.NearbyPlace;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.LocationIndexName;
 
 public class LocationRepository {
     private static ApplicationDatabase databaseInstance;

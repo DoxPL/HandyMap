@@ -5,19 +5,17 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import pl.dominikgaloch.pracalicencjacka.FormDialog;
+import pl.dominikgaloch.pracalicencjacka.dialogs.FormDialog;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
 import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
 import pl.dominikgaloch.pracalicencjacka.utilities.Validator;
 
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;

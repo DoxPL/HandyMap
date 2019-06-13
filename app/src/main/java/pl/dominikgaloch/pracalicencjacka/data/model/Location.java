@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka.data.models;
+package pl.dominikgaloch.pracalicencjacka.data.model;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -19,16 +19,12 @@ public class Location {
     private String name;
     @ColumnInfo(name = "description")
     private String description;
-    @ColumnInfo(name = "visit_date")
-    private String visitDate;
     @ColumnInfo(name = "latitude")
     private double latitude;
     @ColumnInfo(name = "longitude")
     private double longitude;
     @ColumnInfo(name = "marker_color")
     private int markerColor;
-    @ColumnInfo(name = "visit_state")
-    private boolean visited;
     @ColumnInfo(name = "category_id")
     private int categoryID;
 
@@ -74,14 +70,6 @@ public class Location {
         this.description = description;
     }
 
-    public String getVisitDate() {
-        return visitDate;
-    }
-
-    public void setVisitDate(String visitDate) {
-        this.visitDate = visitDate;
-    }
-
     public double getLatitude() {
         return latitude;
     }
@@ -112,14 +100,6 @@ public class Location {
 
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
     }
 
     public GeoPoint getGeoPoint() {

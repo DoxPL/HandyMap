@@ -1,4 +1,4 @@
-package pl.dominikgaloch.pracalicencjacka.data.models;
+package pl.dominikgaloch.pracalicencjacka.data.model;
 
 import androidx.room.ColumnInfo;
 

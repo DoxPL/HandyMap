@@ -11,12 +11,12 @@ import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.data.dao.CategoryDao;
 import pl.dominikgaloch.pracalicencjacka.data.dao.LocationDao;
 import pl.dominikgaloch.pracalicencjacka.data.dao.PhotoDao;
-import pl.dominikgaloch.pracalicencjacka.data.models.Category;
-import pl.dominikgaloch.pracalicencjacka.data.models.Location;
-import pl.dominikgaloch.pracalicencjacka.data.models.Photo;
+import pl.dominikgaloch.pracalicencjacka.data.model.Category;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
+import pl.dominikgaloch.pracalicencjacka.data.model.Photo;
 import pl.dominikgaloch.pracalicencjacka.data.repository.CategoryRepository;
 
-@Database(entities = {Location.class, Photo.class, Category.class}, version = 6)
+@Database(entities = {Location.class, Photo.class, Category.class}, version = 7)
 public abstract class ApplicationDatabase extends RoomDatabase {
     private static ApplicationDatabase DATABASE_INSTANCE;
     public abstract LocationDao locationDao();
