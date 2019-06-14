@@ -2,6 +2,8 @@ package pl.dominikgaloch.pracalicencjacka.data.model;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -11,7 +13,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(indices = {@Index(value = "id")}, foreignKeys = @ForeignKey(entity = Category.class, parentColumns = "id",
         childColumns = "category_id", onDelete = ForeignKey.CASCADE))
-public class Location {
+public class Location implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int id;

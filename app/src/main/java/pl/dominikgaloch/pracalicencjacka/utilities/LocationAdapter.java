@@ -62,7 +62,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
                 if (longClick) {
                     createDialog(view, position);
                 } else {
-                    fragmentUtilities.switchFragment(new MapFragment(location));
+                    //fragmentUtilities.switchFragment(new MapFragment(location));
+                    fragmentUtilities.switchFragment(MapFragment.newInstance(location));
                 }
             }
         });

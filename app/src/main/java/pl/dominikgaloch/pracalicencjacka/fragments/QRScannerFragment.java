@@ -74,7 +74,7 @@ public class QRScannerFragment extends Fragment {
             @Override
             public void onDialogSuccess(Location locationToInsert) {
                 locationViewModel.insert(locationToInsert);
-                fragmentUtilities.switchFragment(new MapFragment(locationToInsert));
+                fragmentUtilities.switchFragment(MapFragment.newInstance(locationToInsert));
             }
         });
     }

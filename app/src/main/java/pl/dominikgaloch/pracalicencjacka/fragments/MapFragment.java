@@ -28,6 +28,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 
+import java.io.Serializable;
 import java.util.List;
 
 import androidx.lifecycle.Observer;
@@ -70,6 +71,14 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         this.receivedLocation = receivedLocation;
     }
 
+    public static MapFragment newInstance(Location receivedLocation) {
+        MapFragment mapFragment = new MapFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("location", receivedLocation);
+        mapFragment.setArguments(bundle);
+        return mapFragment;
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +94,11 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         fabAddPlace = getActivity().findViewById(R.id.fab);
         fabAddPlace.setVisibility(View.VISIBLE);
+        if(getArguments() != null)
+        {
+            this.receivedLocation = (Location) getArguments().getSerializable("location");
+        }
+
         mapInit();
 
         eventsReceiver = new MapEventsReceiver() {
