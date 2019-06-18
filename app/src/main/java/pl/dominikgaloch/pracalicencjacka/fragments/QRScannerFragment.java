@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,6 +30,7 @@ public class QRScannerFragment extends Fragment {
     private LocationViewModel locationViewModel;
     private FragmentUtilities fragmentUtilities;
     private FloatingActionButton fab;
+    private Button btnScan;
 
     public QRScannerFragment() {
 
@@ -42,10 +44,17 @@ public class QRScannerFragment extends Fragment {
         fragmentUtilities = new FragmentUtilities(getActivity());
         fragmentUtilities.setToolbarTitle(getString(R.string.qrscannerView));
         fab = getActivity().findViewById(R.id.fab);
+        btnScan = view.findViewById(R.id.btnScanQR);
         fab.setVisibility(View.GONE);
         integrator = (IntentIntegrator) IntentIntegrator.forSupportFragment(QRScannerFragment.this);
         integrator.setBeepEnabled(false);
         integrator.initiateScan();
+        btnScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                integrator.initiateScan();
+            }
+        });
         return view;
     }
 
@@ -57,7 +66,7 @@ public class QRScannerFragment extends Fragment {
             Snackbar.make(getView(), getString(R.string.qr_read_failed), Snackbar.LENGTH_LONG).show();
             return;
         }
-        String[] resultData = result.getContents().split(",");
+        String[] resultData = (result.getContents() != null) ? result.getContents().split(",") : new String[0];
         GeoPoint point = parseGeoPoint(resultData);
         if (point == null) {
             Snackbar.make(getView(), getString(R.string.qr_incorrect_coordinates), Snackbar.LENGTH_LONG).show();

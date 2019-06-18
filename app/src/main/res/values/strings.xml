@@ -23,7 +23,8 @@
     <string name="empty_list">Lista jest pusta</string>
     <string name="status_provider_disabled">Moduł GPS jest wyłączony</string>
     <string name="qr_read_failed">Nie udało się zeskanować kodu QR</string>
-    <string name="qr_incorrect_coordinates">Niepoprawne współrzędne</string>
+    <string name="qr_incorrect_coordinates">Nie udało się odczytać współrzędnych</string>
+    <string name="qr_scan">Skanuj kod QR</string>
     <string name="dialog_question">Czy na pewno chcesz usunąć wybrane miejsce?</string>
     <string name="dialog_remove_photo_question">Czy chcesz usunąć wybrane zdjęcie?</string>
     <string name="dialog_remove_question">Wszystkie miejsca przypisane do tej kategorii zostaną usunięte</string>

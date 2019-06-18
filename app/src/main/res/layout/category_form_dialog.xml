@@ -50,7 +50,7 @@
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="@string/form_save_text"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorTabContent"
         android:textSize="18sp" />
 
 </LinearLayout>
