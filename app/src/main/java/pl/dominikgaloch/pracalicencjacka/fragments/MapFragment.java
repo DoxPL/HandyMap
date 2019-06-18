@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,17 +24,18 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 
-import java.io.Serializable;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import pl.dominikgaloch.pracalicencjacka.dialogs.FormDialog;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
 import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.CategoryViewModel;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.dialogs.FormDialog;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
 import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
@@ -94,8 +91,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         mvOsmView = view.findViewById(R.id.mvOsmDroid);
         fabAddPlace = getActivity().findViewById(R.id.fab);
         fabAddPlace.setVisibility(View.VISIBLE);
-        if(getArguments() != null)
-        {
+        if (getArguments() != null) {
             this.receivedLocation = (Location) getArguments().getSerializable("location");
         }
 
@@ -199,7 +195,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         pin.setIcon(getPinDrawable(color));
         pin.setTitle(name);
-        if(prefDisplayingCoordinates)
+        if (prefDisplayingCoordinates)
             pin.setSubDescription(position.getLatitude() + ", " + position.getLongitude());
         if (changeUserPosition) {
             if (userLocationPin != null)
@@ -215,7 +211,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         pin.setIcon(getPinDrawable(location.getMarkerColor()));
         pin.setTitle(location.getName());
-        if(prefDisplayingCoordinates)
+        if (prefDisplayingCoordinates)
             pin.setSubDescription(location.getGeoPoint().getLatitude() + ", " + location.getGeoPoint().getLongitude());
         mvOsmView.getOverlays().add(pin);
     }
@@ -298,7 +294,7 @@ public class MapFragment extends Fragment implements LocationChangedListener {
     public void onChange(final GeoPoint currentPosition, boolean setAsCenter) {
         putMarker(currentPosition, getString(R.string.current_user_position), USER_PIN_COLOR,
                 true);
-        if(setAsCenter) {
+        if (setAsCenter) {
             mvOsmView.getController().setCenter(currentPosition);
         }
         mvOsmView.invalidate();

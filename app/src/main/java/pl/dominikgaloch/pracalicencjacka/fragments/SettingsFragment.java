@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.preference.PreferenceFragmentCompat;
 import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     private PreferenceManager preferenceManager;

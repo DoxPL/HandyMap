@@ -4,20 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.preference.PreferenceManager;
-import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
-import pl.dominikgaloch.pracalicencjacka.data.model.Location;
-import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
-import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
-import pl.dominikgaloch.pracalicencjacka.interfaces.NearbyPlacesListener;
-import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
-import pl.dominikgaloch.pracalicencjacka.utilities.NearbyPlacesFinder;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +21,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
+import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.activities.MainActivity;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
+import pl.dominikgaloch.pracalicencjacka.interfaces.NearbyPlacesListener;
+import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
+import pl.dominikgaloch.pracalicencjacka.utilities.NearbyPlacesFinder;
 
 public class NearbyPlacesFragment extends Fragment implements LocationChangedListener {
 

@@ -1,13 +1,6 @@
 package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +13,16 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.ListItemClickListener;
-import pl.dominikgaloch.pracalicencjacka.data.model.Location;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implements Filterable {
 
@@ -96,7 +94,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
     }
 
     public Filter getFilter() {
-        if(listCopy != null) {
+        if (listCopy != null) {
             locationList = listCopy;
         }
         Filter listFilter = new Filter() {
@@ -104,12 +102,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolder> implem
             protected FilterResults performFiltering(CharSequence constraint) {
                 List<Location> updatedList = new ArrayList<>();
                 String inputLowerCase = constraint.toString().toLowerCase();
-                if(inputLowerCase.length() == 0) {
+                if (inputLowerCase.length() == 0) {
                     updatedList = locationList;
                 } else {
-                    for(Location location : locationList) {
+                    for (Location location : locationList) {
                         String locationNameLowerCase = location.getName().toLowerCase();
-                        if(locationNameLowerCase.contains(inputLowerCase)) {
+                        if (locationNameLowerCase.contains(inputLowerCase)) {
                             updatedList.add(location);
                         }
                     }

@@ -9,42 +9,30 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.preference.PreferenceManager;
-import android.view.View;
-
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
+
 import org.osmdroid.util.GeoPoint;
 
-import androidx.fragment.app.FragmentTransaction;
-import kotlin.Suppress;
-import pl.dominikgaloch.pracalicencjacka.fragments.NearbyPlacesFragment;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import pl.dominikgaloch.pracalicencjacka.R;
 import pl.dominikgaloch.pracalicencjacka.fragments.GalleryFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.LocationListFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.MapFragment;
+import pl.dominikgaloch.pracalicencjacka.fragments.NearbyPlacesFragment;
 import pl.dominikgaloch.pracalicencjacka.fragments.QRScannerFragment;
 import pl.dominikgaloch.pracalicencjacka.interfaces.LocationChangedListener;
 import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
@@ -107,12 +95,14 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onProviderEnabled(String provider) {
-                locationChangedCallback.onProviderStatusChanged(true);
+                if (locationChangedCallback != null)
+                    locationChangedCallback.onProviderStatusChanged(true);
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-                locationChangedCallback.onProviderStatusChanged(false);
+                if (locationChangedCallback != null)
+                    locationChangedCallback.onProviderStatusChanged(false);
             }
         };
 

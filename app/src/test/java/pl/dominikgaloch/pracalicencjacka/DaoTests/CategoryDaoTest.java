@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
 import pl.dominikgaloch.pracalicencjacka.data.ApplicationDatabase;

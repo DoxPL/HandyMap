@@ -80,7 +80,7 @@ public class LocationListFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                locationViewModel.setCategoryId((Integer)tab.getTag());
+                locationViewModel.setCategoryId((Integer) tab.getTag());
             }
 
             @Override
@@ -171,7 +171,7 @@ public class LocationListFragment extends Fragment {
                 for (Category category : categories) {
                     addTab(category);
                 }
-                if(tabLayout.getTabCount() == 0) {
+                if (tabLayout.getTabCount() == 0) {
                     removeCategoryItem.setEnabled(false);
                 } else {
                     removeCategoryItem.setEnabled(true);

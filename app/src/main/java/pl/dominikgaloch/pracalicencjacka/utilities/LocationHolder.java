@@ -2,6 +2,7 @@ package pl.dominikgaloch.pracalicencjacka.utilities;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,8 +23,7 @@ public class LocationHolder extends RecyclerView.ViewHolder implements View.OnCl
         itemView.setOnLongClickListener(this);
     }
 
-    public void setOnClickListener(ListItemClickListener listener)
-    {
+    public void setOnClickListener(ListItemClickListener listener) {
         this.listener = listener;
     }
 

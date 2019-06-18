@@ -2,17 +2,6 @@ package pl.dominikgaloch.pracalicencjacka.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import pl.dominikgaloch.pracalicencjacka.dialogs.FormDialog;
-import pl.dominikgaloch.pracalicencjacka.R;
-import pl.dominikgaloch.pracalicencjacka.data.model.Location;
-import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
-import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
-import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
-import pl.dominikgaloch.pracalicencjacka.utilities.Validator;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +12,16 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.osmdroid.util.GeoPoint;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import pl.dominikgaloch.pracalicencjacka.R;
+import pl.dominikgaloch.pracalicencjacka.data.model.Location;
+import pl.dominikgaloch.pracalicencjacka.data.viewmodel.LocationViewModel;
+import pl.dominikgaloch.pracalicencjacka.dialogs.FormDialog;
+import pl.dominikgaloch.pracalicencjacka.interfaces.LocationSavedCallback;
+import pl.dominikgaloch.pracalicencjacka.utilities.FragmentUtilities;
+import pl.dominikgaloch.pracalicencjacka.utilities.Validator;
 
 
 public class QRScannerFragment extends Fragment {

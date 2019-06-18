@@ -112,7 +112,7 @@ public class GalleryFragment extends Fragment {
         spLocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int locationId = ((LocationIndexName)parent.getItemAtPosition(position)).getId();
+                int locationId = ((LocationIndexName) parent.getItemAtPosition(position)).getId();
                 photoViewModel.setLocationId(locationId);
             }
 
@@ -128,7 +128,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == PHOTO_TAKEN_CODE) {
-            savePhoto(currentPhotoPath, ((LocationIndexName)spLocations.getSelectedItem()).getId());
+            savePhoto(currentPhotoPath, ((LocationIndexName) spLocations.getSelectedItem()).getId());
             Snackbar.make(getView(), getString(R.string.text_photo_saved), Snackbar.LENGTH_LONG).show();
         }
     }
